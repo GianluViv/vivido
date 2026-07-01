@@ -34,14 +34,12 @@ class _MenuComponentState extends State<MenuComponent> {
     super.initState();
     appStore.menuList.clear();
 
-    if (appStore.screenTemplateData == null) {
-      appStore.menuList.add(MenuWidgetsModel(
-        menuName: language!.screenList,
-        svgFileName: "project_list.svg",
-        index: SCREEN_LIST_INDEX,
-        isOnHover: false,
-      ));
-    }
+    appStore.menuList.add(MenuWidgetsModel(
+      menuName: language!.screenList,
+      svgFileName: "project_list.svg",
+      index: SCREEN_LIST_INDEX,
+      isOnHover: false,
+    ));
     appStore.menuList.add(MenuWidgetsModel(
       menuName: language!.widgets,
       svgFileName: "widgets.svg",
@@ -54,38 +52,24 @@ class _MenuComponentState extends State<MenuComponent> {
       index: TREE_INDEX,
       isOnHover: false,
     ));
-    if (appStore.screenTemplateData == null) {
-      appStore.menuList.add(MenuWidgetsModel(
-        menuName: language!.profile,
-        svgFileName: "profile.svg",
-        index: PROFILE_INDEX,
-        isOnHover: false,
-      ));
-      appStore.menuList.add(MenuWidgetsModel(
-        menuName: language!.tutorials,
-        svgFileName: "video_collection.svg",
-        index: TUTORIALS_INDEX,
-        isOnHover: false,
-      ));
-      appStore.menuList.add(MenuWidgetsModel(
-        menuName: language!.widgetsInfo,
-        svgFileName: "widgets_info.svg",
-        index: WIDGETS_INFO_INDEX,
-        isOnHover: false,
-      ));
-      appStore.menuList.add(MenuWidgetsModel(
-        menuName: language!.faq,
-        svgFileName: "faqs.svg",
-        index: FAQS_INDEX,
-        isOnHover: false,
-      ));
-      appStore.menuList.add(MenuWidgetsModel(
-        menuName: "Project Media",
-        svgFileName: "Image.svg",
-        index: MEDIA_INDEX,
-        isOnHover: false,
-      ));
-    }
+    appStore.menuList.add(MenuWidgetsModel(
+      menuName: language!.widgetsInfo,
+      svgFileName: "widgets_info.svg",
+      index: WIDGETS_INFO_INDEX,
+      isOnHover: false,
+    ));
+    appStore.menuList.add(MenuWidgetsModel(
+      menuName: language!.faq,
+      svgFileName: "faqs.svg",
+      index: FAQS_INDEX,
+      isOnHover: false,
+    ));
+    appStore.menuList.add(MenuWidgetsModel(
+      menuName: "Project Media",
+      svgFileName: "Image.svg",
+      index: MEDIA_INDEX,
+      isOnHover: false,
+    ));
   }
 
   @override

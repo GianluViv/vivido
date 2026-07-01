@@ -1,4 +1,3 @@
-import 'package:flutter_viz/adminDashboard/model/template_list_model.dart';
 import 'package:flutter_viz/local/app_localizations.dart';
 import 'package:flutter_viz/local_storage/project.dart';
 import 'package:flutter_viz/model/device_screen_size.dart';
@@ -78,16 +77,7 @@ abstract class AppStoreBase with Store {
   bool isLoggedIn = false;
 
   @observable
-  bool isComponent = false;
-
-  @observable
-  bool isProjectTemplate = false;
-
-  @observable
   AppBarTheme appBarTheme = AppBarTheme();
-
-  @observable
-  TemplateData? screenTemplateData;
 
   @observable
   List<String> codeViewData = <String>[];

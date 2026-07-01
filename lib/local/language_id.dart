@@ -560,7 +560,6 @@ class LanguageId extends BaseLanguage {
   String get titleChip => "Chip";
 
   @override
-  String get titleGoogleMap => "Peta Google";
 
   @override
   String get titleYoutubePlayer => "Pemain YouTube";

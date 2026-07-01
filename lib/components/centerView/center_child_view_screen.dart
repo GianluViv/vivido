@@ -1,7 +1,6 @@
 import 'package:flutter_viz/components/faqs_component.dart';
 import 'package:flutter_viz/components/media_component.dart';
 import 'package:flutter_viz/components/predefine_list_component.dart';
-import 'package:flutter_viz/components/profile_component.dart';
 import 'package:flutter_viz/components/screen_list_component.dart';
 import 'package:flutter_viz/components/reorder_screen_widget.dart';
 import 'package:flutter_viz/components/screens_page_components.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_viz/components/centerView/center_body_component.dart';
 import 'package:flutter_viz/components/leftView/left_component_list_component.dart';
 import 'package:flutter_viz/components/leftView/left_widget_list_component.dart';
 import 'package:flutter_viz/components/rightView/right_screen_component.dart';
-import 'package:flutter_viz/components/tutorials_component.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter/cupertino.dart';
@@ -184,20 +182,6 @@ class _CenterChildViewScreenState extends State<CenterChildViewScreen> {
             width: getRightPropertyViewWidth(context),
           )
         ],
-      );
-    } else if (appStore.selectedMenu == PROFILE_INDEX) {
-      /// Profile View
-      return Container(
-        child: ProfileComponent(),
-        width: getChildWidgetsWidth(context, isExpanded: widget.isExpanded),
-        height: MediaQuery.of(context).size.height,
-      );
-    } else if (appStore.selectedMenu == TUTORIALS_INDEX) {
-      /// Tutorials View
-      return Container(
-        child: TutorialsComponent(),
-        width: getChildWidgetsWidth(context, isExpanded: widget.isExpanded),
-        height: MediaQuery.of(context).size.height,
       );
     } else if (appStore.selectedMenu == WIDGETS_INFO_INDEX) {
       /// Widgets Information View

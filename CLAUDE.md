@@ -4,42 +4,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-FlutterViz is a visual, drag-and-drop Flutter UI builder built as a Flutter app itself (primarily targeting Flutter Web). Users compose screens from a palette of 50+ built-in widgets, tweak properties in a right-hand panel, and export clean, formatted Dart code for the resulting layout.
+FlutterViz is a visual, drag-and-drop Flutter UI builder built as a Flutter app itself. Users compose screens from a palette of 50+ built-in widgets, tweak properties in a right-hand panel, and export clean, formatted Dart code for the resulting layout.
 
-The backend API for this project lives on a separate `backend` git branch, not in `main`.
+The upstream (non-fork) backend API for this project lives on a separate `backend` git branch, not in `main`. **This fork no longer uses it at all** — see below.
 
-## Fork goal: local desktop app (no backend)
+## Fork goal: local desktop app (no backend) — largely complete
 
-This fork's target direction is to turn FlutterViz into a **fully local desktop app for Linux/Windows** — no login, no remote backend, no Firebase requirement. Multi-page projects should be created, saved, and loaded from local disk instead of via REST calls.
+This fork's target direction is to turn FlutterViz into a **fully local desktop app for Linux/Windows** — no login, no remote backend, no Firebase. Multi-page projects are created, saved, and loaded from local disk instead of via REST calls. **Fases 0–5 of this migration are done** (only Fase 6 — packaging/installers and minor residual cleanup — remains); see [docs/local-desktop-plan.md](docs/local-desktop-plan.md) for the full phase-by-phase history and what's left.
 
-This is a significant change from upstream because project/screen/page management is currently backend-dependent end-to-end:
-- Login (`lib/screen/login_screen.dart`) calls `login()` (`lib/network/rest_apis.dart`) and gates everything behind `appStore.isLoggedIn`.
-- Project creation/listing (`lib/components/create_project_dialog.dart`, `lib/screen/welcome_screen.dart`) calls `addUserProject()` / `getUserProjectList()`.
-- Page/screen CRUD (`lib/components/add_screen_dialog.dart`, `add_page_dialog.dart`, `screen_list_component.dart`, `screens_page_components.dart`, `screen_clone_dialog.dart`) calls `addScreen()` / `deleteScreen()` / `getScreenList()`.
-- Autosave (`lib/screen/dashboard_screen.dart`, `autoSaveData()`) calls `addScreen()` on a timer.
+What changed from upstream:
+- `lib/network/` (REST client), `lib/adminDashboard/`, `LoginScreen`/`RegisterScreen`/`ForgotPasswordScreen`, and Firebase (Auth/Core/Analytics) + `google_sign_in` + `g_recaptcha_v3` + `flutter_dotenv`/`.env` have all been **removed**. The app boots straight into `WelcomeScreen()` (`lib/screen/welcome_screen.dart`) — a local "recent projects / new / open" picker.
+- Project/screen persistence is handled by `lib/local_storage/local_project_service.dart` (`LocalProjectService`, registered in `get_it`), which reads/writes a `Project` (`lib/local_storage/project.dart`) as a folder on disk: `<name>/project.json` + `<name>/media/` + `<name>/export/`. `project.json`'s `screens` list reuses the existing `ScreenListData` model — its `screenJsonData` field is exactly the string produced by `widgetClassToJsonData()`/consumed by `applyScreenJsonToView()`, so the widget-tree JSON format itself was never touched by this migration.
+- Media (image import) and code export are also fully local: `media_component.dart` copies picked files into `<project>/media/` via `LocalProjectService.importMedia`/`deleteMedia`; `header_component.dart`'s "Download" button zips the generated Dart source (via the `archive` package) and lets you pick a save location with `file_picker`.
+- Widgets with no viable desktop-native plugin (Google Map, YouTube/Video/Audio player) were removed entirely rather than stubbed — see §6 of the plan doc for how to reintroduce them.
 
-By contrast, the actual widget-tree editing (drag&drop, property editing, undo/redo, Dart code generation — see the "Widget tree model" and "Per-widget Class pattern" sections above) is already fully client-side and needs no changes to work offline.
-
-Direction for future work: replace the REST-backed project/screen persistence layer with local file storage (e.g. JSON files under a user data directory, using each `WidgetModel`'s existing `toJson()`/`fromJson()`), and replace/remove the login + Firebase auth gate so the app boots straight into project selection or the editor. Desktop (Linux/Windows) build targets will also need enabling (`flutter create --platforms=windows,linux .`) and `lib/firebase_options.dart` no longer needs to be the platform gate it is today.
-
-The detailed, phased work plan for this migration (technical design, backend touchpoints to replace, `.fvproj` local file format, and per-phase verification steps) lives in [docs/local-desktop-plan.md](docs/local-desktop-plan.md). Consult and update it when working toward this goal.
+By contrast, the actual widget-tree editing (drag&drop, property editing, undo/redo, Dart code generation — see the "Widget tree model" and "Per-widget Class pattern" sections below) was already fully client-side and needed no changes to work offline.
 
 ## Setup
 
-- Requires a `.env` file in the project root (loaded via `flutter_dotenv`, declared as an asset in `pubspec.yaml`). Needed keys: `BASE_URL`, `CAPTACHA_SITE_KEY`, `CAPTACHA_SECRET_KEY`, `INVITE_CODE`, and `GOOGLE_MAPS_API_KEY` (used in `lib/main.dart` to inject the Google Maps JS script on web).
-- Firebase (Auth + Analytics) is configured via `lib/firebase_options.dart` (generated by FlutterFire); Google Sign-In is used for auth.
+No `.env` file, Firebase config, or login is needed — the app has no network dependency at all.
 
 ## Common commands
 
 ```bash
 flutter pub get                                                   # install dependencies
-flutter run -d chrome --web-port 5000                              # run the app (web is the primary target)
+flutter run -d linux                                               # run the app on Linux
+flutter run -d windows                                             # run the app on Windows
+flutter run -d chrome --web-port 5000                              # run the app on web (secondary target in this fork)
 flutter packages pub run build_runner build --delete-conflicting-outputs
                                                                     # regenerate MobX code (*.g.dart) after editing any @observable/@action store
-flutter analyze                                                    # static analysis (flutter_lints)
-flutter test                                                       # run tests (test/widget_test.dart)
-flutter test test/widget_test.dart                                 # run a single test file
-flutter build web                                                  # production web build
+flutter analyze                                                    # static analysis (flutter_lints) — use `grep "error •"` (not `grep "^error"`) to check for real errors, see docs/local-desktop-plan.md
+flutter test                                                       # run tests (test/local_project_service_test.dart; test/widget_test.dart is a stale default-template test, ignore it)
+flutter build linux                                                # Linux desktop build
+flutter build windows                                              # Windows desktop build
+flutter build web                                                  # web build (secondary target in this fork)
 ```
 
 Run `build_runner` any time `lib/store/AppStore.dart` (or any other MobX `Store` class) changes — `AppStore.g.dart` is generated and must stay in sync, otherwise the app won't compile.
@@ -80,7 +78,6 @@ Most tree mutations (`addChildWidget`, `wrapWidget`, `copyWidget`, `moveWidget`,
 
 ### Other areas
 
-- `lib/network/` — REST client (`rest_apis.dart`, `auth_service.dart`, `network_utils.dart`) talking to the backend API (`BASE_URL` from `.env`); response models live in `lib/model/*.dart`.
-- `lib/adminDashboard/` — a self-contained admin section (own `model`/`screen`/`components`) for managing templates, users, categories, feedback, etc.
+- `lib/local_storage/` — `LocalProjectService` (project/screen/media CRUD on disk) and the `Project`/`ProjectMediaItem` models; this is the local replacement for the old `lib/network/` REST client (removed).
 - `lib/local/` — localization (`app_localizations.dart`, `languages.dart`); `AppStore.setLanguage` drives the active locale.
-- `lib/utils/` — shared helpers: `AppConstant.dart` (widget type/string constants), `AppFunctions.dart` (JSON<->Flutter value conversions like `fromJsonPadding`/`fromJsonColor`), `AppColors.dart`, `AppTheme.dart`, `AppCommon.dart`/`AppCommonApiCall.dart`, `syntax_highlighter.dart` (for the code view).
+- `lib/utils/` — shared helpers: `AppConstant.dart` (widget type/string constants), `AppFunctions.dart` (JSON<->Flutter value conversions like `fromJsonPadding`/`fromJsonColor`), `AppColors.dart`, `AppTheme.dart`, `AppCommon.dart`/`AppCommonApiCall.dart` (now local-only, no REST calls), `syntax_highlighter.dart` (for the code view).

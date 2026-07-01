@@ -1,5 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter_viz/local_storage/local_project_service.dart';
 import 'package:flutter_viz/model/media_list_model.dart';
-import 'package:flutter_viz/network/rest_apis.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
 import 'package:flutter_viz/utils/AppCommonApiCall.dart';
 import 'package:flutter_viz/utils/AppFunctions.dart';
@@ -8,7 +10,6 @@ import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
 
@@ -21,9 +22,6 @@ class MediaComponent extends StatefulWidget {
 
 class MediaComponentState extends State<MediaComponent> {
   List<MediaData> mediaList = [];
-  int currentPage = 1;
-  int totalPage = 1;
-  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -32,44 +30,26 @@ class MediaComponentState extends State<MediaComponent> {
   }
 
   Future<void> init() async {
-    mediaListApi(currentPage);
+    await refreshMediaList();
   }
 
-  ///Media List api call
-  Future<void> mediaListApi(int? page) async {
+  /// Local equivalent of the old paginated `getMediaList()` REST call — the
+  /// current project's `media/` folder is small enough not to need paging.
+  Future<void> refreshMediaList() async {
     appStore.setLoading(true);
-
-    await getMediaList(page: page).then((value) async {
-      appStore.setLoading(false);
-      mediaList.clear();
-      mediaList.addAll(value.data!);
-      totalPage = value.pagination!.totalPages!;
-      currentPage = value.pagination!.currentPage!;
-      if (mediaList.isEmpty && currentPage != 1) {
-        selectedIndex = 0;
-        mediaListApi(currentPage - 1);
-      }
-      setState(() {});
-      await allMediaListApi();
-    }).catchError((e) {
-      getToast(e.toString());
-      appStore.setLoading(false);
-    });
+    await allMediaListApi();
+    mediaList = List.of(appStore.mediaList);
+    appStore.setLoading(false);
+    setState(() {});
   }
 
-  ///delete Media api call
-  Future<void> deleteMediaApi(id) async {
+  Future<void> deleteMediaApi(MediaData mediaData) async {
+    final project = appStore.currentProject;
+    if (project == null) return;
     appStore.setLoading(true);
-    Map req = {
-      "id": id,
-    };
-    await deleteMedia(req).then((value) {
-      appStore.setLoading(false);
-      getToast(value.message!);
-    }).catchError((e) {
-      appStore.setLoading(false);
-      getToast(e.toString());
-    });
+    final relativePath = mediaData.userAttachment!.substring(project.directory.path.length + 1);
+    await locator<LocalProjectService>().deleteMedia(project, relativePath);
+    await refreshMediaList();
   }
 
   @override
@@ -132,7 +112,7 @@ class MediaComponentState extends State<MediaComponent> {
                         uploadMedia(
                           context,
                           onUpdate: () {
-                            mediaListApi(currentPage);
+                            refreshMediaList();
                           },
                         );
                       }),
@@ -152,14 +132,12 @@ class MediaComponentState extends State<MediaComponent> {
                                 ),
                                 child: Column(
                                   children: [
-                                    commonCachedNetworkImage(
-                                      mediaData.userAttachment!,
+                                    Image.file(
+                                      File(mediaData.userAttachment!),
                                       fit: BoxFit.cover,
                                       height: 150,
                                       width: context.width(),
-                                    ).cornerRadiusWithClipRRect(COMMON_BUTTON_BORDER_RADIUS).onTap(() {
-                                      launchUrl(Uri.parse(mediaData.userAttachment.validate()));
-                                    }),
+                                    ).cornerRadiusWithClipRRect(COMMON_BUTTON_BORDER_RADIUS),
                                     16.height,
                                     Row(
                                       children: [
@@ -176,9 +154,7 @@ class MediaComponentState extends State<MediaComponent> {
                                             messageText: "Are you sure you want to delete this asset ?",
                                             onAccept: () async {
                                               finish(context);
-                                              await deleteMediaApi(mediaData.id.validate());
-                                              mediaList.remove(mediaData);
-                                              await mediaListApi(currentPage);
+                                              await deleteMediaApi(mediaData);
                                             },
                                           );
                                         }),
@@ -190,41 +166,6 @@ class MediaComponentState extends State<MediaComponent> {
                             }).toList(),
                           ).paddingOnly(top: 70, bottom: 70)
                         : Text(language!.noDataFound, style: boldTextStyle()).visible(!appStore.isLoading).center(),
-                    Positioned(
-                      bottom: 16,
-                      left: 16,
-                      right: 16,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: 30,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.only(right: 8),
-                                itemCount: totalPage,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                    width: 30,
-                                    height: 50,
-                                    alignment: Alignment.center,
-                                    decoration: boxDecorationWithRoundedCorners(
-                                      borderRadius: BorderRadius.all(Radius.circular(4)),
-                                      backgroundColor: selectedIndex == index ? btnBackgroundColor : Colors.grey,
-                                    ),
-                                    child: Text("${index + 1}", style: boldTextStyle(color: Colors.white)),
-                                  ).paddingOnly(left: 8).onTap(() {
-                                    selectedIndex = index;
-                                    setState(() {});
-                                    mediaListApi(index + 1);
-                                  });
-                                }),
-                          ).visible(mediaList.isNotEmpty),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),

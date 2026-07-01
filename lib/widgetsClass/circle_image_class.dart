@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_viz/model/widget_model.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
@@ -137,10 +139,15 @@ class CircleImageClass {
               path ?? DEFAULT_NETWORK_IMAGE,
               fit: boxFit != null ? getBoxFit(boxFit) : BoxFit.cover,
             )
-          : Image.network(
-              path ?? DEFAULT_ASSET_IMAGE,
-              fit: boxFit != null ? getBoxFit(boxFit) : BoxFit.cover,
-            ),
+          : path != null
+              ? Image.file(
+                  File(path!),
+                  fit: boxFit != null ? getBoxFit(boxFit) : BoxFit.cover,
+                )
+              : Image.asset(
+                  DEFAULT_ASSET_IMAGE,
+                  fit: boxFit != null ? getBoxFit(boxFit) : BoxFit.cover,
+                ),
     );
     return getGestureDetector(widgetModel, childData);
   }

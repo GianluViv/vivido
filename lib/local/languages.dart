@@ -377,7 +377,6 @@ abstract class BaseLanguage {
 
   String get titleChip;
 
-  String get titleGoogleMap;
 
   String get titleYoutubePlayer;
 

@@ -561,7 +561,6 @@ class LanguageFr extends BaseLanguage {
   String get titleChip => "Ébrécher";
 
   @override
-  String get titleGoogleMap => "Google Map";
 
   @override
   String get titleYoutubePlayer => "Joueur de YouTube";

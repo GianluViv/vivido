@@ -560,7 +560,6 @@ class LanguageVi extends BaseLanguage {
   String get titleChip => "Chip";
 
   @override
-  String get titleGoogleMap => "Bản đồ Google";
 
   @override
   String get titleYoutubePlayer => "Cầu thủ youtube";

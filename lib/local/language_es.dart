@@ -560,7 +560,6 @@ class LanguageEs extends BaseLanguage {
   String get titleChip => "Chip";
 
   @override
-  String get titleGoogleMap => "Mapa de Google";
 
   @override
   String get titleYoutubePlayer => "Jugador de YouTube";

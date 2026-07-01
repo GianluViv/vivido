@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_viz/components/add_page_dialog.dart';
 import 'package:flutter_viz/externalClasses/on_hover.dart';
 import 'package:flutter_viz/main.dart';
 import 'package:flutter_viz/model/download_model.dart';
 import 'package:flutter_viz/model/screen_list_response.dart';
-import 'package:flutter_viz/network/rest_apis.dart';
 import 'package:flutter_viz/screen/preview_screen.dart';
 import 'package:flutter_viz/screen/welcome_screen.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
@@ -14,10 +14,10 @@ import 'package:flutter_viz/utils/AppCommonApiCall.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/utils/AppWidget.dart';
-import 'package:flutter_viz/utils/web_interop/web_interop.dart';
 import 'package:flutter_viz/widgets/screen_json_parser_class.dart';
 import 'package:flutter_viz/widgets/widgets.dart';
 import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
+import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -26,7 +26,6 @@ import 'package:lottie/lottie.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../model/models.dart';
-import 'feedback_dialog.dart';
 
 class HeaderComponent extends StatefulWidget {
   @override
@@ -37,8 +36,12 @@ class _HeaderComponentState extends State<HeaderComponent> {
   TextEditingController screenController = TextEditingController();
   bool isDarkMode = appStore.isDarkMode;
 
-  ///download Project latest api
+  /// Generates the Dart source for every screen, zips it and lets the user
+  /// save the archive wherever they like — local equivalent of the old
+  /// server-side `downloadProjectLatestApi()` zip download.
   Future<void> downloadProjectLatest() async {
+    final project = appStore.currentProject;
+    if (project == null) return;
     appStore.setProjectDownloading(true);
     List<Map> contents = [];
 
@@ -56,9 +59,6 @@ class _HeaderComponentState extends State<HeaderComponent> {
       for (int i = 0; i < filesContent.length; i++) {
         codeContent = codeContent + filesContent[i];
       }
-
-      log('codeContent $codeContent');
-      log('name ${getFileName(projectFileName: aDownloadModel.fileName)}.dart');
 
       contents.add({
         'file_name': "${getFileName(projectFileName: aDownloadModel.fileName)}.dart",
@@ -81,191 +81,31 @@ class _HeaderComponentState extends State<HeaderComponent> {
       });
     }
 
-    Map req = {
-      "project_name": appStore.projectName.validate(),
-      "is_project_delete": true,
-      "is_project_zip": true,
-      "contents": contents,
-    };
+    try {
+      final archive = Archive();
+      for (final file in contents) {
+        final bytes = utf8.encode(file['file_content'] as String);
+        archive.addFile(ArchiveFile(file['file_name'] as String, bytes.length, bytes));
+      }
+      final zipBytes = ZipEncoder().encode(archive);
 
-    log(req);
-    downloadProjectLatestApi(req).then((value) {
+      final savePath = await FilePicker.platform.saveFile(
+        dialogTitle: language!.downloadProject,
+        fileName: "${getFileName(projectFileName: project.name)}.zip",
+        type: FileType.custom,
+        allowedExtensions: ['zip'],
+      );
       appStore.setProjectDownloading(false);
+      if (savePath == null) return;
 
+      final outputPath = savePath.endsWith('.zip') ? savePath : '$savePath.zip';
+      await File(outputPath).writeAsBytes(zipBytes);
       trackUserEvent(DOWNLOAD_PROJECT_CODE);
+      getToast("Exported to $outputPath");
+    } catch (e) {
       appStore.setProjectDownloading(false);
-      downloadUrlInBrowser(value.url, "${appStore.projectName}");
-    }).catchError((e) {
-      appStore.setProjectDownloading(false);
-      log("latest project download here$e");
-    });
-  }
-
-  ///add template api call
-  Future<void> addTemplateApi(Map rootScreenDataJson) async {
-    hideKeyboard(context);
-    appStore.setLoading(true);
-    String? screenImage;
-    screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) async {
-      if (rootScreenDataJson['widgetsData'].isNotEmpty || rootScreenDataJson['appBarData'].isNotEmpty || rootScreenDataJson['bottomBarNavigationData'].isNotEmpty || rootScreenDataJson['drawerData'].isNotEmpty) {
-        screenImage = base64.encode(capturedImage!);
-      }
-
-      Map req = {
-        "id": appStore.screenTemplateData!.id,
-        "name": appStore.screenTemplateData!.name,
-        "category_id": appStore.screenTemplateData!.categoryId,
-        "status": appStore.screenTemplateData!.status,
-        "screen_data": json.encode(rootScreenDataJson),
-        "template_image": screenImage,
-      };
-      await addTemplate(req).then((value) {
-        appStore.setLoading(false);
-        getToast(value.message!);
-      }).catchError((e) {
-        appStore.setLoading(false);
-        getToast(e.toString());
-      });
-    }).catchError((onError) {
-      print(onError);
-    });
-  }
-
-  ///add component api call
-  Future<void> addComponentApi(Map rootScreenDataJson) async {
-    hideKeyboard(context);
-    appStore.setLoading(true);
-    Map req = {
-      "id": appStore.screenTemplateData!.id,
-      "name": appStore.screenTemplateData!.name,
-      "category_id": appStore.screenTemplateData!.categoryId,
-      "status": appStore.screenTemplateData!.status,
-      "screen_data": json.encode(rootScreenDataJson),
-    };
-
-    await addComponent(req).then((value) {
-      appStore.setLoading(false);
-      getToast(value.message!);
-    }).catchError((e) {
-      appStore.setLoading(false);
+      log("project export failed: $e");
       getToast(e.toString());
-    });
-  }
-
-  ///addProjectTemplateApi call
-  Future<void> addProjectTemplateApi(Map rootScreenDataJson) async {
-    hideKeyboard(context);
-    appStore.setLoading(true);
-    String? screenImage;
-    screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) async {
-      if (rootScreenDataJson['widgetsData'].isNotEmpty || rootScreenDataJson['appBarData'].isNotEmpty || rootScreenDataJson['bottomBarNavigationData'].isNotEmpty || rootScreenDataJson['drawerData'].isNotEmpty) {
-        screenImage = base64.encode(capturedImage!);
-      }
-      Map req = {
-        "id": appStore.screenTemplateData!.id,
-        "name": appStore.screenTemplateData!.name,
-        "status": appStore.screenTemplateData!.status,
-        "project_template_id": appStore.screenTemplateData!.projectTemplateId,
-        "data": json.encode(rootScreenDataJson),
-        "project_template_screen_image": screenImage,
-      };
-      await addProjectTemplate(req).then((value) {
-        appStore.setLoading(false);
-        LiveStream().emit(getUpdatedData, true);
-        getToast(value.message!);
-      }).catchError((e) {
-        appStore.setLoading(false);
-        getToast(e.toString());
-      });
-    }).catchError((onError) {
-      print(onError);
-    });
-  }
-
-  ///downloadProject call
-  Future<void> downloadProjectApi({bool? isProjectDelete, bool? isProjectZip}) async {
-    if (appStore.screenList.length > 0) {
-      createDartFile(0, true);
-    }
-  }
-
-  Map getDownloadFileRequest(bool isProjectDelete, bool isProjectZip, String fileName, String filesContent) {
-    Map req = {
-      "project_name": appStore.projectName.validate(),
-      "is_project_delete": isProjectDelete,
-      "is_project_zip": isProjectZip,
-      "file_name": fileName,
-      "file_content": filesContent,
-    };
-    return req;
-  }
-
-  downloadOtherFiles(int index, bool isDeleteProject) async {
-    if (!isContainsExtraFiles(appStore.headerImport[index])) {
-      bool isProjectZip = false;
-      String fileName = appStore.headerImport[index].replaceAll("import ", "").replaceAll("'", "").replaceAll(";", "");
-      String fileContent = await loadFileContent(fileName);
-
-      Map req = getDownloadFileRequest(isDeleteProject, isProjectZip, fileName, fileContent);
-
-      await downloadProject(req).then((value) async {
-        int newIndex = index + 1;
-        if (appStore.headerImport.length > newIndex) {
-          await downloadOtherFiles(newIndex, false);
-        }
-      }).catchError((e) {
-        appStore.setProjectDownloading(false);
-        getToast(e.toString());
-      });
-    }
-  }
-
-  /// Create a dart file on server for download
-  createDartFile(int index, bool isDeleteProject) async {
-    if (appStore.screenList[index].id! > 0) {
-      appStore.setProjectDownloading(true);
-
-      appStore.codeViewData.clear();
-      appStore.headerImport.clear();
-      appStore.yamlImportLib.clear();
-
-      DownloadModel aDownloadModel = await applyScreenJsonToView(appStore.screenList[index].screenJsonData, isForDownload: true);
-      aDownloadModel.fileName = appStore.screenList[index].name;
-      List<String> filesContent = await viewFinalSourceData(aDownloadModel.selectedWidgetList, downloadModel: aDownloadModel);
-
-      /// Other Files
-      if (appStore.headerImport.length > 0) {
-        await downloadOtherFiles(0, isDeleteProject);
-      }
-
-      String codeContent = "";
-
-      for (int i = 0; i < filesContent.length; i++) {
-        codeContent = codeContent + filesContent[i];
-      }
-
-      Map req = getDownloadFileRequest(isDeleteProject, (appStore.screenList.length - 1) == index ? true : false, "${getFileName(projectFileName: appStore.screenList[index].name)}.dart", codeContent);
-
-      await downloadProject(req).then((value) {
-        if (index == appStore.screenList.length - 1 && value.url!.isNotEmpty) {
-          trackUserEvent(DOWNLOAD_PROJECT_CODE);
-          appStore.setProjectDownloading(false);
-          downloadUrlInBrowser(value.url, "${appStore.projectName}");
-        } else {
-          int newIndex = index + 1;
-          if (appStore.screenList.length > newIndex) {
-            createDartFile(newIndex, false);
-          }
-        }
-      }).catchError((e) {
-        appStore.setProjectDownloading(false);
-        getToast(e.toString());
-      });
-    } else {
-      int newIndex = index + 1;
-      if (appStore.screenList.length > newIndex) {
-        createDartFile(newIndex, (newIndex == 1) ? true : false);
-      }
     }
   }
 
@@ -281,8 +121,7 @@ class _HeaderComponentState extends State<HeaderComponent> {
                 children: [
                   getHeaderLogoImage(),
                   16.width,
-                  (appStore.screenTemplateData == null)
-                      ? Row(
+                  Row(
                           children: [
                             OnHover(builder: (isHovered) {
                               return elevationButtonHighLightColor(
@@ -290,35 +129,15 @@ class _HeaderComponentState extends State<HeaderComponent> {
                                 child: highLightIcon(isHovered, icon: Icons.add),
                                 toolTipMessage: language!.createPage,
                                 onPressed: () async {
-                                  ifNotTester(() async {
-                                    trackUserEvent(VIEW_TEMPLATES);
-                                    await showInDialog(
-                                      context,
-                                      contentPadding: EdgeInsets.all(30),
-                                      backgroundColor: context.scaffoldBackgroundColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(COMMON_CARD_BORDER_RADIUS),
-                                      ),
-                                      builder: (context) => AddPageDialog(),
-                                    );
-                                  });
-                                },
-                              );
-                            }),
-                            16.width,
-                            OnHover(builder: (isHovered) {
-                              return elevationButtonHighLightColor(
-                                isHovered: isHovered,
-                                child: highLightIcon(isHovered, icon: Icons.feedback),
-                                toolTipMessage: language!.feedBack,
-                                onPressed: () async {
+                                  trackUserEvent(VIEW_TEMPLATES);
                                   await showInDialog(
                                     context,
+                                    contentPadding: EdgeInsets.all(30),
+                                    backgroundColor: context.scaffoldBackgroundColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(COMMON_CARD_BORDER_RADIUS),
                                     ),
-                                    contentPadding: EdgeInsets.all(16),
-                                    builder: (context) => FeedbackDialog(),
+                                    builder: (context) => AddPageDialog(),
                                   );
                                 },
                               );
@@ -337,13 +156,11 @@ class _HeaderComponentState extends State<HeaderComponent> {
                                       : highLightIcon(isHovered, icon: Icons.download),
                                   toolTipMessage: (appStore.isProjectDownloading) ? language!.downloadingInProgress : language!.downloadProject,
                                   onPressed: () async {
-                                    ifNotTester(() async {
-                                      if (appStore.isProjectDownloading) {
-                                        getToast(language!.downloadingInProgress);
-                                      } else {
-                                        downloadProjectLatest();
-                                      }
-                                    });
+                                    if (appStore.isProjectDownloading) {
+                                      getToast(language!.downloadingInProgress);
+                                    } else {
+                                      downloadProjectLatest();
+                                    }
                                   },
                                 ),
                               );
@@ -383,48 +200,7 @@ class _HeaderComponentState extends State<HeaderComponent> {
                             }),
                             16.width,
                           ],
-                        )
-                      : SizedBox(),
-                  (appStore.screenTemplateData != null)
-                      ? Row(
-                          children: [
-                            OnHover(builder: (isHovered) {
-                              return elevationButtonHighLightColor(
-                                toolTipMessage: language!.viewSourceCode,
-                                isHovered: isHovered,
-                                child: highLightIcon(isHovered, icon: Icons.code),
-                                onPressed: () {
-                                  viewSourceCode(context);
-                                },
-                              );
-                            }),
-                            16.width,
-                            OnHover(
-                              builder: (isHovered) {
-                                return elevationButtonHighLightColor(
-                                  toolTipMessage: language!.clearCurrentScreenData,
-                                  isHovered: isHovered,
-                                  child: highLightIcon(isHovered, icon: Icons.clear_all),
-                                  onPressed: () {
-                                    showConfirmDialog(
-                                      context,
-                                      language!.areYouClearScreenData,
-                                      onAccept: () {
-                                        trackUserEvent(CLEAR_DATA);
-                                        appStore.resetView();
-                                      },
-                                      buttonColor: appStore.isDarkMode ? darkModeHighLightColor : Colors.red,
-                                      positiveText: language!.clear,
-                                      negativeText: language!.cancel,
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                            16.width,
-                          ],
-                        )
-                      : SizedBox(),
+                        ),
                   OnHover(
                     builder: (isHovered) {
                       return elevationButtonWithText(
@@ -447,88 +223,39 @@ class _HeaderComponentState extends State<HeaderComponent> {
                       isHovered: isHovered,
                       toolTipMessage: language!.save,
                       icon: Icons.save,
-                      title: appStore.isComponent
-                          ? (appStore.screenTemplateData == null)
-                              ? language!.save
-                              : language!.saveComponent
-                          : appStore.isProjectTemplate
-                              ? (appStore.screenTemplateData == null)
-                                  ? language!.save
-                                  : language!.saveTemplateAsProject
-                              : (appStore.screenTemplateData == null)
-                                  ? language!.save
-                                  : language!.saveTemplates,
+                      title: language!.save,
                       onPressed: () async {
-                        ifNotTester(() async {
-                          if (appStore.isProjectDownloading) {
-                            getToast(language!.downloadingInProgress);
-                          } else {
-                            Map<String, dynamic> rootScreenDataJson = await widgetClassToJsonData();
-
-                            if (appStore.screenTemplateData == null) {
-                              if (appStore.selectedScreenId! > 0) {
-                                saveScreenApi();
-                              }
-                            } else {
-                              appStore.isComponent
-                                  ? addComponentApi(rootScreenDataJson)
-                                  : appStore.isProjectTemplate
-                                      ? addProjectTemplateApi(rootScreenDataJson)
-                                      : addTemplateApi(rootScreenDataJson);
-                            }
-                          }
-                        });
+                        if (appStore.isProjectDownloading) {
+                          getToast(language!.downloadingInProgress);
+                        } else if (appStore.selectedScreenId! > 0) {
+                          saveScreenApi();
+                        }
                       },
                     );
                   }),
-                  SizedBox(width: 16).visible(appStore.screenTemplateData == null),
-                  (appStore.screenTemplateData == null)
-                      ? OnHover(builder: (isHovered) {
-                          return elevationButtonHighLightColor(
-                            isHovered: isHovered,
-                            child: SvgPicture.asset(
-                              "${WidgetIconPath}preview.svg",
-                              color: isHovered
-                                  ? btnBackgroundColor
-                                  : appStore.isDarkMode
-                                      ? Colors.white
-                                      : btnBackgroundColor,
-                              height: btnIconSize,
-                              width: btnIconSize,
-                            ),
-                            toolTipMessage: language!.preview,
-                            onPressed: () async {
-                              appStore.setPreviewCode(true);
-                              PreviewScreen().launch(context);
-                            },
-                          );
-                        })
-                      : SizedBox(),
-                  SizedBox(width: 16).visible(appStore.screenTemplateData != null),
-                  (appStore.screenTemplateData != null)
-                      ? OnHover(builder: (isHovered) {
-                          return elevationButtonWithIcon(
-                              isHovered: isHovered,
-                              toolTipMessage: language!.back,
-                              title: language!.back,
-                              icon: Icons.arrow_back,
-                              onPressed: () {
-                                showConfirmDialog(
-                                  context,
-                                  language!.areYouWantToBack,
-                                  buttonColor: appStore.isDarkMode ? darModePrimaryTextColor : textColorPrimary,
-                                  onAccept: () {
-                                    appStore.selectedMenu = ADMIN_TEMPLATES_INDEX;
-                                    finish(context);
-                                  },
-                                );
-                              });
-                        })
-                      : SizedBox(),
-                  appStore.screenTemplateData == null ? 16.width : 0.width,
-                  appStore.screenTemplateData == null ? darkModeSwitchWidget() : SizedBox(),
-                  appStore.screenTemplateData == null ? 16.width : 0.width,
-                  appStore.screenTemplateData == null ? getProfileWidget(context) : SizedBox(),
+                  16.width,
+                  OnHover(builder: (isHovered) {
+                    return elevationButtonHighLightColor(
+                      isHovered: isHovered,
+                      child: SvgPicture.asset(
+                        "${WidgetIconPath}preview.svg",
+                        color: isHovered
+                            ? btnBackgroundColor
+                            : appStore.isDarkMode
+                                ? Colors.white
+                                : btnBackgroundColor,
+                        height: btnIconSize,
+                        width: btnIconSize,
+                      ),
+                      toolTipMessage: language!.preview,
+                      onPressed: () async {
+                        appStore.setPreviewCode(true);
+                        PreviewScreen().launch(context);
+                      },
+                    );
+                  }),
+                  16.width,
+                  darkModeSwitchWidget(),
                 ],
               )
             : Row(
@@ -536,8 +263,6 @@ class _HeaderComponentState extends State<HeaderComponent> {
                   getHeaderLogoImage(),
                   16.width,
                   darkModeSwitchWidget(),
-                  16.width,
-                  getProfileWidget(context),
                 ],
               ),
       );

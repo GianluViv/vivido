@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_viz/model/widget_model.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
@@ -148,9 +150,20 @@ class ImageClass {
     return data;
   }
 
+  /// Live-preview image provider for the editor canvas. "Asset" images picked via
+  /// the local media picker (Fase 4) are absolute file paths on disk, not bundled
+  /// Flutter assets — use FileImage for those, falling back to this app's own
+  /// placeholder asset when nothing has been picked yet.
+  ImageProvider _getImageProvider() {
+    if (imageType == ImageTypeAsset) {
+      return path != null ? FileImage(File(path!)) : AssetImage(DEFAULT_ASSET_IMAGE) as ImageProvider;
+    }
+    return NetworkImage(path ?? DEFAULT_NETWORK_IMAGE);
+  }
+
   Widget getImageDefaultWidget(WidgetModel widgetModel) {
     Widget childData = Image(
-      image: (imageType == ImageTypeAsset ? NetworkImage(path ?? DEFAULT_ASSET_IMAGE) : NetworkImage(path ?? DEFAULT_NETWORK_IMAGE)) /* as ImageProvider<Object>*/,
+      image: _getImageProvider(),
       height: isHeightClear! ? null : fromJsonHeight(height ?? DEFAULT_IMAGE_HEIGHT as double?, heightType),
       width: isWidthClear! ? null : fromJsonWidth(width ?? DEFAULT_IMAGE_WIDTH as double?, widthType),
       fit: fit != null ? getBoxFit(fit) : BoxFit.cover,

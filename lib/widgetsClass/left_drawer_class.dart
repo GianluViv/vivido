@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_viz/externalClasses/flutterViz_drawer.dart';
 import 'package:flutter_viz/externalClasses/flutterViz_drawerItem_model.dart';
 import 'package:flutter_viz/main.dart';
@@ -172,12 +174,19 @@ class LeftDrawerClass {
     return flutterVizDrawerItems;
   }
 
+  ImageProvider _getProfileImageProvider() {
+    if (profileImageType == ImageTypeAsset) {
+      return profileImagePath != null ? FileImage(File(profileImagePath!)) : AssetImage(DEFAULT_DRAWER_ASSET_IMAGE) as ImageProvider;
+    }
+    return NetworkImage(profileImagePath ?? DEFAULT_DRAWER_NETWORK_IMAGE);
+  }
+
   Widget getLeftDrawerWidget({BuildContext? context}) {
     return GestureDetector(
       child: FlutterVizDrawer(
         elevation: elevation ?? DEFAULT_DRAWER_ELEVATION,
         headerColor: headerColor ?? COMMON_BG_COLOR,
-        profileImage: (profileImageType == ImageTypeAsset ? NetworkImage(profileImagePath ?? DEFAULT_DRAWER_ASSET_IMAGE) : NetworkImage(profileImagePath ?? DEFAULT_DRAWER_NETWORK_IMAGE)),
+        profileImage: _getProfileImageProvider(),
         name: name ?? DUMMY_USER_NAME,
         nameStyle: TextStyle(
           fontWeight: getFontWeight(nameFontWeight) ?? FontWeight.normal,

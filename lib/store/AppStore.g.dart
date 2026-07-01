@@ -9,7 +9,8 @@ part of 'AppStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppStore on AppStoreBase, Store {
-  late final _$isProjectDownloadingAtom = Atom(name: 'AppStoreBase.isProjectDownloading', context: context);
+  late final _$isProjectDownloadingAtom =
+      Atom(name: 'AppStoreBase.isProjectDownloading', context: context);
 
   @override
   bool get isProjectDownloading {
@@ -19,12 +20,14 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   set isProjectDownloading(bool value) {
-    _$isProjectDownloadingAtom.reportWrite(value, super.isProjectDownloading, () {
+    _$isProjectDownloadingAtom.reportWrite(value, super.isProjectDownloading,
+        () {
       super.isProjectDownloading = value;
     });
   }
 
-  late final _$isDarkModeOnAtom = Atom(name: 'AppStoreBase.isDarkModeOn', context: context);
+  late final _$isDarkModeOnAtom =
+      Atom(name: 'AppStoreBase.isDarkModeOn', context: context);
 
   @override
   bool get isDarkModeOn {
@@ -39,7 +42,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isPreviewCodeAtom = Atom(name: 'AppStoreBase.isPreviewCode', context: context);
+  late final _$isPreviewCodeAtom =
+      Atom(name: 'AppStoreBase.isPreviewCode', context: context);
 
   @override
   bool get isPreviewCode {
@@ -54,7 +58,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isLoadingScreenDataAtom = Atom(name: 'AppStoreBase.isLoadingScreenData', context: context);
+  late final _$isLoadingScreenDataAtom =
+      Atom(name: 'AppStoreBase.isLoadingScreenData', context: context);
 
   @override
   bool get isLoadingScreenData {
@@ -69,7 +74,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$previousKeyAtom = Atom(name: 'AppStoreBase.previousKey', context: context);
+  late final _$previousKeyAtom =
+      Atom(name: 'AppStoreBase.previousKey', context: context);
 
   @override
   LogicalKeyboardKey? get previousKey {
@@ -84,7 +90,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isViewPropertyAtom = Atom(name: 'AppStoreBase.isViewProperty', context: context);
+  late final _$isViewPropertyAtom =
+      Atom(name: 'AppStoreBase.isViewProperty', context: context);
 
   @override
   bool get isViewProperty {
@@ -99,7 +106,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isLoadingAtom = Atom(name: 'AppStoreBase.isLoading', context: context);
+  late final _$isLoadingAtom =
+      Atom(name: 'AppStoreBase.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -114,7 +122,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isAlignXAtom = Atom(name: 'AppStoreBase.isAlignX', context: context);
+  late final _$isAlignXAtom =
+      Atom(name: 'AppStoreBase.isAlignX', context: context);
 
   @override
   bool? get isAlignX {
@@ -129,7 +138,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$lastSyncTimeAtom = Atom(name: 'AppStoreBase.lastSyncTime', context: context);
+  late final _$lastSyncTimeAtom =
+      Atom(name: 'AppStoreBase.lastSyncTime', context: context);
 
   @override
   String? get lastSyncTime {
@@ -144,7 +154,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isAlignYAtom = Atom(name: 'AppStoreBase.isAlignY', context: context);
+  late final _$isAlignYAtom =
+      Atom(name: 'AppStoreBase.isAlignY', context: context);
 
   @override
   bool? get isAlignY {
@@ -159,7 +170,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isPaginationIndicatorAlignXAtom = Atom(name: 'AppStoreBase.isPaginationIndicatorAlignX', context: context);
+  late final _$isPaginationIndicatorAlignXAtom =
+      Atom(name: 'AppStoreBase.isPaginationIndicatorAlignX', context: context);
 
   @override
   bool? get isPaginationIndicatorAlignX {
@@ -169,12 +181,14 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   set isPaginationIndicatorAlignX(bool? value) {
-    _$isPaginationIndicatorAlignXAtom.reportWrite(value, super.isPaginationIndicatorAlignX, () {
+    _$isPaginationIndicatorAlignXAtom
+        .reportWrite(value, super.isPaginationIndicatorAlignX, () {
       super.isPaginationIndicatorAlignX = value;
     });
   }
 
-  late final _$isPaginationIndicatorAlignYAtom = Atom(name: 'AppStoreBase.isPaginationIndicatorAlignY', context: context);
+  late final _$isPaginationIndicatorAlignYAtom =
+      Atom(name: 'AppStoreBase.isPaginationIndicatorAlignY', context: context);
 
   @override
   bool? get isPaginationIndicatorAlignY {
@@ -184,12 +198,14 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   set isPaginationIndicatorAlignY(bool? value) {
-    _$isPaginationIndicatorAlignYAtom.reportWrite(value, super.isPaginationIndicatorAlignY, () {
+    _$isPaginationIndicatorAlignYAtom
+        .reportWrite(value, super.isPaginationIndicatorAlignY, () {
       super.isPaginationIndicatorAlignY = value;
     });
   }
 
-  late final _$isLoggedInAtom = Atom(name: 'AppStoreBase.isLoggedIn', context: context);
+  late final _$isLoggedInAtom =
+      Atom(name: 'AppStoreBase.isLoggedIn', context: context);
 
   @override
   bool get isLoggedIn {
@@ -204,37 +220,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isComponentAtom = Atom(name: 'AppStoreBase.isComponent', context: context);
-
-  @override
-  bool get isComponent {
-    _$isComponentAtom.reportRead();
-    return super.isComponent;
-  }
-
-  @override
-  set isComponent(bool value) {
-    _$isComponentAtom.reportWrite(value, super.isComponent, () {
-      super.isComponent = value;
-    });
-  }
-
-  late final _$isProjectTemplateAtom = Atom(name: 'AppStoreBase.isProjectTemplate', context: context);
-
-  @override
-  bool get isProjectTemplate {
-    _$isProjectTemplateAtom.reportRead();
-    return super.isProjectTemplate;
-  }
-
-  @override
-  set isProjectTemplate(bool value) {
-    _$isProjectTemplateAtom.reportWrite(value, super.isProjectTemplate, () {
-      super.isProjectTemplate = value;
-    });
-  }
-
-  late final _$appBarThemeAtom = Atom(name: 'AppStoreBase.appBarTheme', context: context);
+  late final _$appBarThemeAtom =
+      Atom(name: 'AppStoreBase.appBarTheme', context: context);
 
   @override
   AppBarTheme get appBarTheme {
@@ -249,22 +236,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$screenTemplateDataAtom = Atom(name: 'AppStoreBase.screenTemplateData', context: context);
-
-  @override
-  TemplateData? get screenTemplateData {
-    _$screenTemplateDataAtom.reportRead();
-    return super.screenTemplateData;
-  }
-
-  @override
-  set screenTemplateData(TemplateData? value) {
-    _$screenTemplateDataAtom.reportWrite(value, super.screenTemplateData, () {
-      super.screenTemplateData = value;
-    });
-  }
-
-  late final _$codeViewDataAtom = Atom(name: 'AppStoreBase.codeViewData', context: context);
+  late final _$codeViewDataAtom =
+      Atom(name: 'AppStoreBase.codeViewData', context: context);
 
   @override
   List<String> get codeViewData {
@@ -279,7 +252,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$widgetCodeDataAtom = Atom(name: 'AppStoreBase.widgetCodeData', context: context);
+  late final _$widgetCodeDataAtom =
+      Atom(name: 'AppStoreBase.widgetCodeData', context: context);
 
   @override
   List<String> get widgetCodeData {
@@ -294,7 +268,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$selectedPropertyAtom = Atom(name: 'AppStoreBase.selectedProperty', context: context);
+  late final _$selectedPropertyAtom =
+      Atom(name: 'AppStoreBase.selectedProperty', context: context);
 
   @override
   int get selectedProperty {
@@ -309,7 +284,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$selectedMenuAtom = Atom(name: 'AppStoreBase.selectedMenu', context: context);
+  late final _$selectedMenuAtom =
+      Atom(name: 'AppStoreBase.selectedMenu', context: context);
 
   @override
   int? get selectedMenu {
@@ -324,7 +300,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$selectedScreenIdAtom = Atom(name: 'AppStoreBase.selectedScreenId', context: context);
+  late final _$selectedScreenIdAtom =
+      Atom(name: 'AppStoreBase.selectedScreenId', context: context);
 
   @override
   int? get selectedScreenId {
@@ -339,7 +316,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$projectIdAtom = Atom(name: 'AppStoreBase.projectId', context: context);
+  late final _$projectIdAtom =
+      Atom(name: 'AppStoreBase.projectId', context: context);
 
   @override
   int? get projectId {
@@ -354,7 +332,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$projectNameAtom = Atom(name: 'AppStoreBase.projectName', context: context);
+  late final _$projectNameAtom =
+      Atom(name: 'AppStoreBase.projectName', context: context);
 
   @override
   String? get projectName {
@@ -369,7 +348,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$fileNameAtom = Atom(name: 'AppStoreBase.fileName', context: context);
+  late final _$fileNameAtom =
+      Atom(name: 'AppStoreBase.fileName', context: context);
 
   @override
   String? get fileName {
@@ -384,7 +364,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$fileContentAtom = Atom(name: 'AppStoreBase.fileContent', context: context);
+  late final _$fileContentAtom =
+      Atom(name: 'AppStoreBase.fileContent', context: context);
 
   @override
   String? get fileContent {
@@ -399,7 +380,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$selectedDropdownScreenAtom = Atom(name: 'AppStoreBase.selectedDropdownScreen', context: context);
+  late final _$selectedDropdownScreenAtom =
+      Atom(name: 'AppStoreBase.selectedDropdownScreen', context: context);
 
   @override
   ScreenListData? get selectedDropdownScreen {
@@ -409,12 +391,14 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   set selectedDropdownScreen(ScreenListData? value) {
-    _$selectedDropdownScreenAtom.reportWrite(value, super.selectedDropdownScreen, () {
+    _$selectedDropdownScreenAtom
+        .reportWrite(value, super.selectedDropdownScreen, () {
       super.selectedDropdownScreen = value;
     });
   }
 
-  late final _$drawerClassAtom = Atom(name: 'AppStoreBase.drawerClass', context: context);
+  late final _$drawerClassAtom =
+      Atom(name: 'AppStoreBase.drawerClass', context: context);
 
   @override
   WidgetModel? get drawerClass {
@@ -429,7 +413,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$appBarClassAtom = Atom(name: 'AppStoreBase.appBarClass', context: context);
+  late final _$appBarClassAtom =
+      Atom(name: 'AppStoreBase.appBarClass', context: context);
 
   @override
   WidgetModel? get appBarClass {
@@ -444,7 +429,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$bottomNavigationBarClassAtom = Atom(name: 'AppStoreBase.bottomNavigationBarClass', context: context);
+  late final _$bottomNavigationBarClassAtom =
+      Atom(name: 'AppStoreBase.bottomNavigationBarClass', context: context);
 
   @override
   WidgetModel? get bottomNavigationBarClass {
@@ -454,12 +440,14 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   set bottomNavigationBarClass(WidgetModel? value) {
-    _$bottomNavigationBarClassAtom.reportWrite(value, super.bottomNavigationBarClass, () {
+    _$bottomNavigationBarClassAtom
+        .reportWrite(value, super.bottomNavigationBarClass, () {
       super.bottomNavigationBarClass = value;
     });
   }
 
-  late final _$rootViewAtom = Atom(name: 'AppStoreBase.rootView', context: context);
+  late final _$rootViewAtom =
+      Atom(name: 'AppStoreBase.rootView', context: context);
 
   @override
   WidgetModel? get rootView {
@@ -474,7 +462,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$parentWidgetsListAtom = Atom(name: 'AppStoreBase.parentWidgetsList', context: context);
+  late final _$parentWidgetsListAtom =
+      Atom(name: 'AppStoreBase.parentWidgetsList', context: context);
 
   @override
   List<WidgetModel> get parentWidgetsList {
@@ -489,7 +478,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$selectedWidgetListAtom = Atom(name: 'AppStoreBase.selectedWidgetList', context: context);
+  late final _$selectedWidgetListAtom =
+      Atom(name: 'AppStoreBase.selectedWidgetList', context: context);
 
   @override
   List<WidgetModel> get selectedWidgetList {
@@ -504,7 +494,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$screenListAtom = Atom(name: 'AppStoreBase.screenList', context: context);
+  late final _$screenListAtom =
+      Atom(name: 'AppStoreBase.screenList', context: context);
 
   @override
   List<ScreenListData> get screenList {
@@ -519,7 +510,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$currentSelectedWidgetAtom = Atom(name: 'AppStoreBase.currentSelectedWidget', context: context);
+  late final _$currentSelectedWidgetAtom =
+      Atom(name: 'AppStoreBase.currentSelectedWidget', context: context);
 
   @override
   WidgetModel? get currentSelectedWidget {
@@ -529,12 +521,14 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   set currentSelectedWidget(WidgetModel? value) {
-    _$currentSelectedWidgetAtom.reportWrite(value, super.currentSelectedWidget, () {
+    _$currentSelectedWidgetAtom.reportWrite(value, super.currentSelectedWidget,
+        () {
       super.currentSelectedWidget = value;
     });
   }
 
-  late final _$menuListAtom = Atom(name: 'AppStoreBase.menuList', context: context);
+  late final _$menuListAtom =
+      Atom(name: 'AppStoreBase.menuList', context: context);
 
   @override
   List<MenuWidgetsModel> get menuList {
@@ -549,7 +543,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$adminMenuListAtom = Atom(name: 'AppStoreBase.adminMenuList', context: context);
+  late final _$adminMenuListAtom =
+      Atom(name: 'AppStoreBase.adminMenuList', context: context);
 
   @override
   List<MenuWidgetsModel> get adminMenuList {
@@ -564,7 +559,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$mediaListAtom = Atom(name: 'AppStoreBase.mediaList', context: context);
+  late final _$mediaListAtom =
+      Atom(name: 'AppStoreBase.mediaList', context: context);
 
   @override
   List<MediaData> get mediaList {
@@ -579,7 +575,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isPaddingLockAtom = Atom(name: 'AppStoreBase.isPaddingLock', context: context);
+  late final _$isPaddingLockAtom =
+      Atom(name: 'AppStoreBase.isPaddingLock', context: context);
 
   @override
   bool get isPaddingLock {
@@ -594,7 +591,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isRadiusLockAtom = Atom(name: 'AppStoreBase.isRadiusLock', context: context);
+  late final _$isRadiusLockAtom =
+      Atom(name: 'AppStoreBase.isRadiusLock', context: context);
 
   @override
   bool get isRadiusLock {
@@ -624,7 +622,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isAlignAtom = Atom(name: 'AppStoreBase.isAlign', context: context);
+  late final _$isAlignAtom =
+      Atom(name: 'AppStoreBase.isAlign', context: context);
 
   @override
   bool get isAlign {
@@ -639,7 +638,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$alignmentAtom = Atom(name: 'AppStoreBase.alignment', context: context);
+  late final _$alignmentAtom =
+      Atom(name: 'AppStoreBase.alignment', context: context);
 
   @override
   Alignment? get alignment {
@@ -654,7 +654,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$pageViewAlignmentAtom = Atom(name: 'AppStoreBase.pageViewAlignment', context: context);
+  late final _$pageViewAlignmentAtom =
+      Atom(name: 'AppStoreBase.pageViewAlignment', context: context);
 
   @override
   Alignment? get pageViewAlignment {
@@ -669,7 +670,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$valueErrorMsgAtom = Atom(name: 'AppStoreBase.valueErrorMsg', context: context);
+  late final _$valueErrorMsgAtom =
+      Atom(name: 'AppStoreBase.valueErrorMsg', context: context);
 
   @override
   String get valueErrorMsg {
@@ -684,7 +686,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$selectedLanguageCodeAtom = Atom(name: 'AppStoreBase.selectedLanguageCode', context: context);
+  late final _$selectedLanguageCodeAtom =
+      Atom(name: 'AppStoreBase.selectedLanguageCode', context: context);
 
   @override
   String? get selectedLanguageCode {
@@ -694,12 +697,14 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   set selectedLanguageCode(String? value) {
-    _$selectedLanguageCodeAtom.reportWrite(value, super.selectedLanguageCode, () {
+    _$selectedLanguageCodeAtom.reportWrite(value, super.selectedLanguageCode,
+        () {
       super.selectedLanguageCode = value;
     });
   }
 
-  late final _$isLanguageChangedAtom = Atom(name: 'AppStoreBase.isLanguageChanged', context: context);
+  late final _$isLanguageChangedAtom =
+      Atom(name: 'AppStoreBase.isLanguageChanged', context: context);
 
   @override
   bool get isLanguageChanged {
@@ -714,7 +719,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$isDarkModeAtom = Atom(name: 'AppStoreBase.isDarkMode', context: context);
+  late final _$isDarkModeAtom =
+      Atom(name: 'AppStoreBase.isDarkMode', context: context);
 
   @override
   bool get isDarkMode {
@@ -729,7 +735,8 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$profileImageAtom = Atom(name: 'AppStoreBase.profileImage', context: context);
+  late final _$profileImageAtom =
+      Atom(name: 'AppStoreBase.profileImage', context: context);
 
   @override
   String get profileImage {
@@ -744,32 +751,54 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$setLoggedInAsyncAction = AsyncAction('AppStoreBase.setLoggedIn', context: context);
+  late final _$userEmailAtom =
+      Atom(name: 'AppStoreBase.userEmail', context: context);
+
+  @override
+  String get userEmail {
+    _$userEmailAtom.reportRead();
+    return super.userEmail;
+  }
+
+  @override
+  set userEmail(String value) {
+    _$userEmailAtom.reportWrite(value, super.userEmail, () {
+      super.userEmail = value;
+    });
+  }
+
+  late final _$setLoggedInAsyncAction =
+      AsyncAction('AppStoreBase.setLoggedIn', context: context);
 
   @override
   Future<void> setLoggedIn(bool val) {
     return _$setLoggedInAsyncAction.run(() => super.setLoggedIn(val));
   }
 
-  late final _$setLanguageAsyncAction = AsyncAction('AppStoreBase.setLanguage', context: context);
+  late final _$setLanguageAsyncAction =
+      AsyncAction('AppStoreBase.setLanguage', context: context);
 
   @override
   Future<void> setLanguage(String? val, {BuildContext? context}) {
-    return _$setLanguageAsyncAction.run(() => super.setLanguage(val, context: context));
+    return _$setLanguageAsyncAction
+        .run(() => super.setLanguage(val, context: context));
   }
 
-  late final _$setDarkModeAsyncAction = AsyncAction('AppStoreBase.setDarkMode', context: context);
+  late final _$setDarkModeAsyncAction =
+      AsyncAction('AppStoreBase.setDarkMode', context: context);
 
   @override
   Future<void> setDarkMode(bool aIsDarkMode) {
     return _$setDarkModeAsyncAction.run(() => super.setDarkMode(aIsDarkMode));
   }
 
-  late final _$AppStoreBaseActionController = ActionController(name: 'AppStoreBase', context: context);
+  late final _$AppStoreBaseActionController =
+      ActionController(name: 'AppStoreBase', context: context);
 
   @override
   void setProfileImage(String? val) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setProfileImage');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setProfileImage');
     try {
       return super.setProfileImage(val);
     } finally {
@@ -778,8 +807,20 @@ mixin _$AppStore on AppStoreBase, Store {
   }
 
   @override
+  void setUserEmail(String? val) {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setUserEmail');
+    try {
+      return super.setUserEmail(val);
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setProjectId(int? val) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setProjectId');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setProjectId');
     try {
       return super.setProjectId(val);
     } finally {
@@ -789,7 +830,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setProjectDownloading(bool isDownload) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setProjectDownloading');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setProjectDownloading');
     try {
       return super.setProjectDownloading(isDownload);
     } finally {
@@ -799,7 +841,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setProjectName(String? data) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setProjectName');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setProjectName');
     try {
       return super.setProjectName(data);
     } finally {
@@ -809,7 +852,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setIsLanguageChanged(bool value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setIsLanguageChanged');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsLanguageChanged');
     try {
       return super.setIsLanguageChanged(value);
     } finally {
@@ -819,7 +863,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setValueErrorMsg(String value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setValueErrorMsg');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setValueErrorMsg');
     try {
       return super.setValueErrorMsg(value);
     } finally {
@@ -829,7 +874,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setIsPaddingLock(bool value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setIsPaddingLock');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsPaddingLock');
     try {
       return super.setIsPaddingLock(value);
     } finally {
@@ -839,7 +885,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setSelectedProperty(int value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setSelectedProperty');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setSelectedProperty');
     try {
       return super.setSelectedProperty(value);
     } finally {
@@ -849,7 +896,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setIsRadiusLock(bool value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setIsRadiusLock');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsRadiusLock');
     try {
       return super.setIsRadiusLock(value);
     } finally {
@@ -859,7 +907,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void updateSyncTime(String value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.updateSyncTime');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.updateSyncTime');
     try {
       return super.updateSyncTime(value);
     } finally {
@@ -869,7 +918,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setIsAlignX(bool? value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setIsAlignX');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsAlignX');
     try {
       return super.setIsAlignX(value);
     } finally {
@@ -879,7 +929,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setIsAlignY(bool? value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setIsAlignY');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsAlignY');
     try {
       return super.setIsAlignY(value);
     } finally {
@@ -889,7 +940,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setIsPaginationIndicatorAlignX(bool? value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setIsPaginationIndicatorAlignX');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsPaginationIndicatorAlignX');
     try {
       return super.setIsPaginationIndicatorAlignX(value);
     } finally {
@@ -899,7 +951,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setIsPaginationIndicatorAlignY(bool? value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setIsPaginationIndicatorAlignY');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsPaginationIndicatorAlignY');
     try {
       return super.setIsPaginationIndicatorAlignY(value);
     } finally {
@@ -909,7 +962,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setColor(Color value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setColor');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setColor');
     try {
       return super.setColor(value);
     } finally {
@@ -919,7 +973,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setAlignment(Alignment value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setAlignment');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setAlignment');
     try {
       return super.setAlignment(value);
     } finally {
@@ -929,7 +984,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setPageViewAlignment(Alignment value) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setPageViewAlignment');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setPageViewAlignment');
     try {
       return super.setPageViewAlignment(value);
     } finally {
@@ -939,7 +995,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void updateSelectedWidget(WidgetModel selectedWidgetModel) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.updateSelectedWidget');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.updateSelectedWidget');
     try {
       return super.updateSelectedWidget(selectedWidgetModel);
     } finally {
@@ -949,7 +1006,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void updateSelectedWidgetFromMenu(WidgetModel? selectedWidgetModel) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.updateSelectedWidgetFromMenu');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.updateSelectedWidgetFromMenu');
     try {
       return super.updateSelectedWidgetFromMenu(selectedWidgetModel);
     } finally {
@@ -959,7 +1017,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void addChildWidget(WidgetModel addWidgets) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addChildWidget');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.addChildWidget');
     try {
       return super.addChildWidget(addWidgets);
     } finally {
@@ -969,7 +1028,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void copyWidget() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.copyWidget');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.copyWidget');
     try {
       return super.copyWidget();
     } finally {
@@ -979,7 +1039,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void moveWidget({bool? isMoveUpOperation}) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.moveWidget');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.moveWidget');
     try {
       return super.moveWidget(isMoveUpOperation: isMoveUpOperation);
     } finally {
@@ -989,7 +1050,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void wrapWidget(WidgetModel wrapWidgets) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.wrapWidget');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.wrapWidget');
     try {
       return super.wrapWidget(wrapWidgets);
     } finally {
@@ -999,7 +1061,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void selectParentWidget(String? parentWidgetId) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectParentWidget');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectParentWidget');
     try {
       return super.selectParentWidget(parentWidgetId);
     } finally {
@@ -1009,7 +1072,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void selectSubParent(WidgetModel parentWidgets, dynamic parentWidgetId) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectSubParent');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectSubParent');
     try {
       return super.selectSubParent(parentWidgets, parentWidgetId);
     } finally {
@@ -1019,7 +1083,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void selectAppbar() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectAppbar');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectAppbar');
     try {
       return super.selectAppbar();
     } finally {
@@ -1029,7 +1094,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void selectBottomNavigation() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectBottomNavigation');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectBottomNavigation');
     try {
       return super.selectBottomNavigation();
     } finally {
@@ -1039,7 +1105,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void selectDrawer() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectDrawer');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectDrawer');
     try {
       return super.selectDrawer();
     } finally {
@@ -1049,7 +1116,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void selectRootView() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectRootView');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectRootView');
     try {
       return super.selectRootView();
     } finally {
@@ -1059,7 +1127,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void addRootView() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addRootView');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.addRootView');
     try {
       return super.addRootView();
     } finally {
@@ -1069,7 +1138,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void finishLoadingData() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.finishLoadingData');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.finishLoadingData');
     try {
       return super.finishLoadingData();
     } finally {
@@ -1079,7 +1149,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setLoading(bool val) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setLoading');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setLoading');
     try {
       return super.setLoading(val);
     } finally {
@@ -1088,8 +1159,20 @@ mixin _$AppStore on AppStoreBase, Store {
   }
 
   @override
+  void loadProject(Project project) {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.loadProject');
+    try {
+      return super.loadProject(project);
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addScreens(List<ScreenListData> allScreens) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addScreens');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.addScreens');
     try {
       return super.addScreens(allScreens);
     } finally {
@@ -1099,7 +1182,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void updateScreenNewData(dynamic jsonData, dynamic selectedScreenId) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.updateScreenNewData');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.updateScreenNewData');
     try {
       return super.updateScreenNewData(jsonData, selectedScreenId);
     } finally {
@@ -1109,7 +1193,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void updateScreenImage(dynamic screenImage, dynamic selectedScreenId) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.updateScreenImage');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.updateScreenImage');
     try {
       return super.updateScreenImage(screenImage, selectedScreenId);
     } finally {
@@ -1119,7 +1204,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void updateScreenName(dynamic screenName, dynamic selectedScreenId) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.updateScreenName');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.updateScreenName');
     try {
       return super.updateScreenName(screenName, selectedScreenId);
     } finally {
@@ -1129,7 +1215,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setScreenDetails(ScreenListData screenListData) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setScreenDetails');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setScreenDetails');
     try {
       return super.setScreenDetails(screenListData);
     } finally {
@@ -1139,7 +1226,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void removeScreen(int? id) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.removeScreen');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.removeScreen');
     try {
       return super.removeScreen(id);
     } finally {
@@ -1149,7 +1237,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setScreenList(List<ScreenListData> aScreenList) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setScreenList');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setScreenList');
     try {
       return super.setScreenList(aScreenList);
     } finally {
@@ -1159,7 +1248,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setWidgetsList(List<WidgetModel> widgetList) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setWidgetsList');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setWidgetsList');
     try {
       return super.setWidgetsList(widgetList);
     } finally {
@@ -1169,7 +1259,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void removeSelectedWidget() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.removeSelectedWidget');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.removeSelectedWidget');
     try {
       return super.removeSelectedWidget();
     } finally {
@@ -1179,7 +1270,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void refreshMainViewData() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.refreshMainViewData');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.refreshMainViewData');
     try {
       return super.refreshMainViewData();
     } finally {
@@ -1189,7 +1281,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void addDrawer(WidgetModel drawer) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addDrawer');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.addDrawer');
     try {
       return super.addDrawer(drawer);
     } finally {
@@ -1199,7 +1292,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void addBottomNavigation(WidgetModel bNBar) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addBottomNavigation');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.addBottomNavigation');
     try {
       return super.addBottomNavigation(bNBar);
     } finally {
@@ -1209,7 +1303,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void addAppBar(WidgetModel appBar) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addAppBar');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.addAppBar');
     try {
       return super.addAppBar(appBar);
     } finally {
@@ -1219,7 +1314,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void resetView() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.resetView');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.resetView');
     try {
       return super.resetView();
     } finally {
@@ -1229,7 +1325,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void selectViewFromTree(Node<dynamic> selectedView) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectViewFromTree');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectViewFromTree');
     try {
       return super.selectViewFromTree(selectedView);
     } finally {
@@ -1238,8 +1335,10 @@ mixin _$AppStore on AppStoreBase, Store {
   }
 
   @override
-  void selectSubViewFromTree(List<WidgetModel?> aSelectedWidgetList, Node<dynamic> selectedView) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.selectSubViewFromTree');
+  void selectSubViewFromTree(
+      List<WidgetModel?> aSelectedWidgetList, Node<dynamic> selectedView) {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectSubViewFromTree');
     try {
       return super.selectSubViewFromTree(aSelectedWidgetList, selectedView);
     } finally {
@@ -1249,7 +1348,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void addText(String data) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addText');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.addText');
     try {
       return super.addText(data);
     } finally {
@@ -1259,7 +1359,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setViewProperty(bool val) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setViewProperty');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setViewProperty');
     try {
       return super.setViewProperty(val);
     } finally {
@@ -1269,7 +1370,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setPreviewCode(bool val) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setPreviewCode');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setPreviewCode');
     try {
       return super.setPreviewCode(val);
     } finally {
@@ -1279,7 +1381,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void setCodeViewData(List<String> data) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.setCodeViewData');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setCodeViewData');
     try {
       return super.setCodeViewData(data);
     } finally {
@@ -1289,7 +1392,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   void updateData(dynamic modelData, {bool isRootView = false}) {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.updateData');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.updateData');
     try {
       return super.updateData(modelData, isRootView: isRootView);
     } finally {
@@ -1299,7 +1403,8 @@ mixin _$AppStore on AppStoreBase, Store {
 
   @override
   dynamic clearData() {
-    final _$actionInfo = _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.clearData');
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.clearData');
     try {
       return super.clearData();
     } finally {
@@ -1323,10 +1428,7 @@ isAlignY: ${isAlignY},
 isPaginationIndicatorAlignX: ${isPaginationIndicatorAlignX},
 isPaginationIndicatorAlignY: ${isPaginationIndicatorAlignY},
 isLoggedIn: ${isLoggedIn},
-isComponent: ${isComponent},
-isProjectTemplate: ${isProjectTemplate},
 appBarTheme: ${appBarTheme},
-screenTemplateData: ${screenTemplateData},
 codeViewData: ${codeViewData},
 widgetCodeData: ${widgetCodeData},
 selectedProperty: ${selectedProperty},
@@ -1358,7 +1460,8 @@ valueErrorMsg: ${valueErrorMsg},
 selectedLanguageCode: ${selectedLanguageCode},
 isLanguageChanged: ${isLanguageChanged},
 isDarkMode: ${isDarkMode},
-profileImage: ${profileImage}
+profileImage: ${profileImage},
+userEmail: ${userEmail}
     ''';
   }
 }

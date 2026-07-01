@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_viz/externalClasses/colorPicker/colorpicker.dart';
 import 'package:flutter_viz/externalClasses/icon_picker.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
@@ -1848,7 +1850,7 @@ Widget commonAssetImageWidget(BuildContext context, {required Function(String?)?
                       return DropdownMenuItem(
                         child: Row(
                           children: [
-                            commonCachedNetworkImage(item.userAttachment!, fit: BoxFit.cover, height: 30, width: 50),
+                            Image.file(File(item.userAttachment!), fit: BoxFit.cover, height: 30, width: 50),
                             16.width,
                             Text(
                               item.userAttachment.validate().split('/').last,

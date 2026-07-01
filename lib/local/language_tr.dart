@@ -560,7 +560,6 @@ class LanguageTr extends BaseLanguage {
   String get titleChip => "Yonga";
 
   @override
-  String get titleGoogleMap => "Google Harita";
 
   @override
   String get titleYoutubePlayer => "YouTube oyuncusu";

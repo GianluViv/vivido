@@ -560,7 +560,6 @@ class LanguageAr extends BaseLanguage {
   String get titleChip => "رقاقة";
 
   @override
-  String get titleGoogleMap => "خرائط جوجل";
 
   @override
   String get titleYoutubePlayer => "Youtube لاعب يوتيوب";

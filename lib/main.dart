@@ -1,30 +1,20 @@
 import 'package:flutter_viz/local/app_localizations.dart';
 import 'package:flutter_viz/local/languages.dart';
 import 'package:flutter_viz/local_storage/local_project_service.dart';
-import 'package:flutter_viz/screen/login_screen.dart';
-import 'package:flutter_viz/screen/register_screen.dart';
 import 'package:flutter_viz/screen/welcome_screen.dart';
 import 'package:flutter_viz/store/AppStore.dart';
-import 'package:flutter_viz/utils/AnalyticsService.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/utils/AppTheme.dart';
 import 'package:flutter_viz/widgets/handle_keyboard_event.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screenshot/screenshot.dart';
-import 'firebase_options.dart';
-
-FirebaseAuth auth = FirebaseAuth.instance;
 
 AppStore appStore = AppStore();
 BaseLanguage? language;
@@ -45,14 +35,6 @@ ScreenshotController screenshotController = ScreenshotController();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  /// Firebase is only configured for the web target today (see firebase_options.dart).
-  /// TODO(local-desktop-plan Fase 4): remove Firebase entirely once auth is dropped.
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
 
   await initialize(aLocaleLanguageList: languageList());
 
@@ -92,8 +74,6 @@ void main() async {
     packageInfo = packageInformation;
   });
 
-  await dotenv.load(fileName: ".env");
-
   runApp(MyApp());
 }
 
@@ -121,14 +101,8 @@ class _MyAppState extends State<MyApp> {
           darkTheme: AppTheme.darkTheme,
           themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           navigatorKey: navigatorKey,
-          // Fase 3: WelcomeScreen is now the local "recent projects / new / open" picker
-          // (LocalProjectService-backed). Fase 4 removes the remaining Login/Register routes below.
+          // WelcomeScreen is the local "recent projects / new / open" picker (LocalProjectService-backed).
           home: WelcomeScreen(),
-          routes: <String, WidgetBuilder>{
-            LoginScreen.tag: (_) => LoginScreen(),
-            RegisterScreen.tag: (_) => RegisterScreen(),
-            TRY_DEMO_ROUTE: (_) => const LoginScreen(isDemo: true),
-          },
           supportedLocales: LanguageDataModel.languageLocales(),
           localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
           localeResolutionCallback: (locale, supportedLocales) => locale,
@@ -140,6 +114,5 @@ class _MyAppState extends State<MyApp> {
 }
 
 setupServiceLocator() {
-  locator.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
   locator.registerLazySingleton<LocalProjectService>(() => LocalProjectService());
 }

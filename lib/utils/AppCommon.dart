@@ -1,4 +1,3 @@
-import 'package:flutter_viz/utils/AppWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -15,14 +14,6 @@ appBarMessage() {
 
 printLogData(String? logs) {
   log("-----\nLogs:$logs");
-}
-
-void ifNotTester(VoidCallback callback, [bool showToast = true]) {
-  if ((!appStore.userEmail.contains(DEMO_EMAIL) && getStringAsync(USER_TYPE) == USER)) {
-    callback.call();
-  } else {
-    if (showToast) toast(language!.youCanNotPerformAction);
-  }
 }
 
 drawerMessage() {
@@ -413,20 +404,6 @@ String get getAppLogo {
     return "images/flutterViz_white.png";
   } else {
     return "images/flutterViz.png";
-  }
-}
-
-Widget profileImage(double size) {
-  if (appStore.profileImage.isNotEmpty) {
-    return commonCachedNetworkImage(
-      appStore.profileImage,
-      fit: BoxFit.cover,
-      height: size,
-      width: size,
-      placeHolderImage: 'images/user_place_holder.png',
-    );
-  } else {
-    return Image.asset('images/user.jpg', fit: BoxFit.cover, height: size, width: size);
   }
 }
 

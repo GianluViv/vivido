@@ -202,6 +202,14 @@ class LocalProjectService {
     return relativePath;
   }
 
+  /// Removes a media file from `<project>/media/` and its `project.json` entry.
+  Future<void> deleteMedia(Project project, String relativePath) async {
+    final file = File('${project.directory.path}/$relativePath');
+    if (await file.exists()) await file.delete();
+    project.media.removeWhere((m) => m.path == relativePath);
+    await saveProject(project);
+  }
+
   String _uniqueFileName(Project project, String fileName) {
     if (!project.media.any((m) => m.name == fileName)) return fileName;
     final dotIndex = fileName.lastIndexOf('.');

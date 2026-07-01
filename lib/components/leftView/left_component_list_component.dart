@@ -1,9 +1,7 @@
 import 'package:flutter_viz/main.dart';
 import 'package:flutter_viz/model/category_component_list_model.dart';
-import 'package:flutter_viz/network/rest_apis.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
-import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/utils/AppWidget.dart';
 import 'package:flutter_viz/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -25,30 +23,6 @@ class LeftComponentListComponentState extends State<LeftComponentListComponent> 
   double _crossAxisSpacing = 10;
   double _mainAxisSpacing = 10;
   double _childAspectRatio = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    await categoryComponentListApi();
-  }
-
-  Future<void> categoryComponentListApi() async {
-    appStore.setLoading(true);
-
-    await getCategoryComponentList().then((value) async {
-      appStore.setLoading(false);
-      categoryComponentList.clear();
-      categoryComponentList.addAll(value.data!);
-      setState(() {});
-    }).catchError((e) {
-      getToast(e.toString());
-      appStore.setLoading(false);
-    });
-  }
 
   @override
   void setState(fn) {

@@ -560,7 +560,6 @@ class LanguageDe extends BaseLanguage {
   String get titleChip => "Chip";
 
   @override
-  String get titleGoogleMap => "Google Karte";
 
   @override
   String get titleYoutubePlayer => "YouTube-Spieler";

@@ -561,7 +561,6 @@ class LanguagePt extends BaseLanguage {
   String get titleChip => "Lasca";
 
   @override
-  String get titleGoogleMap => "Googlemap.";
 
   @override
   String get titleYoutubePlayer => "YouTube Player.";

@@ -1506,48 +1506,46 @@ Widget subChildView(WidgetModel selectedWidgetModel) {
     return align;
   } else if (gestureDetector != null) {
     return gestureDetector;
-  } else if (expanded != null) {
-    return expanded;
   } else if (padding != null) {
-    return padding;
-  } else if (singleChildScrollView != null) {
-    return singleChildScrollView;
-  } else if (sizedBox != null) {
-    return sizedBox;
-  } else if (columnView != null) {
-    return columnView;
-  } else if (stack != null) {
-    return stack;
-  } else if (rowView != null) {
-    return rowView;
-  } else if (container != null) {
-    return container;
-  } else if (cardView != null) {
-    return cardView;
-  } else if (clipRRect != null) {
-    return clipRRect;
-  } else if (listView != null) {
-    return listView;
-  } else if (gridView != null) {
-    return gridView;
-  } else if (constrainedBox != null) {
-    return constrainedBox;
-  } else if (rotatedBox != null) {
-    return rotatedBox;
-  } else if (opacity != null) {
-    return opacity;
-  } else if (pageView != null) {
-    return pageView;
-  } else if (tabBar != null) {
-  return tabBar;
+  return padding;
+} else if (singleChildScrollView != null) {
+  return singleChildScrollView;
+} else if (sizedBox != null) {
+  return sizedBox;
+} else if (columnView != null) {
+  return columnView;
+} else if (stack != null) {
+  return stack;
+} else if (rowView != null) {
+  return rowView;
+} else if (container != null) {
+  return container;
+} else if (cardView != null) {
+  return cardView;
+} else if (clipRRect != null) {
+  return clipRRect;
+} else if (listView != null) {
+  return listView;
+} else if (gridView != null) {
+  return gridView;
+} else if (constrainedBox != null) {
+  return constrainedBox;
+} else if (rotatedBox != null) {
+  return rotatedBox;
+} else if (opacity != null) {
+  return opacity;
+} else if (pageView != null) {
+  return pageView;
+} else if (tabBar != null) {
+return tabBar;
 } else if (tabBarView != null) {
-  return SizedBox(height: 300, child: tabBarView);
+return SizedBox(height: 300, child: tabBarView);
 } else if (defaultTabController != null) {
-  return defaultTabController;
+return defaultTabController;
 } else {
-  return SizedBox(
-    child: Text("Dummy subChildView"),
-  );
+return SizedBox(
+  child: Text("Dummy subChildView"),
+);
 }
 }
 

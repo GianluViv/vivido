@@ -232,8 +232,20 @@ reintroduzione futura.
 - **Verifica:** `flutter build windows` completa senza errori (**confermato**, palette senza
   mappa/video/audio/youtube); `flutter analyze` a 0 errori — **nota**: questo conteggio era in
   realtà basato su un grep sbagliato (vedi la correzione nella verifica di Fase 2 più sotto) e
-  nascondeva 3 problemi preesistenti poi trovati e risolti in Fase 2. `flutter build linux` non
-  ancora testato (nessun host Linux disponibile in questa sessione).
+  nascondeva 3 problemi preesistenti poi trovati e risolti in Fase 2. `flutter build linux --debug`
+  **ora testato e verde** (host Linux disponibile in una sessione successiva) — vedi nota sotto.
+- **Aggiornamento (verifica `flutter build linux`, sessione successiva):** due problemi bloccavano
+  la prima build su host Linux, entrambi risolti:
+  1. `.env` assente in questo host (è gitignored, va ricreato per-macchina come già notato in Fase 0)
+     — ricreato con le stesse chiavi placeholder.
+  2. **Bug reale trovato**, non legato all'ambiente: `lib/widgets/on_accept_widgets.dart:116` aveva
+     `if (!isExpanded)` invece di `if (!isExpanded!)`, con `isExpanded` tipizzato `bool?` — errore di
+     null-safety che blocca la compilazione su qualunque target (non solo Linux). Era una modifica
+     presente nel working tree ma non ancora committata al momento del test; non chiaro in quale
+     sessione precedente fosse stata introdotta né perché non fosse emersa nella verifica
+     `flutter build windows` di questa fase (il file compare come modificato anche in quella sessione).
+     **Ripristinato il `!`**. Dopo questo fix, `flutter build linux --debug` produce
+     `build/linux/x64/debug/bundle/flutter_viz` senza errori.
 
 ### Fase 2 — `LocalProjectService` (persistenza su file) ✅ COMPLETATA
 **Scopo:** salvare/caricare un progetto su disco.
@@ -363,58 +375,180 @@ reintroduzione futura.
   del livello di rete pianificata per la Fase 4, non toccato qui per restare nello scopo di questa
   fase.
 
-### Fase 4 — Rimozione del gate di login/backend
+### Fase 4 — Rimozione del gate di login/backend ✅ COMPLETATA
 **Scopo:** boot pulito senza autenticazione. **Decisione:** livello di rete **rimosso** del tutto.
-- [ ] Sostituire il bypass temporaneo della Fase 0 con una vera schermata iniziale
-      "Progetti recenti / Nuovo / Apri".
-- [ ] Rimuovere `LoginScreen`, `RegisterScreen`, `ForgotPassword`, Firebase Auth (+
-      `firebase_core`/`firebase_auth`/`firebase_analytics`), `google_sign_in`, e il
-      caricamento `.env` non più necessario.
-- [ ] Rimuovere la dipendenza `g_recaptcha_v3` (usata solo in `lib/screen/register_screen.dart`,
-      verificato non bloccare la build nativa — rimandata qui dalla Fase 1 perché legata al
-      login, non ai widget dell'editor).
-- [ ] **Rimuovere** `lib/network/` (`rest_apis.dart`, `network_utils.dart`, `auth_service.dart`) e
-      i modelli di risposta backend ora inutilizzati (`lib/model/*_response.dart`, ecc.).
-- **Verifica:** l'app parte direttamente sulla schermata progetti; nessun riferimento a rete nel
-      codebase (`grep` di `http`/`rest_apis` a zero).
+- [x] Il bypass temporaneo della Fase 0 era già stato sostituito da `WelcomeScreen` come
+      "Progetti recenti / Nuovo / Apri" in Fase 3 — nessun lavoro aggiuntivo qui.
+- [x] Rimossi `LoginScreen`, `RegisterScreen`, `ForgotPasswordScreen` e `SplashScreen` (quest'ultima
+      era già dead code: nessuna rotta ci arrivava più, `main.dart` avvia `WelcomeScreen` da Fase 3).
+      Rimossi Firebase Auth/Core/Analytics (+ `AnalyticsService`), `google_sign_in`, e il caricamento
+      `.env`/`flutter_dotenv` — non più necessari (le costanti `baseURl`/`CAPTACHA_*`/`INVITE_CODE`
+      lette da `.env` in `AppConstant.dart` servivano solo al layer di rete rimosso).
+      `trackScreenView`/`trackUserEvent` (`AppFunctions.dart`) sono stati resi no-op invece di
+      rimossi, per non dover toccare i loro ~19 call site sparsi nell'app.
+- [x] Rimossa la dipendenza `g_recaptcha_v3` (era solo in `register_screen.dart`, eliminato).
+- [x] **Rimosso** `lib/network/` (`rest_apis.dart`, `network_utils.dart`, `auth_service.dart`) e 12
+      modelli di risposta backend ora orfani in `lib/model/` (`base_response`, `login_response`,
+      `user_project_list_model`, `profile_info_model`, `profile_photo_model`, `city_model`,
+      `country_model`, `state_model`, `add_screen_model`, `class_widget_model`,
+      `feedback_status_model`, `verify_recaptcha_model` — verificati non referenziati altrove per
+      nome di classe, non solo per import diretto).
+- **Decisione presa in sessione (non nella stesura originale del piano) — area admin anticipata da
+  Fase 6**: `lib/network/` era importato da tutti i 14 file di `lib/adminDashboard/`, non solo dal
+  flusso di login. Tenerlo in vita con uno stub avrebbe contraddetto la Decisione #4 ("rete rimossa
+  del tutto") e lasciato per un'intera fase codice che non compila con uno stub finto; l'area admin
+  era comunque già irraggiungibile dal boot bypassato in Fase 0. **Rimossa qui `lib/adminDashboard/`
+  per intero** (component/model/screen), insieme a `lib/screen/admin_project_template_screen.dart`.
+  La parte restante di Fase 6 ("altro codice morto: AnalyticsService, modelli backend residui") è
+  quindi già in gran parte assorbita da questa fase.
+- **Funzionalità rimosse per mancanza di equivalente locale** (dipendevano dal backend/account utente
+  e non hanno senso in un'app desktop senza login):
+  - **Profile / Change password / Edit profile** (`profile_component.dart`,
+    `change_password_dialog.dart`, `edit_profile_dialog.dart`) — eliminati, insieme a
+    `getProfileWidget()`/`profileImage()` (`AppWidget.dart`/`AppCommon.dart`) e alla voce "Profile"
+    nel menu laterale (`menu_component.dart`) e in `center_child_view_screen.dart`.
+  - **Feedback** (`feedback_dialog.dart`) — eliminato, insieme all'icona nell'header.
+  - **Tutorials** (`tutorials_component.dart`) — eliminato, insieme alla voce di menu; la lista video
+    veniva da `getTutorialsList()` (backend), senza equivalente locale bundlabile.
+  - **Galleria "componenti" da backend** (`left_component_list_component.dart`,
+    `categoryComponentListApi`) — rimossa la chiamata di rete, il pannello ora mostra sempre "nessun
+    dato" (nessun archivio locale di componenti salvati esiste ancora).
+  - **Galleria "template pagina" da backend** in `add_page_dialog.dart`
+    (`categoryTemplateListApi`/tab bar) — rimossa, stesso pattern già usato in `create_project_dialog.dart`
+    in Fase 3: resta solo la creazione di una pagina vuota.
+  - **Duplicato morto** `lib/components/addpagedialog.dart` (senza underscore, mai referenziato) e
+    `lib/components/add_clone_project_dialog.dart` (già segnalato non referenziato in Fase 3) —
+    eliminati.
+- **Funzionalità riportate in locale invece che rimosse**, dove esisteva già l'infrastruttura:
+  - **Media** (`media_component.dart`, `AppCommonApiCall.dart`): la libreria immagini di progetto ora
+    legge/scrive `<project>/media/` via `LocalProjectService` (`importMedia`, nuovo `deleteMedia`)
+    invece di `getMediaList()`/upload multipart; le thumbnail nel pannello e nel picker della
+    proprietà "Asset Image" (`comman_property_view.dart`) usano `Image.file` invece di
+    `commonCachedNetworkImage`. **Non toccato**: la resa live dei widget Image/CircleImage/ImageIcon
+    già trascinati sul canvas (`Image_class.dart` e affini) usa ancora sempre `NetworkImage(path)` per
+    il path selezionato — bug preesistente non legato a questa fase, la vera integrazione
+    locale-end-to-end resta il compito di Fase 5 ("adattare media_component.dart").
+  - **Export codice** (`header_component.dart`, `downloadProjectLatest()`): scrive ora i file `.dart`
+    generati direttamente in `<project>/export/` su disco invece di chiamare
+    `downloadProjectLatestApi()` (zip lato server). Non è ancora uno zip/installer — resta compito di
+    Fase 5 ("generazione locale... creare lo zip in locale").
+  - Rimossa anche la funzionalità morta "Save as Template/Component" nell'header (backend catalog
+    condiviso, `addTemplateApi`/`addComponentApi`/`addProjectTemplateApi`): dipendeva da
+    `appStore.screenTemplateData`, mai assegnato in nessun punto raggiungibile del codice (verificato
+    con grep) — cioè era già dead code prima ancora della rimozione della rete. Rimosso anche il
+    campo `screenTemplateData`/tipo `TemplateData` da `AppStore.dart` (rigenerato `AppStore.g.dart`
+    con `build_runner`) e le relative diramazioni sempre-false in `header_component.dart`,
+    `menu_component.dart`, `right_screen_component.dart`.
+  - `deleteScreenApi()` in `right_screen_component.dart` e `preview_screen.dart` (non toccati in Fase
+    3, che aveva convertito solo `screen_list_component.dart`/`screens_page_components.dart`) ora
+    usano `LocalProjectService.deleteScreen()`.
+- **Verifica:** `flutter pub get` rimuove 16 pacchetti (Firebase ×4, `google_sign_in` ×5,
+  `g_recaptcha_v3`, `flutter_dotenv`, `image_picker_web`, ecc.); `flutter analyze` → 0 errori;
+  `flutter test test/local_project_service_test.dart` → 5/5 verdi; `flutter build linux --debug` →
+  pulita; **eseguito il binario risultante** (`build/linux/x64/debug/bundle/flutter_viz`) su display
+  reale: resta in esecuzione senza eccezioni, log di boot regolare (`IS_LOGGED_IN=false`,
+  lingua caricata). Non verificato in questa sessione: `flutter build windows` (nessun host Windows
+  disponibile qui, simmetrico al limite opposto delle sessioni precedenti).
+- **Nota per Fase 5/6**: `image_picker_web` era stato lasciato in Fase 1 perché non bloccava la build
+  nativa; è stato rimosso qui perché è risultato non più referenziato da nessun file (il media
+  picker locale usa solo `image_picker`).
 
-### Fase 5 — Media ed export codice in locale
-**Scopo:** eliminare gli ultimi due punti di dipendenza backend.
-- [ ] **Media**: sostituire upload/lista media remoti con copia dei file immagine nella cartella
-      del progetto (`media/`) e riferimenti relativi; adattare `media_component.dart`. Include la
-      rimozione della dipendenza `image_picker_web` (rimandata qui dalla Fase 1, non bloccava la
-      build nativa ma è comunque web-only) in favore di `image_picker`/`file_picker` (già dipendenze).
-- [ ] **Export codice**: rimpiazzare `downloadProjectLatestApi()` (zip lato server) con
-      generazione locale — riusare `viewFinalSourceData()` per il contenuto e creare lo zip in
-      locale (aggiungere `archive`) salvandolo con `file_picker` (Salva con nome).
-- **Verifica:** import di un'immagine e uso in un widget; export progetto produce uno zip Dart
-      valido su disco senza rete.
+### Fase 5 — Media ed export codice in locale ✅ COMPLETATA
+**Scopo:** completare l'integrazione locale end-to-end di media ed export (la Fase 4 aveva già
+coperto la parte "senza rete" di entrambi come effetto collaterale della rimozione di
+`lib/network/`; questa fase copre la parte di *qualità/completezza* del risultato).
+- [x] Media: sostituire upload/lista media remoti con copia dei file nella cartella del
+      progetto → **fatto in Fase 4** (`media_component.dart` + `LocalProjectService.importMedia`/
+      `deleteMedia`, rimossa `image_picker_web`).
+- [x] **Resa locale dei media nei widget**: `lib/widgetsClass/Image_class.dart`,
+      `circle_image_class.dart`, `image_icon_class.dart`, `left_drawer_class.dart` e
+      `page_view_class.dart` usavano tutti `NetworkImage`/`Image.network` anche per il tipo "Asset"
+      (bug preesistente, "accidentalmente funzionante" quando `path` era un URL del vecchio backend —
+      vedi rischio segnalato a fine Fase 4). Ora, quando `imageType == ImageTypeAsset`: se `path` è
+      valorizzato (path locale assoluto scelto dal picker media) si usa `FileImage`/`Image.file`;
+      altrimenti si usa `AssetImage`/`Image.asset` sul placeholder bundlato in *questa* app
+      (`images/placeIndex.png` e affini, già dichiarati come asset in `pubspec.yaml`). **Non
+      toccata** la generazione del codice esportato (`getCodeAsString`/stringhe `AssetImage(...)`):
+      era già corretta di suo — assume che l'utente copi le immagini in `assets/images/`
+      nel progetto esportato, un passaggio manuale preesistente e non legato alla rete.
+- [x] Export codice: rimpiazzare `downloadProjectLatestApi()` con generazione locale → **fatto**.
+      `downloadProjectLatest()` in `header_component.dart` genera i sorgenti via
+      `viewFinalSourceData()` (invariato, già locale), li impacchetta in uno zip vero con il pacchetto
+      `archive` (`Archive`/`ArchiveFile`/`ZipEncoder`), e lascia scegliere dove salvarlo con
+      `FilePicker.platform.saveFile()` ("Salva con nome"). Se l'utente annulla il dialogo, l'export
+      si interrompe senza errori.
+- **Verifica:** `flutter analyze` → 0 errori; `flutter test test/local_project_service_test.dart` →
+  5/5 verdi (invariati); `flutter build linux --debug` → pulita dopo l'aggiunta di `archive` a
+  `pubspec.yaml`. Verifica manuale interattiva (drag di un'immagine nel canvas, click su "Download")
+  non eseguita in questa sessione — nessuno strumento di cattura schermo funzionante disponibile per
+  questo host Linux (vedi nota sotto); il codice è stato verificato per compilazione/tipi e per
+  coerenza logica con `LocalProjectService`/`Project.exportDirectory` già testati in Fase 2.
+- **Nota**: un tentativo di screenshot con `import` (ImageMagick) su questo host è fallito
+  (`missing an image filename` nonostante il path fosse passato correttamente — presumibilmente una
+  policy di sicurezza di ImageMagick che blocca la cattura di `-window root`). L'avvio del binario
+  Linux è comunque stato verificato in Fase 4 (processo stabile, nessuna eccezione nei log).
 
-### Fase 6 — Rifinitura, packaging, pulizia
-- [ ] **Rimuovere l'area admin** `lib/adminDashboard/` e i suoi modelli/riferimenti (decisione presa).
-- [ ] Rimuovere altro codice morto (analytics/`AnalyticsService`, modelli backend residui).
-- [ ] Aggiornare `README.md`/`CLAUDE.md`: istruzioni build/run desktop, formato cartella-progetto.
-- [ ] Packaging: eseguibili/installer Windows (`flutter build windows`) e Linux
-      (`flutter build linux`, valutare AppImage/Flatpak).
-- [ ] `flutter analyze` e `flutter test` puliti.
+### Fase 6 — Rifinitura, packaging, pulizia 🟡 QUASI COMPLETATA (packaging installer non fatto)
+- [x] ~~Rimuovere l'area admin `lib/adminDashboard/`~~ → **fatto in Fase 4** (anticipata per necessità:
+      dipendeva interamente da `lib/network/`, rimosso nella stessa fase).
+- [x] Rimosso codice morto residuo: campi `isComponent`/`isProjectTemplate` in `AppStore.dart` (mai
+      assegnati, stesso pattern del già rimosso `screenTemplateData`; rigenerato `AppStore.g.dart`);
+      l'intero blocco "Admin Screen Index" in `AppConstant.dart` (`ADMIN_DASHBOARD_INDEX` e altri 6,
+      tutti orfani); `PROFILE_INDEX`/`TUTORIALS_INDEX`; `WidgetTypeGoogleMap`/`WidgetTypeVideoPlayer`/
+      `WidgetTypeAudioPlayer`/`WidgetTypeYoutubePlayer` (residui della rimozione widget di Fase 1); le
+      14 occorrenze di `titleGoogleMap` nei file di traduzione (`lib/local/language_*.dart` +
+      `languages.dart`).
+- [x] **Bug critico trovato e corretto**: `ifNotTester()` (`lib/utils/AppCommon.dart`) è rimasta la
+      guardia originale del concetto di utente "tester" del backend — condizionava l'esecuzione della
+      callback a `getStringAsync(USER_TYPE) == USER`. Con il login rimosso, `USER_TYPE` non viene
+      **mai** scritto, quindi la condizione è sempre falsa e la callback **non veniva mai eseguita**.
+      La Fase 3 aveva già trovato e corretto questo stesso bug per due call site (autosave, create
+      project), ma **altri 8 call site erano rimasti**, tutti azioni chiave dell'editor silenziosamente
+      disabilitate: bottone **Save** e **Download/Export** dell'header, **Create Page**,
+      **rinomina/clona schermata**, **view source code**, **clear screen data** e **delete screen**
+      nel pannello destro, **delete screen** nella preview. Rimossa la guardia da tutti gli 8 call
+      site (`header_component.dart`, `right_screen_component.dart`, `preview_screen.dart`) ed
+      eliminata la funzione `ifNotTester` stessa, ora completamente inutilizzata.
+- [x] Aggiornato `README.md` (rimossa la sezione `.env`/variabili d'ambiente non più necessaria,
+      aggiunte istruzioni `flutter run -d linux`/`-d windows` e formato cartella-progetto) e
+      `CLAUDE.md` (sezioni "Fork goal"/"Setup"/"Common commands"/"Other areas" aggiornate per
+      riflettere lo stato attuale: nessun `.env`, `lib/network/`/`lib/adminDashboard/` rimossi,
+      `lib/local_storage/` come nuovo layer di persistenza).
+- [ ] **Packaging (non fatto in questa sessione)**: `flutter build linux` (debug e `--release`)
+      verificati puliti ed eseguiti su display reale senza eccezioni; **non** prodotto un pacchetto
+      installabile (AppImage/Flatpak) — gli strumenti necessari (`appimagetool`, `flatpak-builder`)
+      non sono installati su questo host e richiederebbero un'installazione a livello di sistema non
+      eseguita senza conferma esplicita. `flutter build windows` resta non verificabile da un host
+      Linux (serve una macchina/CI Windows). Questo rimane l'unico punto aperto del piano.
+- [x] `flutter analyze` e `flutter test` puliti (verificato a ogni step di Fase 4/5/6).
 
 ---
 
 ## 4. Decisioni prese
 1. **Formato progetto → cartella per progetto** (`project.json` + `media/` + `export/`). Vedi §2.1.
-2. **Area admin → rimossa** del tutto (Fase 6).
+2. **Area admin → rimossa** del tutto → **fatto in Fase 4** (anticipata da Fase 6: dipendeva
+   interamente da `lib/network/`, rimosso nella stessa fase).
 3. **Widget web-only → rimossi** (mappa/YouTube/video/audio), con appunto di reintroduzione in §6.
-4. **Livello di rete → rimosso** del tutto (`lib/network/`, Firebase, auth). Nessun backend opzionale.
+4. **Livello di rete → rimosso** del tutto (`lib/network/`, Firebase, auth) → **fatto in Fase 4**.
+   Nessun backend opzionale. Rimosse anche le feature senza equivalente locale (Profile, Feedback,
+   Tutorials, gallerie template/componenti da backend) — vedi Fase 4 per l'elenco completo.
 
 ## 5. Rischi principali
 - ~~Compilazione desktop bloccata dai plugin web-only~~ → **risolto in Fase 1** (`google_maps`,
   `youtube_player_iframe`, `just_audio`, `video_player`, `web` rimossi; `dart:html` isolato dietro
   import condizionale). `flutter build windows` verificato pulito.
 - Coerenza del formato `screenJsonData` tra versioni: introdurre `formatVersion` da subito.
-- La rimozione di rete/admin/widget tocca molti file: procedere per fasi con `flutter analyze` a
-  ogni step per intercettare riferimenti pendenti.
-- `flutter build linux` non ancora verificato in questa sessione (nessun host Linux disponibile) —
-  da testare appena possibile, potrebbero emergere blocchi analoghi specifici di quel target.
+- ~~La rimozione di rete/admin/widget tocca molti file~~ → **fatto in Fase 4**, proceduto con
+  `flutter analyze` a ogni step come previsto; nessun riferimento a rete rimasto (verificato a grep).
+- ~~`flutter build linux` non ancora verificato~~ → **risolto**: testato su host Linux,
+  `flutter build linux --debug` verde dopo il fix di `on_accept_widgets.dart` descritto in Fase 1;
+  il binario risultante è stato anche eseguito su display reale in Fase 4 (nessun crash).
+  Non ancora testato `--release`, né il packaging (AppImage/Flatpak, previsto in Fase 6); non ancora
+  testato `flutter build windows` dopo le rimozioni di Fase 4 (nessun host Windows in questa sessione).
+- **Nuovo — resa locale dei media incompleta**: dopo la Fase 4 i path immagine importati sono locali,
+  ma `Image_class.dart` (e affini) li passano ancora sempre a `NetworkImage`. Finché non si risolve
+  in Fase 5, un'immagine importata da `media_component.dart` non si vede nell'anteprima live del
+  widget sul canvas anche se il file esiste su disco.
 
 ---
 

@@ -1,6 +1,11 @@
 # FlutterViz UI Builder (Open Source)
 
-> **Note:** The backend code for this project is available in the [`backend` branch](https://github.com/iqonic-design/flutter_viz/tree/backend). Please switch to the `backend` branch to access and work with the backend source code.
+> **Note:** This is a fork of FlutterViz targeting a **fully local desktop app** (Linux/Windows) —
+> no login, no backend, no Firebase. Projects are stored as plain folders on disk. See
+> [docs/local-desktop-plan.md](docs/local-desktop-plan.md) for the full migration write-up and
+> [CLAUDE.md](CLAUDE.md) for codebase notes. The original web/backend-connected version this was
+> forked from lives on the [`backend` branch](https://github.com/iqonic-design/flutter_viz/tree/backend)
+> of the upstream repository.
 
 **FlutterViz** is a visual UI builder built using Flutter. It allows developers to design stunning Flutter UIs with a drag-and-drop interface, export clean Dart code, and accelerate the development process.
 
@@ -33,28 +38,40 @@
 ```bash
 git clone https://github.com/iqonic-design/flutter_viz.git
 cd flutterviz
+```
+
+2. **Install dependencies**
+
+```bash
+flutter pub get
+```
+
+3. **Run the desktop app** (no `.env`, no login, no backend needed — the app boots straight into
+   project selection):
+
+```bash
+flutter run -d linux    # or: flutter run -d windows
+```
+
+No environment variables or `.env` file are required in this fork — the previous `BASE_URL`/
+`CAPTACHA_*`/`INVITE_CODE` keys only existed to talk to the (now removed) backend.
+
+### 📁 Project storage
+
+Projects are plain folders on disk (no cloud account, no server) — see
+[docs/local-desktop-plan.md](docs/local-desktop-plan.md#21-formato-progetto--cartella-per-progetto-deciso)
+for the exact format:
 
 ```
----
-## 🔑 Environment Variables
-
-To unlock the full power of **FlutterViz**, you’ll need to set up a `.env` file in your project’s root directory.  
-This file holds your private configuration keys—keeping your app secure, flexible, and ready for production.
-
-**Here’s what each variable does:**
-
-- **`BASE_URL`**: The root URL of the backend API that your application communicates with for all data operations and services.
-- **`CAPTACHA_SITE_KEY`**: Your Google reCAPTCHA site key, protecting your forms from spam and abuse.
-- **`CAPTACHA_SECRET_KEY`**: The secret key for verifying reCAPTCHA responses on the backend.
-- **`INVITE_CODE`**: A required code that users must enter during account creation to register and access the application.
-
-**Sample `.env` file:**
-```properties
-BASE_URL=YOUR_BASE_URL
-CAPTACHA_SITE_KEY=YOUR_CAPTACHA_SITE_KEY
-CAPTACHA_SECRET_KEY=YOUR_CAPTACHA_SECRET_KEY
-INVITE_CODE=YOUR_INVITE_CODE
+<ProjectName>/
+ ├─ project.json   # project metadata + all screens (widget-tree JSON)
+ ├─ media/         # images imported into the project
+ └─ export/        # (reserved for future local export output)
 ```
+
+New projects are created under the OS-standard app-data directory by default (via
+`path_provider`), or in any folder you pick with "Open Project".
+
 ---
 
 ## 🤝 Contributing

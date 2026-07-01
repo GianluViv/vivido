@@ -49,9 +49,9 @@ class Node<T> {
   const Node({
     required this.key,
     required this.label,
-    this.children: const [],
-    this.expanded: false,
-    this.parent: false,
+    this.children = const [],
+    this.expanded = false,
+    this.parent = false,
     this.icon,
     this.iconColor,
     this.selectedIconColor,

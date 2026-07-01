@@ -1,17 +1,11 @@
 import 'dart:convert';
-import 'dart:ui';
 
-import 'package:flutter_viz/adminDashboard/model/template_list_model.dart';
 import 'package:flutter_viz/local_storage/local_project_service.dart';
-import 'package:flutter_viz/model/category_template_list_model.dart';
 import 'package:flutter_viz/model/screen_list_response.dart';
-import 'package:flutter_viz/network/rest_apis.dart';
-import 'package:flutter_viz/utils/AppColors.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/utils/AppWidget.dart';
 import 'package:flutter_viz/widgets/screen_json_parser_class.dart';
-import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -26,38 +20,15 @@ class AddPageDialog extends StatefulWidget {
   AddPageDialogState createState() => AddPageDialogState();
 }
 
-class AddPageDialogState extends State<AddPageDialog> with SingleTickerProviderStateMixin {
+class AddPageDialogState extends State<AddPageDialog> {
   final formKey = GlobalKey<FormState>();
 
-  TabController? _tabController;
   TextEditingController pageNameController = TextEditingController();
-
-  List<CategoryTemplateData> categoryTemplateList = [];
 
   @override
   void initState() {
     super.initState();
-    init();
     trackScreenView(PRE_BUILD_SCREEN);
-  }
-
-  Future<void> init() async {
-    await categoryTemplateListApi();
-    _tabController = TabController(length: categoryTemplateList.length + 1, vsync: this);
-  }
-
-  Future<void> categoryTemplateListApi() async {
-    appStore.setLoading(true);
-
-    await getCategoryTemplateList().then((value) async {
-      appStore.setLoading(false);
-      categoryTemplateList.clear();
-      categoryTemplateList.addAll(value.data!);
-      setState(() {});
-    }).catchError((e) {
-      getToast(e.toString());
-      appStore.setLoading(false);
-    });
   }
 
   /// Creates a new page in the current local project via LocalProjectService,
@@ -117,8 +88,7 @@ class AddPageDialogState extends State<AddPageDialog> with SingleTickerProviderS
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 1070,
-      height: 800,
+      width: 500,
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
@@ -159,200 +129,14 @@ class AddPageDialogState extends State<AddPageDialog> with SingleTickerProviderS
                         ],
                       ),
                       16.height,
-                      Divider(thickness: 2, color: appStore.isDarkMode ? darkModeSecondaryBackgroundDark : COMMON_BORDER_COLOR),
-                      16.height,
+                      dialogPrimaryColorButton(
+                        text: language!.createNew,
+                        onTap: () async {
+                          addScreenApi();
+                        },
+                      ),
                     ],
                   ),
-                if (_tabController != null)
-                  TabBar(
-                    controller: _tabController,
-                    indicatorColor: btnBackgroundColor,
-                    labelColor: btnBackgroundColor,
-                    unselectedLabelColor: appStore.isDarkMode ? darkModeSubTextColor : Colors.black,
-                    isScrollable: true,
-                    labelPadding: EdgeInsets.only(left: 30, right: 30),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    labelStyle: primaryTextStyle(),
-                    tabs: List.generate(categoryTemplateList.length + 1, (index) {
-                      if (index == 0) {
-                        return Tab(text: 'Blank Page');
-                      }
-                      CategoryTemplateData categoryTemplateData = categoryTemplateList[index - 1];
-                      return Tab(text: categoryTemplateData.name.validate());
-                    }).toList(),
-                  ),
-                30.height,
-                if (_tabController != null)
-                  TabBarView(
-                    controller: _tabController,
-                    children: List.generate(categoryTemplateList.length + 1, (index) {
-                      if (index == 0) {
-                        return SingleChildScrollView(
-                          child: SizedBox(
-                            width: screenPreviewWidth,
-                            child: Column(
-                              children: [
-                                Text("Blank App", style: secondaryTextStyle(size: 16)),
-                                8.height,
-                                SingleChildScrollView(
-                                  child: Container(
-                                    padding: EdgeInsets.all(8),
-                                    height: screenPreviewHeight,
-                                    width: screenPreviewWidth,
-                                    alignment: Alignment.center,
-                                    decoration: boxDecorationWithRoundedCorners(
-                                      border: Border.all(color: appStore.isDarkMode ? Colors.transparent : COMMON_BORDER_COLOR),
-                                      borderRadius: BorderRadius.circular(COMMON_CARD_BORDER_RADIUS),
-                                      backgroundColor: appStore.isDarkMode ? darkModeSecondaryBackgroundDark : centerBackgroundColor,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          child: Icon(Icons.add, color: context.iconColor),
-                                          decoration: boxDecorationWithRoundedCorners(
-                                            boxShape: BoxShape.circle,
-                                            backgroundColor: context.scaffoldBackgroundColor,
-                                          ),
-                                          height: 50,
-                                          width: 50,
-                                        ),
-                                        30.height,
-                                        dialogPrimaryColorButton(
-                                          text: language!.createNew,
-                                          onTap: () async {
-                                            addScreenApi();
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else {
-                        CategoryTemplateData categoryTemplateData = categoryTemplateList[index - 1];
-                        List<TemplateData> mTemplateList = categoryTemplateData.template!;
-                        return SingleChildScrollView(
-                          child: Container(
-                            width: context.width(),
-                            alignment: Alignment.topCenter,
-                            child: Wrap(
-                              spacing: 30,
-                              runSpacing: 30,
-                              children: mTemplateList.map((templateData) {
-                                return Column(
-                                  children: [
-                                    Text("${templateData.name}", style: secondaryTextStyle(size: 16)),
-                                    8.height,
-                                    GestureDetector(
-                                      child: AnimatedContainer(
-                                        duration: commonAnimationDuration,
-                                        child: SingleChildScrollView(
-                                          child: Container(
-                                            width: screenPreviewWidth,
-                                            height: screenPreviewHeight,
-                                            decoration: boxDecorationWithRoundedCorners(
-                                              borderRadius: BorderRadius.circular(COMMON_CARD_BORDER_RADIUS),
-                                              backgroundColor: appStore.isDarkMode ? darkModeSecondaryBackgroundDark : centerBackgroundColor,
-                                            ),
-                                            child: Stack(
-                                              children: [
-                                                Container(
-                                                  height: screenPreviewHeight,
-                                                  width: screenPreviewWidth,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: appStore.isDarkMode ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.1),
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(COMMON_CARD_BORDER_RADIUS),
-                                                  ),
-                                                  child: templateData.templateImage != null
-                                                      ? Image.memory(
-                                                          base64Decode(templateData.templateImage!),
-                                                          width: screenPreviewWidth,
-                                                          height: screenPreviewHeight,
-                                                          fit: BoxFit.fill,
-                                                        ).cornerRadiusWithClipRRect(COMMON_CARD_BORDER_RADIUS)
-                                                      : Container(
-                                                          width: screenPreviewWidth,
-                                                          height: screenPreviewHeight,
-                                                          color: Colors.white,
-                                                        ).cornerRadiusWithClipRRect(COMMON_CARD_BORDER_RADIUS),
-                                                ),
-                                                HoverWidget(
-                                                  builder: (context, isHovering) {
-                                                    return isHovering
-                                                        ? BackdropFilter(
-                                                            filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-                                                            child: Container(
-                                                              alignment: Alignment.center,
-                                                              color: Colors.black.withValues(alpha: 0.5),
-                                                              width: screenPreviewWidth,
-                                                              height: screenPreviewHeight,
-                                                              child: Column(
-                                                                mainAxisSize: MainAxisSize.min,
-                                                                children: [
-                                                                  Text(
-                                                                    templateData.name.validate(),
-                                                                    style: primaryTextStyle(color: Colors.white, size: 18),
-                                                                  ),
-                                                                  8.height,
-                                                                  Container(
-                                                                    height: 30,
-                                                                    width: 140,
-                                                                    padding: EdgeInsets.all(0),
-                                                                    alignment: Alignment.center,
-                                                                    decoration: boxDecorationWithRoundedCorners(
-                                                                      borderRadius: radius(8),
-                                                                      backgroundColor: btnBackgroundColor,
-                                                                    ),
-                                                                    child: Text(
-                                                                      language!.tapToUseTemplate,
-                                                                      style: secondaryTextStyle(color: Colors.white, size: 12),
-                                                                      textAlign: TextAlign.center,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : Container(
-                                                            width: screenPreviewWidth,
-                                                            height: screenPreviewHeight,
-                                                            decoration: boxDecorationWithRoundedCorners(
-                                                              border: Border.all(
-                                                                color: appStore.isDarkMode ? Colors.transparent : COMMON_BORDER_COLOR,
-                                                              ),
-                                                              borderRadius: BorderRadius.circular(COMMON_CARD_BORDER_RADIUS),
-                                                              backgroundColor: Colors.transparent,
-                                                            ),
-                                                          );
-                                                  },
-                                                )
-                                              ],
-                                            ),
-                                          ).cornerRadiusWithClipRRect(COMMON_CARD_BORDER_RADIUS),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        trackUserEvent("$USER_PRE_BUILD_TEMPLATES (${templateData.name})");
-                                        addScreenApi(rootScreenData: templateData.screenData);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        );
-                      }
-                    }).toList(),
-                  ).expand(),
               ],
             ),
           ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_viz/model/widget_model.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
@@ -108,9 +110,16 @@ class ImageIconClass {
     return data;
   }
 
+  ImageProvider _getImageProvider() {
+    if (imageType == ImageTypeAsset) {
+      return path != null ? FileImage(File(path!)) : AssetImage(DEFAULT_ASSET_IMAGE_ICON) as ImageProvider;
+    }
+    return NetworkImage(path ?? DEFAULT_NETWORK_IMAGE_ICON);
+  }
+
   Widget getImageIconDefaultWidget(WidgetModel widgetModel) {
     Widget childData = ImageIcon(
-      (imageType == ImageTypeAsset ? NetworkImage(path ?? DEFAULT_ASSET_IMAGE_ICON) : NetworkImage(path ?? DEFAULT_NETWORK_IMAGE_ICON)),
+      _getImageProvider(),
       size: size ?? DEFAULT_ICON_SIZE,
       color: color ?? DEFAULT_ICON_COLOR,
     );

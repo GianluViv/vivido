@@ -561,7 +561,6 @@ class LanguageAf extends BaseLanguage {
   String get titleChip => "Rotsskerf";
 
   @override
-  String get titleGoogleMap => "Google kaart";
 
   @override
   String get titleYoutubePlayer => "YouTube-speler";

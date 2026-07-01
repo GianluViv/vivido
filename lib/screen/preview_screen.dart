@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_viz/externalClasses/on_hover.dart';
-import 'package:flutter_viz/network/rest_apis.dart';
+import 'package:flutter_viz/local_storage/local_project_service.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
-import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/utils/AppWidget.dart';
 import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
@@ -37,22 +36,13 @@ class PreviewScreenState extends State<PreviewScreen> {
     if (mounted) super.setState(fn);
   }
 
-  ///delete screen api call
+  ///Local equivalent of the old deleteScreen() REST call.
   Future deleteScreenApi({int? screenId}) async {
+    if (appStore.currentProject == null || screenId == null) return;
     appStore.setLoading(true);
-    Map req = {
-      'id': screenId,
-    };
-    await deleteScreen(req).then((value) {
-      appStore.setLoading(false);
-      if (value.status!) {
-        appStore.removeScreen(screenId);
-        getToast(value.message!);
-      }
-    }).catchError((e) {
-      appStore.setLoading(false);
-      getToast(e.toString());
-    });
+    await locator<LocalProjectService>().deleteScreen(appStore.currentProject!, screenId);
+    appStore.removeScreen(screenId);
+    appStore.setLoading(false);
   }
 
   @override
@@ -152,16 +142,14 @@ class PreviewScreenState extends State<PreviewScreen> {
                                                             }),
                                                             12.width,
                                                             deleteIcon(context).onTap(() {
-                                                              ifNotTester(() async {
-                                                                deleteConfirmationDialog(
-                                                                  context: context,
-                                                                  messageText: language!.areYouSureDeleteScreen,
-                                                                  onAccept: () {
-                                                                    finish(context);
-                                                                    deleteScreenApi(screenId: screenData.id.validate());
-                                                                  },
-                                                                );
-                                                              });
+                                                              deleteConfirmationDialog(
+                                                                context: context,
+                                                                messageText: language!.areYouSureDeleteScreen,
+                                                                onAccept: () {
+                                                                  finish(context);
+                                                                  deleteScreenApi(screenId: screenData.id.validate());
+                                                                },
+                                                              );
                                                             }),
                                                           ],
                                                         ),

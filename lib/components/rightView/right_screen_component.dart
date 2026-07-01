@@ -1,8 +1,8 @@
 import 'package:flutter_viz/components/add_page_dialog.dart';
 import 'package:flutter_viz/components/screen_clone_dialog.dart';
+import 'package:flutter_viz/local_storage/local_project_service.dart';
 import 'package:flutter_viz/main.dart';
 import 'package:flutter_viz/model/screen_list_response.dart';
-import 'package:flutter_viz/network/rest_apis.dart';
 import 'package:flutter_viz/screen/screen_preview.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
@@ -35,21 +35,13 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
     });
   }
 
-  ///delete screen api call
+  ///Local equivalent of the old deleteScreen() REST call.
   Future deleteScreenApi({int? screenId}) async {
-    Map req = {
-      'id': screenId,
-    };
-    await deleteScreen(req).then((value) {
-      if (value.status!) {
-        appStore.removeScreen(screenId);
-        getToast(value.message!);
-      }
-      LiveStream().emit(getUpdatedData, true);
-      LiveStream().emit(updateScreenList);
-    }).catchError((e) {
-      getToast(e.toString());
-    });
+    if (appStore.currentProject == null || screenId == null) return;
+    await locator<LocalProjectService>().deleteScreen(appStore.currentProject!, screenId);
+    appStore.removeScreen(screenId);
+    LiveStream().emit(getUpdatedData, true);
+    LiveStream().emit(updateScreenList);
   }
 
   _getView() {
@@ -57,8 +49,7 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         16.height,
-        if (appStore.screenTemplateData == null)
-          Observer(
+        Observer(
             builder: (_) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -139,13 +130,11 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
                           editIcon(
                             context,
                             () async {
-                              ifNotTester(() async {
-                                await showInDialog(
-                                  context,
-                                  builder: (context) => ScreenCloneDialog(isEdit: true),
-                                );
-                                setState(() {});
-                              });
+                              await showInDialog(
+                                context,
+                                builder: (context) => ScreenCloneDialog(isEdit: true),
+                              );
+                              setState(() {});
                             },
                           ),
                         ),
@@ -157,17 +146,15 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
                         child: outLineIconButton(context, cloneIcon(context)),
                       ),
                       onTap: () async {
-                        ifNotTester(() async {
-                          bool? res = await showInDialog(
-                            context,
-                            builder: (context) {
-                              return ScreenCloneDialog();
-                            },
-                          );
-                          if (res ?? false) {
-                            setState(() {});
-                          }
-                        });
+                        bool? res = await showInDialog(
+                          context,
+                          builder: (context) {
+                            return ScreenCloneDialog();
+                          },
+                        );
+                        if (res ?? false) {
+                          setState(() {});
+                        }
                       },
                     ).visible(appStore.selectedScreenId! > 0),
                     GestureDetector(
@@ -176,9 +163,7 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
                         child: outLineIconButton(context, sourceCodeIcon(context)),
                       ),
                       onTap: () {
-                        ifNotTester(() {
-                          viewSourceCode(context);
-                        });
+                        viewSourceCode(context);
                       },
                     ).visible(appStore.selectedScreenId! > 0),
                     GestureDetector(
@@ -187,48 +172,46 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
                         child: outLineIconButton(context, clearIcon(context)),
                       ),
                       onTap: () {
-                        ifNotTester(() async {
-                          showInDialog(
-                            context,
-                            builder: (context) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(language!.areYouClearScreenData, style: primaryTextStyle()),
-                                  30.height,
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      dialogGrayBorderButton(
-                                        text: language!.cancel,
-                                        onTap: () {
+                        showInDialog(
+                          context,
+                          builder: (context) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(language!.areYouClearScreenData, style: primaryTextStyle()),
+                                30.height,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    dialogGrayBorderButton(
+                                      text: language!.cancel,
+                                      onTap: () {
+                                        finish(context);
+                                      },
+                                    ),
+                                    16.width,
+                                    SizedBox(
+                                      height: 36,
+                                      width: 110,
+                                      child: TextButton(
+                                        child: Text(language!.clear, style: TextStyle(color: Colors.red, fontSize: btnTextSize)),
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Colors.red.withValues(alpha: 0.1),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(COMMON_BUTTON_BORDER_RADIUS), side: BorderSide(color: Colors.red, width: 0.5)),
+                                        ),
+                                        onPressed: () {
+                                          trackUserEvent(CLEAR_DATA);
                                           finish(context);
+                                          appStore.resetView();
                                         },
                                       ),
-                                      16.width,
-                                      SizedBox(
-                                        height: 36,
-                                        width: 110,
-                                        child: TextButton(
-                                          child: Text(language!.clear, style: TextStyle(color: Colors.red, fontSize: btnTextSize)),
-                                          style: TextButton.styleFrom(
-                                            backgroundColor: Colors.red.withValues(alpha: 0.1),
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(COMMON_BUTTON_BORDER_RADIUS), side: BorderSide(color: Colors.red, width: 0.5)),
-                                          ),
-                                          onPressed: () {
-                                            trackUserEvent(CLEAR_DATA);
-                                            finish(context);
-                                            appStore.resetView();
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        });
+                                    )
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ).visible(appStore.selectedScreenId! > 0),
                     GestureDetector(
@@ -254,9 +237,7 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
                 Divider(color: COMMON_BORDER_COLOR),
               ],
             ),
-          )
-        else
-          SizedBox(),
+          ),
         Observer(builder: (_) {
           if (appStore.currentSelectedWidget != null) {
             return Container(

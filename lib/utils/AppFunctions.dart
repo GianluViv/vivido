@@ -7,7 +7,6 @@ import 'package:flutter_viz/model/drawer_Item_model.dart';
 import 'package:flutter_viz/model/models.dart';
 import 'package:flutter_viz/model/screen_list_response.dart';
 import 'package:flutter_viz/model/widget_model.dart';
-import 'package:flutter_viz/screen/login_screen.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/widgets/screen_json_parser_class.dart';
@@ -59,7 +58,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import 'AnalyticsService.dart';
 import 'AppConstant.dart';
 import 'AppWidget.dart';
 
@@ -365,18 +363,13 @@ bool getHorizontalOrVerticalAlignment(double? horizontalAlignment, double? verti
 }
 
 /// Track screen view
-trackScreenView(String screenName) async {
-  if (!appStore.isInDebugMode) {
-    locator<AnalyticsService>().logEvent("View " + screenName);
-  }
-}
+/// TODO(local-desktop-plan Fase 6): no-op since Fase 4 removed Firebase Analytics; kept as a hook
+/// point in case local usage logging is ever wanted, so the ~19 call sites don't need touching.
+trackScreenView(String screenName) async {}
 
-/// Track Firebase event logs
-trackUserEvent(String eventName) async {
-  if (!appStore.isInDebugMode) {
-    locator<AnalyticsService>().logEvent(eventName);
-  }
-}
+/// Track user event
+/// TODO(local-desktop-plan Fase 6): no-op since Fase 4 removed Firebase Analytics.
+trackUserEvent(String eventName) async {}
 
 /// get Parent Widget Row and Column
 bool getExpanded(WidgetModel widgetModel, bool? isExpanded) {
@@ -577,51 +570,6 @@ getToast(String message) {
   });
 }
 
-logoutConfirmationDialog(BuildContext context) async {
-  await showConfirmDialogCustom(
-    context,
-    dialogType: DialogType.CONFIRMATION,
-    title: language!.logout,
-    subTitle: language!.areYouSureWantToLogout,
-    negativeText: language!.no,
-    positiveText: language!.yes,
-    primaryColor: btnBackgroundColor,
-    onAccept: (c) async {
-      trackUserEvent(LOGOUT);
-      await removeKey(IS_LOGGED_IN);
-      await removeKey(USER_NAME);
-      await removeKey(USER_EMAIL);
-      await removeKey(USER_ID);
-      await removeKey(USER_TYPE);
-      await removeKey(USER_COUNTRY_ID);
-      await removeKey(USER_COUNTRY_NAME);
-      await removeKey(USER_STATE_ID);
-      await removeKey(USER_STATE_NAME);
-      await removeKey(USER_CITY_NAME);
-      await removeKey(USER_CITY_ID);
-      await removeKey(USER_PHONE_NUMBER);
-      await removeKey(USER_GENDER);
-      await removeKey(USER_DATE_OF_BIRTH);
-      await removeKey(USER_DETAILS);
-      await removeKey(USER_DESIGNATION);
-      await removeKey(FACEBOOK_URL);
-      await removeKey(GITHUB_URL);
-      await removeKey(TWITTER_URL);
-      await removeKey(STACK_OVERFLOW_URL);
-      await removeKey(LINKDIN_URL);
-      await removeKey(PINTEREST_URL);
-      await removeKey(DRIBBBLE_URL);
-      await removeKey(UPLABS_URL);
-      await removeKey(INSTAGRAM_URL);
-      await removeKey(LAST_LOGIN);
-      await removeKey(SELECTED_LANGUAGE_CODE);
-      await removeKey(THEME_MODE_INDEX);
-      await removeKey(USER_PHOTO);
-      await appStore.setLoggedIn(false);
-      LoginScreen().launch(context, isNewTask: true);
-    },
-  );
-}
 
 String getLastLogin({required String updateTimeString}) {
   if (updateTimeString.isNotEmpty) {

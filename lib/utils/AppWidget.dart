@@ -1,4 +1,3 @@
-import 'package:flutter_viz/network/rest_apis.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
@@ -272,31 +271,6 @@ Widget getHeaderLogoImage() {
   ).expand();
 }
 
-Widget getProfileWidget(BuildContext context) {
-  return Observer(
-    builder: (context) {
-      return PopupMenuButton<int>(
-        tooltip: language!.profile,
-        color: appStore.isDarkMode ? darkModeSecondaryBackgroundDark : Colors.white,
-        child: profileImage(35).cornerRadiusWithClipRRect(20),
-        initialValue: 0,
-        onSelected: (value) async {
-          if (value == 0) {
-            appStore.selectedMenu = PROFILE_INDEX;
-          } else if (value == 1) {
-            logoutConfirmationDialog(context);
-          }
-        },
-        itemBuilder: (context) {
-          return [
-            PopupMenuItem<int>(value: 0, child: Text(language!.profile, style: primaryTextStyle())),
-            PopupMenuItem<int>(value: 1, child: Text(language!.logout, style: primaryTextStyle())),
-          ];
-        },
-      );
-    },
-  );
-}
 
 Widget getTotalCountWidget(BuildContext context, {required String icon, required String title, int? total, Color? bgColor}) {
   return Container(
@@ -649,22 +623,6 @@ Widget addButtonRounded() {
 }
 
 Widget darkModeSwitchWidget() {
-  /// edit profile api call
-  Future editProfileApi(int themeMode) async {
-    Map req = {
-      'email': getStringAsync(USER_EMAIL),
-      'user_id': getIntAsync(USER_ID),
-      'is_darkmode': themeMode,
-    };
-
-    await updateProfile(req).then((value) {
-      printLogData("profile data$req");
-      log(value.message);
-    }).catchError((e) {
-      log(e.toString());
-    });
-  }
-
   return FlutterSwitch(
     value: appStore.isDarkMode,
     width: 55,
@@ -681,7 +639,6 @@ Widget darkModeSwitchWidget() {
     onToggle: (value) {
       appStore.setDarkMode(value);
       setValue(THEME_MODE_INDEX, value ? ThemeModeDark : ThemeModeLight);
-      editProfileApi(value ? ThemeModeDark : ThemeModeLight);
     },
   );
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_viz/model/widget_model.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
@@ -406,8 +408,23 @@ class PageViewClass {
   }
 
   Widget _getImageDefaultWidget() {
+    if (imageType != ImageTypeNetwork) {
+      return image != null
+          ? Image.file(
+              File(image!),
+              height: isImageHeightClear! ? null : fromJsonHeight(imageHeight, imageHeightType) ?? DEFAULT_PAGE_VIEW_IMAGE_HEIGHT as double?,
+              width: isImageWidthClear! ? null : fromJsonWidth(imageWidth, imageWidthType) ?? DEFAULT_PAGE_VIEW_IMAGE_WIDTH as double?,
+              fit: fit != null ? getBoxFit(fit) : BoxFit.cover,
+            )
+          : Image.asset(
+              DEFAULT_PAGE_VIEW_ASSET_IMAGE,
+              height: isImageHeightClear! ? null : fromJsonHeight(imageHeight, imageHeightType) ?? DEFAULT_PAGE_VIEW_IMAGE_HEIGHT as double?,
+              width: isImageWidthClear! ? null : fromJsonWidth(imageWidth, imageWidthType) ?? DEFAULT_PAGE_VIEW_IMAGE_WIDTH as double?,
+              fit: fit != null ? getBoxFit(fit) : BoxFit.cover,
+            );
+    }
     return Image.network(
-      image ?? (imageType == ImageTypeAsset ? DEFAULT_PAGE_VIEW_ASSET_IMAGE : DEFAULT_PAGE_VIEW_NETWORK_IMAGE),
+      image ?? DEFAULT_PAGE_VIEW_NETWORK_IMAGE,
       height: isImageHeightClear! ? null : fromJsonHeight(imageHeight, imageHeightType) ?? DEFAULT_PAGE_VIEW_IMAGE_HEIGHT as double?,
       width: isImageWidthClear! ? null : fromJsonWidth(imageWidth, imageWidthType) ?? DEFAULT_PAGE_VIEW_IMAGE_WIDTH as double?,
       fit: fit != null ? getBoxFit(fit) : BoxFit.cover,

@@ -1,17 +1,10 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 const String appName = "FlutterViz BETA";
 const font = "Inter";
-final baseURl = dotenv.env['BASE_URl'];
 
 const VERSION_NAME = '0.9.0';
 
 const DUMMY_USER_NAME = "Rose";
 const DUMMY_USER_EMAIL = "rose54321@gmail.com";
-
-///captcha code
-final CAPTACHA_SITE_KEY = dotenv.env['CAPTACHA_SITE_KEY'];
-final CAPTACHA_SECRET_KEY = dotenv.env['CAPTACHA_SECRET_KEY'];
 
 ///LiveStream Keys
 const LIVESTREAM_UPDATE_LAST_SYNC_TIME = "updateLastSyncTime";
@@ -31,15 +24,12 @@ const commonAnimationDuration = Duration(milliseconds: 300);
 const ROOT_VIEW_ID = "00000000007";
 
 const CODE_VIEW_INDEX = 9999;
-final INVITE_CODE = dotenv.env['INVITE_CODE'];
 
 /// Screen Index
 const int PRE_COMPONENTS_INDEX = -1;
 const int SCREEN_LIST_INDEX = 0;
 const int WIDGETS_INDEX = 1;
 const int TREE_INDEX = 2;
-const int PROFILE_INDEX = 3;
-const int TUTORIALS_INDEX = 4;
 const int WIDGETS_INFO_INDEX = 5;
 const int FAQS_INDEX = 6;
 const int MEDIA_INDEX = 7;
@@ -47,16 +37,6 @@ const int COMPONENT_INDEX = -1;
 const int SHARE_INDEX = -1;
 const int HELP_INDEX = -1;
 const int SCREEN_INDEX = -1;
-
-///Admin Screen Index
-const int ADMIN_DASHBOARD_INDEX = 0;
-const int ADMIN_USERS_INDEX = 1;
-const int ADMIN_CATEGORIES_INDEX = 2;
-const int ADMIN_TEMPLATES_INDEX = 3;
-const int ADMIN_COMPONENT_INDEX = -1;
-const int ADMIN_PROJECT_INDEX = 4;
-const int ADMIN_FEEDBACK_INDEX = 5;
-const int ADMIN_TUTORIALS_INDEX = 6;
 
 const String DEFAULT_FILE_NAME = "PreviewScreen";
 const String DEFAULT_YOUTUBE_ID = "9xwazD5SyVg";
@@ -110,8 +90,6 @@ const WidgetIconType = "Icon";
 const WidgetTypeIconButton = "IconButton";
 const WidgetTypeListTile = "ListTile";
 const WidgetTypeChipView = "ChipView";
-const WidgetTypeVideoPlayer = "VideoPlayer";
-const WidgetTypeAudioPlayer = "AudioPlayer";
 const WidgetTypeSwitchListTile = "SwitchListTile";
 const WidgetTypeCheckboxListTile = "CheckboxListTile";
 const WidgetTypeSizedBox = "SizedBox";
@@ -137,8 +115,6 @@ const WidgetTypeCalender = "Calendar";
 const WidgetTypeDropDown = "DropDown";
 const WidgetTypeWebView = "WebView";
 const WidgetTypeCircleImage = "CircleImage";
-const WidgetTypeGoogleMap = "GoogleMap";
-const WidgetTypeYoutubePlayer = "YoutubePlayer";
 const WidgetTypeSlider = "Slider";
 const WidgetTypeRatingBar = "RatingBar";
 const WidgetTypeRotatedBox = "RotatedBox";

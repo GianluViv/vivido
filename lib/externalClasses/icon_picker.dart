@@ -122,7 +122,7 @@ class IconPicker extends FormField<String> {
   /// to [initialValue] or the empty string.
   ///
   /// For documentation about the various parameters, see the [TextField] class
-  /// and [new TextField], the constructor.
+  /// and [TextField], the constructor.
   IconPicker({
     Key? key,
     this.controller,

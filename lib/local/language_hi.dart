@@ -560,7 +560,6 @@ class LanguageHi extends BaseLanguage {
   String get titleChip => "टुकड़ा";
 
   @override
-  String get titleGoogleMap => "गूगल नक्शा";
 
   @override
   String get titleYoutubePlayer => "यूट्यूब प्लेयर";

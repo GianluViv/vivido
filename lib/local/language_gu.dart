@@ -560,7 +560,6 @@ class LanguageGu extends BaseLanguage {
   String get titleChip => "ચિપ";
 
   @override
-  String get titleGoogleMap => "ગૂગલે નકશો";
 
   @override
   String get titleYoutubePlayer => "યુ ટ્યુબ પ્લેયર";
