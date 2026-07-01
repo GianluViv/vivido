@@ -10,7 +10,6 @@ import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/widgetsClass/Icon_class.dart';
 import 'package:flutter_viz/widgetsClass/Image_class.dart';
 import 'package:flutter_viz/widgetsClass/app_bar_class.dart';
-import 'package:flutter_viz/widgetsClass/audio_player_class.dart';
 import 'package:flutter_viz/widgetsClass/bottom_navigation_bar_class.dart';
 import 'package:flutter_viz/widgetsClass/calender_class.dart';
 import 'package:flutter_viz/widgetsClass/card_class.dart';
@@ -53,9 +52,7 @@ import 'package:flutter_viz/widgetsClass/tab_view_class.dart';
 import 'package:flutter_viz/widgetsClass/text_button_class.dart';
 import 'package:flutter_viz/widgetsClass/text_class.dart';
 import 'package:flutter_viz/widgetsClass/text_field_class.dart';
-import 'package:flutter_viz/widgetsClass/video_player_class.dart';
 import 'package:flutter_viz/widgetsClass/web_view_class.dart';
-import 'package:flutter_viz/widgetsClass/youtube_player_class.dart';
 import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -181,12 +178,6 @@ List<WidgetModel> baseWidgetsList = [
   /// List Tile
   getWidgets(WidgetTypeListTile),
 
-  /// Video Player
-  getWidgets(WidgetTypeVideoPlayer),
-
-  /// Audio Player
-  getWidgets(WidgetTypeAudioPlayer),
-
   /// Switch List Tile
   getWidgets(WidgetTypeSwitchListTile),
 
@@ -210,9 +201,6 @@ List<WidgetModel> baseWidgetsList = [
 
   /// Circle Image View
   getWidgets(WidgetTypeCircleImage),
-
-  /// Youtube Player
-  getWidgets(WidgetTypeYoutubePlayer),
 
   /// Slider
   getWidgets(WidgetTypeSlider),
@@ -265,18 +253,6 @@ getWidgets(String? subType) {
       displayWidget: getDisplayWidget(getWidgetsIcon(WidgetTypeSlider), getWidgetTitle(WidgetTypeSlider)),
       widgetSubType: WidgetTypeSlider,
       widgetViewModel: SliderClass(),
-      widgetType: WidgetTypeNormal,
-    );
-  } else if (subType == WidgetTypeYoutubePlayer) {
-    /// Youtube Player
-    return WidgetModel(
-      id: getWidgetId(),
-      title: getWidgetTitle(WidgetTypeYoutubePlayer),
-      displayWidget: getDisplayWidget(getWidgetsIcon(WidgetTypeYoutubePlayer), getWidgetTitle(WidgetTypeYoutubePlayer)),
-      widgetSubType: WidgetTypeYoutubePlayer,
-      widgetViewModel: YoutubePlayerClass(),
-      headerImport: YoutubePlayerClass().getHeaderClassFiles(),
-      yamlLibName: YoutubePlayerClass().getYamlLib(),
       widgetType: WidgetTypeNormal,
     );
   } else if (subType == WidgetTypeTextField) {
@@ -514,32 +490,6 @@ getWidgets(String? subType) {
       widgetViewModel: GridViewClass(),
       subWidgetsList: [],
       widgetType: WidgetTypeGridLayout,
-    );
-  } else if (subType == WidgetTypeVideoPlayer) {
-    /// Video Player
-    return WidgetModel(
-      id: getWidgetId(),
-      title: getWidgetTitle(WidgetTypeVideoPlayer),
-      displayWidget: getDisplayWidget(getWidgetsIcon(WidgetTypeVideoPlayer), getWidgetTitle(WidgetTypeVideoPlayer)),
-      widgetSubType: WidgetTypeVideoPlayer,
-      widgetViewModel: VideoPlayerClass(),
-      headerImport: VideoPlayerClass().getHeaderClassFiles(),
-      yamlLibName: VideoPlayerClass().getYamlLib(),
-      subWidgetsList: [],
-      widgetType: WidgetTypeNormal,
-    );
-  } else if (subType == WidgetTypeAudioPlayer) {
-    /// Audio Player
-    return WidgetModel(
-      id: getWidgetId(),
-      title: getWidgetTitle(WidgetTypeAudioPlayer),
-      displayWidget: getDisplayWidget(getWidgetsIcon(WidgetTypeAudioPlayer), getWidgetTitle(WidgetTypeAudioPlayer)),
-      widgetSubType: WidgetTypeAudioPlayer,
-      widgetViewModel: AudioPlayerClass(),
-      headerImport: AudioPlayerClass().getHeaderClassFiles(),
-      yamlLibName: AudioPlayerClass().getYamlLib(),
-      subWidgetsList: [],
-      widgetType: WidgetTypeNormal,
     );
   } else if (subType == WidgetTypeSwitchListTile) {
     /// Switch List Tile
@@ -1885,24 +1835,6 @@ getWidgetsClassData(
     } else if (isEndCodeAsString) {
       return (widgetModel.widgetViewModel as GridViewClass).getEndCodeAsString(isChild!, widgetModel);
     }
-  } else if (widgetModel.widgetSubType == WidgetTypeVideoPlayer) {
-    /// Video Player
-    if (isChildData) {
-      return (widgetModel.widgetViewModel as VideoPlayerClass).getVideoPlayerWidget(widgetModel);
-    } else if (isCodeAsString) {
-      return (widgetModel.widgetViewModel as VideoPlayerClass).getCodeAsString(widgetModel);
-    } else if (isPropertyJsonData) {
-      return (widgetModel.widgetViewModel as VideoPlayerClass).toJson();
-    }
-  } else if (widgetModel.widgetSubType == WidgetTypeAudioPlayer) {
-    /// Audio Player
-    if (isChildData) {
-      return (widgetModel.widgetViewModel as AudioPlayerClass).getAudioPlayerWidget(widgetModel);
-    } else if (isCodeAsString) {
-      return (widgetModel.widgetViewModel as AudioPlayerClass).getCodeAsString(widgetModel);
-    } else if (isPropertyJsonData) {
-      return (widgetModel.widgetViewModel as AudioPlayerClass).toJson();
-    }
   } else if (widgetModel.widgetSubType == WidgetTypeSwitchListTile) {
     /// Switch List Tile
     if (isChildData) {
@@ -2057,15 +1989,6 @@ getWidgetsClassData(
     } else if (isEndCodeAsString) {
       return (widgetModel.widgetViewModel as OpacityClass).getEndCodeAsString(isChild!, widgetModel);
     }
-  } else if (widgetModel.widgetSubType == WidgetTypeYoutubePlayer) {
-    /// Youtube Player
-    if (isChildData) {
-      return (widgetModel.widgetViewModel as YoutubePlayerClass).getYoutubePlayerWidget(widgetModel);
-    } else if (isCodeAsString) {
-      return (widgetModel.widgetViewModel as YoutubePlayerClass).getCodeAsString(widgetModel);
-    } else if (isPropertyJsonData) {
-      return (widgetModel.widgetViewModel as YoutubePlayerClass).toJson();
-    }
   } else if (widgetModel.widgetSubType == WidgetTypeCreditCardView) {
     /// CreditCardView
     if (isChildData) {
@@ -2123,13 +2046,7 @@ getWidgetsClassData(
 
 /// Get all Import lib
 getHeaderClassFiles(ScreenJsonData childData) {
-  if (childData.subType == WidgetTypeYoutubePlayer) {
-    return childData.youtubePlayerClass!.getHeaderClassFiles();
-  } else if (childData.subType == WidgetTypeAudioPlayer) {
-    return childData.audioPlayerClass!.getHeaderClassFiles();
-  } else if (childData.subType == WidgetTypeVideoPlayer) {
-    return childData.videoPlayerClass!.getHeaderClassFiles();
-  } else if (childData.subType == WidgetTypeRatingBar) {
+  if (childData.subType == WidgetTypeRatingBar) {
     return childData.ratingBarClass!.getHeaderClassFiles();
   } else if (childData.subType == WidgetTypeCreditCardView) {
     return childData.creditCardViewClass!.getHeaderClassFiles();
@@ -2148,13 +2065,7 @@ getHeaderClassFiles(ScreenJsonData childData) {
 
 /// Get all pubspec lib name
 getYamlLib(ScreenJsonData childData) {
-  if (childData.subType == WidgetTypeYoutubePlayer) {
-    return childData.youtubePlayerClass!.getYamlLib();
-  } else if (childData.subType == WidgetTypeAudioPlayer) {
-    return childData.audioPlayerClass!.getYamlLib();
-  } else if (childData.subType == WidgetTypeVideoPlayer) {
-    return childData.videoPlayerClass!.getYamlLib();
-  } else if (childData.subType == WidgetTypeRatingBar) {
+  if (childData.subType == WidgetTypeRatingBar) {
     return childData.ratingBarClass!.getYamlLib();
   } else if (childData.subType == WidgetTypeLottieAnimation) {
     return childData.lottieAnimationClass!.getYamlLib();
@@ -2239,12 +2150,6 @@ getWidgetJsonData(ScreenJsonData childData) {
     return childData.opacityClass;
   } else if (childData.subType == WidgetTypeImageIcon) {
     return childData.imageIconClass;
-  } else if (childData.subType == WidgetTypeYoutubePlayer) {
-    return childData.youtubePlayerClass;
-  } else if (childData.subType == WidgetTypeAudioPlayer) {
-    return childData.audioPlayerClass;
-  } else if (childData.subType == WidgetTypeVideoPlayer) {
-    return childData.videoPlayerClass;
   } else if (childData.subType == WidgetTypePageView) {
     return childData.pageViewClass;
   } else if (childData.subType == WidgetTypeTab) {
@@ -2321,18 +2226,12 @@ String getWidgetTitle(String? subType) {
     return language!.titleTextField;
   } else if (subType == WidgetTypeWebView) {
     return language!.titleWebView;
-  } else if (subType == WidgetTypeAudioPlayer) {
-    return language!.titleAudioPlayer;
-  } else if (subType == WidgetTypeVideoPlayer) {
-    return language!.titleVideoPlayer;
   } else if (subType == WidgetTypeListTile) {
     return language!.titleListTile;
   } else if (subType == WidgetTypeStack) {
     return language!.titleStack;
   } else if (subType == WidgetTypeChipView) {
     return language!.titleChip;
-  } else if (subType == WidgetTypeYoutubePlayer) {
-    return language!.titleYoutubePlayer;
   } else if (subType == WidgetTypeSlider) {
     return language!.titleSlider;
   } else if (subType == WidgetTypeRatingBar) {

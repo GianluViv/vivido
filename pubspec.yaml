@@ -37,15 +37,8 @@ dependencies:
   get_it: ^8.0.3
   fl_chart: ^1.0.0
   flutter_dotenv: ^5.2.1
+  path_provider: ^2.1.5
 
-  # Youtube player
-  youtube_player_iframe: ^5.2.1
-  #  youtube_plyr_iframe: ^2.0.7
-  # Audio Player Lib
-  just_audio: ^0.10.4
-  rxdart: ^0.28.0
-  # Video Player
-  video_player: ^2.10.0
   # Chart
   #  charts_flutter: ^0.12.0
   readmore: ^3.0.0

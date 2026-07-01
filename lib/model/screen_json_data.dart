@@ -1,6 +1,5 @@
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/widgetsClass/app_bar_class.dart';
-import 'package:flutter_viz/widgetsClass/audio_player_class.dart';
 import 'package:flutter_viz/widgetsClass/bottom_navigation_bar_class.dart';
 import 'package:flutter_viz/widgetsClass/calender_class.dart';
 import 'package:flutter_viz/widgetsClass/card_class.dart';
@@ -44,9 +43,7 @@ import 'package:flutter_viz/widgetsClass/tab_view_class.dart';
 import 'package:flutter_viz/widgetsClass/text_button_class.dart';
 import 'package:flutter_viz/widgetsClass/text_class.dart';
 import 'package:flutter_viz/widgetsClass/text_field_class.dart';
-import 'package:flutter_viz/widgetsClass/video_player_class.dart';
 import 'package:flutter_viz/widgetsClass/web_view_class.dart';
-import 'package:flutter_viz/widgetsClass/youtube_player_class.dart';
 
 class ScreenJsonData {
   String? type;
@@ -87,9 +84,6 @@ class ScreenJsonData {
   ClipRRectClass? clipRRectClass;
   OpacityClass? opacityClass;
   ImageIconClass? imageIconClass;
-  AudioPlayerClass? audioPlayerClass;
-  VideoPlayerClass? videoPlayerClass;
-  YoutubePlayerClass? youtubePlayerClass;
   PageViewClass? pageViewClass;
   TabBarClass? tabBarClass;
   TabBarViewClass? tabBarViewClass;
@@ -125,9 +119,6 @@ class ScreenJsonData {
     cardClass = json[WidgetTypeCard] != null ? new CardClass.fromJson(json[WidgetTypeCard]) : null;
     listViewClass = json[WidgetTypeList] != null ? new ListViewClass.fromJson(json[WidgetTypeList]) : null;
     gridViewClass = json[WidgetTypeGrid] != null ? new GridViewClass.fromJson(json[WidgetTypeGrid]) : null;
-    audioPlayerClass = json[WidgetTypeAudioPlayer] != null ? new AudioPlayerClass.fromJson(json[WidgetTypeAudioPlayer]) : null;
-    videoPlayerClass = json[WidgetTypeVideoPlayer] != null ? new VideoPlayerClass.fromJson(json[WidgetTypeVideoPlayer]) : null;
-    youtubePlayerClass = json[WidgetTypeYoutubePlayer] != null ? new YoutubePlayerClass.fromJson(json[WidgetTypeYoutubePlayer]) : null;
     textClass = json[WidgetTypeText] != null ? new TextClass.fromJson(json[WidgetTypeText]) : null;
     textFieldClass = json[WidgetTypeTextField] != null ? new TextFieldClass.fromJson(json[WidgetTypeTextField]) : null;
     textButtonClass = json[WidgetTypeTextButton] != null ? new TextButtonClass.fromJson(json[WidgetTypeTextButton]) : null;
@@ -277,15 +268,6 @@ class ScreenJsonData {
     }
     if (this.imageIconClass != null) {
       data[WidgetTypeImageIcon] = this.imageIconClass!.toJson();
-    }
-    if (this.youtubePlayerClass != null) {
-      data[WidgetTypeYoutubePlayer] = this.youtubePlayerClass!.toJson();
-    }
-    if (this.audioPlayerClass != null) {
-      data[WidgetTypeAudioPlayer] = this.audioPlayerClass!.toJson();
-    }
-    if (this.videoPlayerClass != null) {
-      data[WidgetTypeVideoPlayer] = this.youtubePlayerClass!.toJson();
     }
     if (this.tabBarClass != null) {
       data[WidgetTypeTabBar] = this.tabBarClass!.toJson();

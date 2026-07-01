@@ -100,18 +100,12 @@ String getWidgetsIcon(String? widgetType) {
     return getPath("CheckboxListTile.svg");
   } else if (widgetType == WidgetTypeDivider) {
     return getPath("Divider.svg");
-  } else if (widgetType == WidgetTypeVideoPlayer) {
-    return getPath("VideoPlayer.svg");
-  } else if (widgetType == WidgetTypeAudioPlayer) {
-    return getPath("AudioPlayer.svg");
   } else if (widgetType == WidgetTypeListTile) {
     return getPath("ListTile.svg");
   } else if (widgetType == WidgetTypeStack) {
     return getPath("Stack.svg");
   } else if (widgetType == WidgetTypeSlider) {
     return getPath("Slider.svg");
-  } else if (widgetType == WidgetTypeYoutubePlayer) {
-    return getPath("YoutubePlayer.svg");
   } else if (widgetType == WidgetTypeRatingBar) {
     return getPath("RatingBar.svg");
   } else if (widgetType == WidgetTypeLottieAnimation) {
@@ -156,7 +150,6 @@ List<String> fullWidthWidgetTypeList = [
   WidgetTypeSwitchListTile,
   WidgetTypeCheckboxListTile,
   WidgetTypeCalender,
-  WidgetTypeVideoPlayer,
   WidgetTypeCreditCardView,
   WidgetTypeLinearProgressIndicator,
 ];

@@ -1,5 +1,6 @@
 import 'package:flutter_viz/local/app_localizations.dart';
 import 'package:flutter_viz/local/languages.dart';
+import 'package:flutter_viz/local_storage/local_project_service.dart';
 import 'package:flutter_viz/screen/dashboard_screen.dart';
 import 'package:flutter_viz/screen/login_screen.dart';
 import 'package:flutter_viz/screen/register_screen.dart';
@@ -141,4 +142,5 @@ class _MyAppState extends State<MyApp> {
 
 setupServiceLocator() {
   locator.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
+  locator.registerLazySingleton<LocalProjectService>(() => LocalProjectService());
 }

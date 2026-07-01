@@ -1,5 +1,4 @@
 import 'package:flutter_viz/adminDashboard/model/tutorials_model.dart';
-import 'package:flutter_viz/externalClasses/flutterViz_youtube_player.dart';
 import 'package:flutter_viz/network/rest_apis.dart';
 import 'package:flutter_viz/utils/AppColors.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_viz/utils/AppWidget.dart';
 import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
 
@@ -142,18 +142,7 @@ class TutorialsComponentState extends State<TutorialsComponent> {
                                       ],
                                     ),
                                   ).onTap(() {
-                                    showInDialog(context, builder: (_) {
-                                      return FlutterVizYoutubePlayer(
-                                        url: (tutorialsItem.url != null) ? getYoutubeVideoId(tutorialsItem.url!) : DEFAULT_YOUTUBE_ID,
-                                        autoPlay: false,
-                                        looping: false,
-                                        mute: false,
-                                        showControls: true,
-                                        showFullScreen: true,
-                                        height: context.height() * 0.8,
-                                        width: context.width() * 0.6,
-                                      ).cornerRadiusWithClipRRectOnly(topLeft: COMMON_CARD_BORDER_RADIUS.toInt(), topRight: COMMON_CARD_BORDER_RADIUS.toInt());
-                                    }, contentPadding: EdgeInsets.all(0));
+                                    launchUrl(Uri.parse(tutorialsItem.url.validate(value: "https://www.youtube.com/watch?v=$DEFAULT_YOUTUBE_ID")));
                                   });
                                 }).toList(),
                               ),

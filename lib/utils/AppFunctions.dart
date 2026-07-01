@@ -15,7 +15,6 @@ import 'package:flutter_viz/widgets/widgets.dart';
 import 'package:flutter_viz/widgetsClass/Icon_class.dart';
 import 'package:flutter_viz/widgetsClass/Image_class.dart';
 import 'package:flutter_viz/widgetsClass/app_bar_class.dart';
-import 'package:flutter_viz/widgetsClass/audio_player_class.dart';
 import 'package:flutter_viz/widgetsClass/bottom_navigation_bar_class.dart';
 import 'package:flutter_viz/widgetsClass/calender_class.dart';
 import 'package:flutter_viz/widgetsClass/card_class.dart';
@@ -54,9 +53,7 @@ import 'package:flutter_viz/widgetsClass/switch_list_tile_class.dart';
 import 'package:flutter_viz/widgetsClass/text_button_class.dart';
 import 'package:flutter_viz/widgetsClass/text_class.dart';
 import 'package:flutter_viz/widgetsClass/text_field_class.dart';
-import 'package:flutter_viz/widgetsClass/video_player_class.dart';
 import 'package:flutter_viz/widgetsClass/web_view_class.dart';
-import 'package:flutter_viz/widgetsClass/youtube_player_class.dart';
 import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -391,7 +388,6 @@ bool getExpanded(WidgetModel widgetModel, bool? isExpanded) {
               widgetModel.widgetSubType == WidgetTypeCheckboxListTile ||
               widgetModel.widgetSubType == WidgetTypeSwitchListTile ||
               widgetModel.widgetSubType == WidgetTypeCalender ||
-              widgetModel.widgetSubType == WidgetTypeVideoPlayer ||
               widgetModel.widgetSubType == WidgetTypeCreditCardView ||
               widgetModel.widgetSubType == WidgetTypeLinearProgressIndicator))) {
         return true;
@@ -461,8 +457,6 @@ ExpandedModel getIsExpanded(bool? isExpanded) {
     return ExpandedModel(isExpanded: false, message: language!.checkboxListTileExpandedMsg);
   } else if (widgetType == WidgetTypeCalender && parentType == WidgetTypeRow && !isExpanded!) {
     return ExpandedModel(isExpanded: false, message: language!.calenderExpandedMsg);
-  } else if (widgetType == WidgetTypeVideoPlayer && parentType == WidgetTypeRow && !isExpanded!) {
-    return ExpandedModel(isExpanded: false, message: language!.videoPlayerExpandedMsg);
   } else if (widgetType == WidgetTypeCreditCardView && parentType == WidgetTypeRow && !isExpanded!) {
     return ExpandedModel(isExpanded: false, message: language!.creditCardViewExpandedMsg);
   } else if (widgetType == WidgetTypeLinearProgressIndicator && parentType == WidgetTypeRow && !isExpanded!) {
@@ -485,10 +479,6 @@ getWidgetCasting(WidgetModel widgetModel) {
     return widgetModel.widgetViewModel as ListTileClass?;
   } else if (widgetModel.widgetSubType == WidgetTypeChipView) {
     return widgetModel.widgetViewModel as ChipViewClass?;
-  } else if (widgetModel.widgetSubType == WidgetTypeVideoPlayer) {
-    return widgetModel.widgetViewModel as VideoPlayerClass?;
-  } else if (widgetModel.widgetSubType == WidgetTypeAudioPlayer) {
-    return widgetModel.widgetViewModel as AudioPlayerClass?;
   } else if (widgetModel.widgetSubType == WidgetTypeSwitchListTile) {
     return widgetModel.widgetViewModel as SwitchListTileClass?;
   } else if (widgetModel.widgetSubType == WidgetTypeCheckboxListTile) {
@@ -529,8 +519,6 @@ getWidgetCasting(WidgetModel widgetModel) {
     return widgetModel.widgetViewModel as WebViewClass?;
   } else if (widgetModel.widgetSubType == WidgetTypeCircleImage) {
     return widgetModel.widgetViewModel as CircleImageClass?;
-  } else if (widgetModel.widgetSubType == WidgetTypeYoutubePlayer) {
-    return widgetModel.widgetViewModel as YoutubePlayerClass?;
   } else if (widgetModel.widgetSubType == WidgetTypeSlider) {
     return widgetModel.widgetViewModel as SliderClass?;
   } else if (widgetModel.widgetSubType == WidgetTypeRatingBar) {

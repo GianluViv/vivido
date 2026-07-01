@@ -243,24 +243,6 @@ List<WidgetsInformationModel> getWidgetInfo() {
     url: 'https://api.flutter.dev/flutter/widgets/ImageIcon-class.html',
   ));
   list.add(WidgetsInformationModel(
-    title: language!.titleVideoPlayer,
-    description: language!.desVideoPlayer,
-    image: 'images/widgetsInformation/wi_videoplayer.png',
-    url: 'https://pub.dev/packages/video_player',
-  ));
-  list.add(WidgetsInformationModel(
-    title: language!.titleAudioPlayer,
-    description: language!.desAudioPlayer,
-    image: 'images/widgetsInformation/wi_audioplayer.png',
-    url: 'https://pub.dev/packages/just_audio',
-  ));
-  list.add(WidgetsInformationModel(
-    title: language!.titleYoutubePlayer,
-    description: language!.desYoutubePlayer,
-    image: 'images/widgetsInformation/wi_youtubeplayer.png',
-    url: 'https://pub.dev/packages/youtube_player_iframe',
-  ));
-  list.add(WidgetsInformationModel(
     title: language!.titleCalender,
     description: language!.desCalender,
     image: 'images/widgetsInformation/wi_calender.png',

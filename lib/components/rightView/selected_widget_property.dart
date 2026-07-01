@@ -2,7 +2,6 @@ import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/widgets/handle_keyboard_event.dart';
 import 'package:flutter_viz/widgetsClass/text_class.dart';
 import 'package:flutter_viz/widgetsProperty/app_bar_property_view.dart';
-import 'package:flutter_viz/widgetsProperty/audio_player_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/bottom_navigation_bar_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/button_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/calender_property_view.dart';
@@ -47,9 +46,7 @@ import 'package:flutter_viz/widgetsProperty/tab_property.dart';
 import 'package:flutter_viz/widgetsProperty/tab_view_properties.dart';
 import 'package:flutter_viz/widgetsProperty/text_field_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/text_property_view.dart';
-import 'package:flutter_viz/widgetsProperty/video_player_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/web_view_property_view.dart';
-import 'package:flutter_viz/widgetsProperty/youtube_property_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -105,10 +102,6 @@ class _SelectedWidgetPropertyState extends State<SelectedWidgetProperty> {
       return ListViewPropertyView();
     else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeGrid)
       return GridViewPropertyView();
-    else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeVideoPlayer)
-      return VideoPlayerPropertyView();
-    else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeAudioPlayer)
-      return AudioPlayerPropertyView();
     else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeSwitchListTile)
       return SwitchListTilePropertyView();
     else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeCheckboxListTile)
@@ -139,8 +132,6 @@ class _SelectedWidgetPropertyState extends State<SelectedWidgetProperty> {
       return OpacityPropertyView();
     else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeImageIcon)
       return ImageIconPropertyView();
-    else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeYoutubePlayer)
-      return YoutubePropertyView();
     else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeRootView)
       return RootViewProperty();
     else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypePageView)
