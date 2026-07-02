@@ -126,7 +126,7 @@ class PageViewClass {
 
   PageViewClass({
     this.image,
-    this.imageType = ImageTypeNetwork,
+    this.imageType = ImageTypeAsset,
     this.count,
     this.widthType = TypePX,
     this.heightType = TypePX,
@@ -168,8 +168,8 @@ class PageViewClass {
   });
 
   PageViewClass.fromJson(Map<String, dynamic> json) {
+    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeAsset;
     image = json['image'] != null ? json['image'] : (imageType == ImageTypeAsset ? DEFAULT_PAGE_VIEW_ASSET_IMAGE : DEFAULT_PAGE_VIEW_NETWORK_IMAGE);
-    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeNetwork;
     count = json['count'] != null ? json['count'] : DEFAULT_PAGE_VIEW_COUNT;
     height = json['height'] != null ? fromJsonHeight(json['height'], heightType ?? TypePX) : DEFAULT_PAGE_VIEW_HEIGHT as double?;
     width = json['width'] != null ? fromJsonWidth(json['width'], widthType ?? TypePX) : DEFAULT_PAGE_VIEW_WIDTH as double?;

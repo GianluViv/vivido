@@ -144,6 +144,36 @@ class _HeaderComponentState extends State<HeaderComponent> {
                 children: [
                   getHeaderLogoImage(),
                   16.width,
+                  OnHover(builder: (isHovered) {
+                    return elevationButtonHighLightColor(
+                      isHovered: isHovered,
+                      child: highLightIcon(isHovered, icon: Icons.undo),
+                      toolTipMessage: "Undo",
+                      onPressed: () {
+                        if (appStore.canUndo()) {
+                          appStore.undo();
+                        } else {
+                          getToast("Nothing to undo");
+                        }
+                      },
+                    );
+                  }),
+                  8.width,
+                  OnHover(builder: (isHovered) {
+                    return elevationButtonHighLightColor(
+                      isHovered: isHovered,
+                      child: highLightIcon(isHovered, icon: Icons.redo),
+                      toolTipMessage: "Redo",
+                      onPressed: () {
+                        if (appStore.canRedo()) {
+                          appStore.redo();
+                        } else {
+                          getToast("Nothing to redo");
+                        }
+                      },
+                    );
+                  }),
+                  16.width,
                   Row(
                           children: [
                             OnHover(builder: (isHovered) {
@@ -176,7 +206,7 @@ class _HeaderComponentState extends State<HeaderComponent> {
                                           height: 25,
                                           child: Lottie.asset('images/loader.json').center(),
                                         ).visible(appStore.isProjectDownloading)
-                                      : highLightIcon(isHovered, icon: Icons.download),
+                                      : highLightIcon(isHovered, icon: Icons.inventory_2_outlined),
                                   toolTipMessage: (appStore.isProjectDownloading) ? language!.downloadingInProgress : language!.downloadProject,
                                   onPressed: () async {
                                     if (appStore.isProjectDownloading) {
@@ -192,7 +222,7 @@ class _HeaderComponentState extends State<HeaderComponent> {
                             OnHover(builder: (isHovered) {
                               return elevationButtonHighLightColor(
                                 isHovered: isHovered,
-                                child: highLightIcon(isHovered, icon: Icons.archive_outlined),
+                                child: fwzIcon(isHovered),
                                 toolTipMessage: "Export Project as .fwz",
                                 onPressed: exportProjectAsFwz,
                               );

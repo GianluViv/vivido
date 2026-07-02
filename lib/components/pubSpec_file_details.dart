@@ -40,7 +40,7 @@ class _PubSpecFileDetailsState extends State<PubSpecFileDetails> {
     }
   }
 
-  /// Download FlutterViz lib source code
+  /// Download bundled external-class source code
   downloadCode(String fileName) async {
     trackUserEvent(DOWNLOAD_CODE);
 

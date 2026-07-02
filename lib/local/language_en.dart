@@ -875,7 +875,7 @@ class LanguageEn extends BaseLanguage {
   String get titleGridChild => "GridView Child Example\n↓\nChild 1\n↓\nChild 2";
 
   @override
-  String get copyrightInformation => "///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/\n\n";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Login to stay connected";

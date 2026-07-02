@@ -868,7 +868,7 @@ class LanguageHi extends BaseLanguage {
   String get titleGridChild => "ग्रिडव्यू बाल उदाहरण \ N ↓ \ NChild 1 \ N ↓ \ NChild 2";
 
   @override
-  String get copyrightInformation => "///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/\n\n";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "जुड़े रहने के लिए लॉग इन करें।";

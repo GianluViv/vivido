@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter_viz/externalClasses/flutterViz_drawer.dart';
-import 'package:flutter_viz/externalClasses/flutterViz_drawerItem_model.dart';
+import 'package:flutter_viz/externalClasses/custom_drawer.dart';
+import 'package:flutter_viz/externalClasses/custom_drawer_item_model.dart';
 import 'package:flutter_viz/main.dart';
 import 'package:flutter_viz/model/drawer_Item_model.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
@@ -53,7 +53,7 @@ class LeftDrawerClass {
       {this.elevation,
       this.headerColor,
       this.profileImagePath,
-      this.profileImageType = ImageTypeNetwork,
+      this.profileImageType = ImageTypeAsset,
       this.name,
       this.email,
       this.nameFontWeight,
@@ -73,7 +73,7 @@ class LeftDrawerClass {
     elevation = json['elevation'] != null ? json['elevation'] : DEFAULT_DRAWER_ELEVATION;
     headerColor = json['headerColor'] != null ? fromJsonColor(json['headerColor']) : COMMON_BG_COLOR;
     profileImagePath = json['profileImagePath'] != null ? json['profileImagePath'] : (json['profileImageType'] == ImageTypeNetwork ? DEFAULT_DRAWER_NETWORK_IMAGE : DEFAULT_DRAWER_ASSET_IMAGE);
-    profileImageType = json['profileImageType'] != null ? json['profileImageType'] : ImageTypeNetwork;
+    profileImageType = json['profileImageType'] != null ? json['profileImageType'] : ImageTypeAsset;
     name = json['name'] != null ? json['name'] : DUMMY_USER_NAME;
     nameFontWeight = json['nameFontWeight'] != null ? json['nameFontWeight'] : FontWeightTypeNormal;
     nameFontStyle = json['nameFontStyle'] != null ? fromJsonFontStyle(json['nameFontStyle']) : FontStyle.normal;
@@ -166,12 +166,12 @@ class LeftDrawerClass {
   }
 
   /// Drawer Items
-  List<FlutterVizDrawerItemModel> getFlutterVizDrawerItems() {
-    List<FlutterVizDrawerItemModel> flutterVizDrawerItems = [];
+  List<CustomDrawerItemModel> getCustomDrawerItems() {
+    List<CustomDrawerItemModel> customDrawerItems = [];
     drawerItems.forEach((element) {
-      flutterVizDrawerItems.add(FlutterVizDrawerItemModel(icon: IconData(element!.icon!.codePoint!, fontFamily: "MaterialIcons"), label: element.label));
+      customDrawerItems.add(CustomDrawerItemModel(icon: IconData(element!.icon!.codePoint!, fontFamily: "MaterialIcons"), label: element.label));
     });
-    return flutterVizDrawerItems;
+    return customDrawerItems;
   }
 
   ImageProvider _getProfileImageProvider() {
@@ -183,7 +183,7 @@ class LeftDrawerClass {
 
   Widget getLeftDrawerWidget({BuildContext? context}) {
     return GestureDetector(
-      child: FlutterVizDrawer(
+      child: CustomDrawer(
         elevation: elevation ?? DEFAULT_DRAWER_ELEVATION,
         headerColor: headerColor ?? COMMON_BG_COLOR,
         profileImage: _getProfileImageProvider(),
@@ -201,7 +201,7 @@ class LeftDrawerClass {
           fontSize: 14,
           color: emailFontColor ?? DEFAULT_DRAWER_FONT_COLOR,
         ),
-        drawerItems: getFlutterVizDrawerItems(),
+        drawerItems: getCustomDrawerItems(),
         iconColor: iconColor ?? DEFAULT_ICON_COLOR,
         iconSize: iconSize ?? DEFAULT_ICON_SIZE,
         labelStyle: TextStyle(
@@ -219,7 +219,7 @@ class LeftDrawerClass {
 
   /// For view code
   getCodeAsString() {
-    return "FlutterVizDrawer(\n"
+    return "CustomDrawer(\n"
         "elevation: ${elevation ?? DEFAULT_DRAWER_ELEVATION},\n"
         "headerColor: ${headerColor ?? COMMON_BG_COLOR},\n"
         "profileImage:${profileImageType == ImageTypeAsset ? "AssetImage(\"${profileImagePath != null ? 'images/${profileImagePath!.split('/').last}' : DEFAULT_DRAWER_ASSET_IMAGE}\")" : "NetworkImage(\"${profileImagePath ?? DEFAULT_DRAWER_NETWORK_IMAGE}\")"},\n"
@@ -237,7 +237,7 @@ class LeftDrawerClass {
             "fontSize:14,\n"
             "color:${emailFontColor ?? DEFAULT_DRAWER_FONT_COLOR},\n"
             "),\n" : ""}"
-        "${getFlutterVizDrawerItems().length != 0 ? "drawerItems: flutterVizDrawerItems,\n"
+        "${getCustomDrawerItems().length != 0 ? "drawerItems: customDrawerItems,\n"
             "iconColor: ${iconColor ?? DEFAULT_ICON_COLOR},\n"
             "iconSize: ${iconSize ?? DEFAULT_ICON_SIZE},\n"
             "labelStyle: TextStyle(\n"
@@ -251,6 +251,6 @@ class LeftDrawerClass {
 
   /// Import all header files which are use for this lib
   getHeaderClassFiles() {
-    return ["import 'flutterViz_drawerItem_model.dart';", "import 'flutterViz_drawer.dart';"];
+    return ["import 'custom_drawer_item_model.dart';", "import 'custom_drawer.dart';"];
   }
 }

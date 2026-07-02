@@ -67,7 +67,7 @@ class LottieAnimationClass {
     this.width,
     this.fit,
     this.path,
-    this.imageType = ImageTypeNetwork,
+    this.imageType = ImageTypeAsset,
     this.padding,
     this.widthType = TypePX,
     this.heightType = TypePX,
@@ -86,11 +86,11 @@ class LottieAnimationClass {
     height = json['height'] != null ? fromJsonHeight(json['height'], heightType ?? TypePX) : DEFAULT_IMAGE_HEIGHT as double?;
     width = json['width'] != null ? fromJsonWidth(json['width'], widthType ?? TypePX) : DEFAULT_IMAGE_WIDTH as double?;
     fit = json['fit'] != null ? json['fit'] : boxFitCover;
-    path = json['path'] != null ? json['path'] : (imageType == json['imageType'] ? "images/inCompatible.json" : "https://assets2.lottiefiles.com/packages/lf20_aZTdD5.json");
+    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeAsset;
+    path = json['path'] != null ? json['path'] : (imageType == ImageTypeAsset ? "images/inCompatible.json" : "https://assets2.lottiefiles.com/packages/lf20_aZTdD5.json");
     padding = json['padding'] != null ? fromJsonPadding(json['padding']) : EdgeInsets.zero;
     widthType = json['widthType'] != null ? json['widthType'] : TypePX;
     heightType = json['heightType'] != null ? json['heightType'] : TypePX;
-    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeNetwork;
     horizontalAlignment = json['horizontalAlignment'] != null ? json['horizontalAlignment'] : 0;
     verticalAlignment = json['verticalAlignment'] != null ? json['verticalAlignment'] : 0;
     isAlignX = json['isAlignX'] != null ? json['isAlignX'] : false;

@@ -876,7 +876,7 @@ class LanguageNl extends BaseLanguage {
   String get titleGridChild => "Gridview Kindvoorbeeld \ n ↓ \ nchild 1 \ n ↓ \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// Bestand downloaden van Flutterviz- Sleep en laat een gereedschap vallen. Ga voor meer informatie naar https://flutterviz.io/\N\n";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Log in om verbonden te blijven.";

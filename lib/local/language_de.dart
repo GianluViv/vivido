@@ -872,7 +872,7 @@ class LanguageDe extends BaseLanguage {
   String get titleGridChild => "GridView-Kind-Beispiel \ n ↓ \ Nchild 1 \ n ↓ \ Nchild 2";
 
   @override
-  String get copyrightInformation => "/// Datei herunterladen von flatternviz- Drag & Drop ein Werkzeug. Weitere Informationen finden Sie unter https://flutterviz.io/Nyn";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Melden Sie sich an, um angeschlossen zu bleiben.";

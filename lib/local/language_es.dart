@@ -868,7 +868,7 @@ class LanguageEs extends BaseLanguage {
   String get titleGridChild => "GridView Niño Ejemplo \ N ↓ \ Nchild 1 \ n ↓ \ Nchild 2";
 
   @override
-  String get copyrightInformation => "/// Descarga de archivos desde Flutterviz, arrastre y suelte una herramienta. Para más detalles, visite https://flutterviz.io/\n\n";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Inicie sesión para mantenerse conectado.";

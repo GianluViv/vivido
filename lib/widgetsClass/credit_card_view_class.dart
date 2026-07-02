@@ -1,4 +1,4 @@
-import 'package:flutter_viz/externalClasses/flutterViz_credit_card_view.dart';
+import 'package:flutter_viz/externalClasses/custom_credit_card_view.dart';
 import 'package:flutter_viz/main.dart';
 import 'package:flutter_viz/model/widget_model.dart';
 import 'package:flutter_viz/utils/AppCommon.dart';
@@ -230,7 +230,7 @@ class CreditCardViewClass {
   Widget getDefaultCreditCardViewWidget(WidgetModel widgetModel) {
     Widget childData = AbsorbPointer(
       absorbing: absorbPointer(),
-      child: FlutterVizCreditCardView(
+      child: CustomCreditCardView(
         obscureCardNumber: obscureCardNumber ?? true,
         obscureCVV: obscureCVV ?? false,
         spacing: spacing ?? 16,
@@ -315,7 +315,7 @@ class CreditCardViewClass {
   }
 
   getCreditCardViewClassString() {
-    return "FlutterVizCreditCardView( \n"
+    return "CustomCreditCardView( \n"
         "obscureCardNumber: ${obscureCardNumber ?? true},\n"
         "obscureCVV: ${obscureCVV ?? false},\n"
         "spacing: ${spacing ?? 16},\n"
@@ -376,6 +376,6 @@ class CreditCardViewClass {
 
   /// Import all header files which are use for this lib
   getHeaderClassFiles() {
-    return ["import 'flutterViz_credit_card_view.dart';"];
+    return ["import 'custom_credit_card_view.dart';"];
   }
 }

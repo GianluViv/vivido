@@ -3,13 +3,10 @@ class Assets {
   Assets._();
 
   static const String devicesGooglepixel = 'images/devices/googlepixel.png';
-  static const String filesFlutterVizAudioPlayer = 'images/files/FlutterVizAudioPlayer.dart';
-  static const String filesFlutterVizBottomNavigationBarModel = 'images/files/FlutterVizBottomNavigationBarModel.dart';
-  static const String filesFlutterVizCreditCardView = 'images/files/FlutterVizCreditCardView.dart';
-  static const String filesFlutterVizDrawer = 'images/files/FlutterVizDrawer.dart';
-  static const String filesFlutterVizDrawerItemModel = 'images/files/FlutterVizDrawerItemModel.dart';
-  static const String filesFlutterVizVideoPlayer = 'images/files/FlutterVizVideoPlayer.dart';
-  static const String filesFlutterVizYoutubePlayer = 'images/files/FlutterVizYoutubePlayer.dart';
+  static const String filesCustomBottomNavigationBarModel = 'images/files/CustomBottomNavigationBarModel.dart';
+  static const String filesCustomCreditCardView = 'images/files/CustomCreditCardView.dart';
+  static const String filesCustomDrawer = 'images/files/CustomDrawer.dart';
+  static const String filesCustomDrawerItemModel = 'images/files/CustomDrawerItemModel.dart';
   static const String flagIcAr = 'images/flag/ic_ar.png';
   static const String flagIcDutch = 'images/flag/ic_dutch.png';
   static const String flagIcFrance = 'images/flag/ic_france.png';

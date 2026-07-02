@@ -875,7 +875,7 @@ class LanguageId extends BaseLanguage {
   String get titleGridChild => "GRIDView Child Contoh \ n ↓ \ nchild 1 \ n ↓ \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// unduh file dari flutterviz- seret dan jatuhkan alat. Untuk detail lebih lanjut Kunjungi https://fluttereviz.io/nönn";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Masuk untuk tetap terhubung.";

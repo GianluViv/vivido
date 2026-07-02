@@ -50,7 +50,7 @@ class CircleImageClass {
 
   CircleImageClass({
     this.padding,
-    this.imageType = ImageTypeNetwork,
+    this.imageType = ImageTypeAsset,
     this.path,
     this.radius,
     this.boxFit,
@@ -66,11 +66,10 @@ class CircleImageClass {
 
   CircleImageClass.fromJson(Map<String, dynamic> json) {
     radius = json['radius'] != null ? fromJsonWidth(json['radius'], radiusType ?? TypePX) : DEFAULT_CIRCLE_IMAGE_WIDTH;
-    path = json['path'] != null ? json['path'] : (imageType == ImageTypeAsset ? DEFAULT_ASSET_IMAGE : DEFAULT_NETWORK_IMAGE);
-    padding = json['padding'] != null ? fromJsonPadding(json['padding']) : EdgeInsets.zero;
     boxFit = json['boxFit'] != null ? json['boxFit'] : boxFitCover;
     radiusType = json['radiusType'] != null ? json['radiusType'] : TypePX;
-    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeNetwork;
+    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeAsset;
+    path = json['path'] != null ? json['path'] : (imageType == ImageTypeAsset ? DEFAULT_ASSET_IMAGE : DEFAULT_NETWORK_IMAGE);
     horizontalAlignment = json['horizontalAlignment'] != null ? json['horizontalAlignment'] : DEFAULT_HORIZONTAL_ALIGNMENT;
     verticalAlignment = json['verticalAlignment'] != null ? json['verticalAlignment'] : DEFAULT_VERTICAL_ALIGNMENT;
     isAlignX = json['isAlignX'] != null ? json['isAlignX'] : false;

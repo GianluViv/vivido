@@ -232,9 +232,9 @@ Future<List<String>> viewFinalSourceData(List<WidgetModel> selectedWidgetList, {
   /// BottomNavigationBar itemList
   if (appStore.bottomNavigationBarClass != null) {
     List<BottomNavigationBarItemModel?> items = (appStore.bottomNavigationBarClass!.widgetViewModel as BottomNavigationBarClass).bottomNavigationBarItems;
-    finalData.add("List<FlutterVizBottomNavigationBarModel> flutterVizBottomNavigationBarItems = "
+    finalData.add("List<CustomBottomNavigationBarModel> customBottomNavigationBarItems = "
         "${items.map((data) {
-      return "FlutterVizBottomNavigationBarModel(icon:Icons.${data!.icon!.iconName},label:\"${data.label}\")";
+      return "CustomBottomNavigationBarModel(icon:Icons.${data!.icon!.iconName},label:\"${data.label}\")";
     }).toList()}"
         ";");
     finalData.add("\n");
@@ -243,9 +243,9 @@ Future<List<String>> viewFinalSourceData(List<WidgetModel> selectedWidgetList, {
   /// Drawer itemList
   if (appStore.drawerClass != null) {
     List<DrawerItemModel?> items = (appStore.drawerClass!.widgetViewModel as LeftDrawerClass).drawerItems;
-    finalData.add("List<FlutterVizDrawerItemModel> flutterVizDrawerItems = "
+    finalData.add("List<CustomDrawerItemModel> customDrawerItems = "
         "${items.map((data) {
-      return "FlutterVizDrawerItemModel(icon:Icons.${data!.icon!.iconName},label:\"${data.label}\")";
+      return "CustomDrawerItemModel(icon:Icons.${data!.icon!.iconName},label:\"${data.label}\")";
     }).toList()}"
         ";");
     finalData.add("\n");

@@ -868,7 +868,7 @@ class LanguageVi extends BaseLanguage {
   String get titleGridChild => "Ví dụ về màn hình trẻ em \ n ↓ \ nchild 1 \ n ↓ \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// tải tập tin từ flutenviz- kéo và thả một công cụ. Để biết thêm chi tiết, hãy truy cập https://flutterviz.io/\nаn";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Đăng nhập để duy trì kết nối.";

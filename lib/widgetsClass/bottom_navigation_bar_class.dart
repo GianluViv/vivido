@@ -142,7 +142,7 @@ class BottomNavigationBarClass {
 
   getBottomNavigationBarString() {
     return "BottomNavigationBar(\n"
-        "items: flutterVizBottomNavigationBarItems.map((FlutterVizBottomNavigationBarModel item) {\n"
+        "items: customBottomNavigationBarItems.map((CustomBottomNavigationBarModel item) {\n"
         "return BottomNavigationBarItem(\n"
         "icon: Icon(item.icon),\n"
         "label: item.label\n,"
@@ -169,6 +169,6 @@ class BottomNavigationBarClass {
 
   /// Import all header files which are use for this lib
   getHeaderClassFiles() {
-    return ["import 'flutterViz_bottom_navigationBar_model.dart';"];
+    return ["import 'custom_bottom_navigationBar_model.dart';"];
   }
 }

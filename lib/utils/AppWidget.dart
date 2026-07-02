@@ -546,6 +546,22 @@ Widget highLightIcon(bool isHovered, {IconData? icon}) {
   );
 }
 
+/// Floppy-disk icon labelled "fwz", used on the "Export Project as .fwz" button.
+Widget fwzIcon(bool isHovered) {
+  final color = isHovered
+      ? btnBackgroundColor
+      : appStore.isDarkMode
+          ? Colors.white
+          : btnBackgroundColor;
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(Icons.save_outlined, color: color, size: 18),
+      Text('fwz', style: TextStyle(color: color, fontSize: 9, fontWeight: FontWeight.bold)),
+    ],
+  );
+}
+
 elevationButtonHighLightColor({bool isHovered = false, Function? onPressed, String toolTipMessage = '', Widget? child}) {
   return ElevatedButton(
       style: ElevatedButton.styleFrom(

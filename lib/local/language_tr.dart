@@ -875,7 +875,7 @@ class LanguageTr extends BaseLanguage {
   String get titleGridChild => "GridView Çocuk örneği \ n ↓ \ nchild 1 \ n ↓ \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// flutterviz - dosya indirmesi - bir araçları sürükleyip bırakın. Daha fazla ayrıntı için https://flutterviz.io/\n\n ziyareti için";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Bağlı kalmak için giriş yapın.";

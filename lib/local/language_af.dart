@@ -875,7 +875,7 @@ class LanguageAf extends BaseLanguage {
   String get titleGridChild => "GridView Kind Voorbeeld \ n ↓ \ nchild 1 \ n ↓ \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// lêer aflaai van flutterviz-sleep en sleep 'n gereedskap. Vir meer besonderhede besoek https://flutterviz.io/\n \'";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Teken in om te bly verbind.";

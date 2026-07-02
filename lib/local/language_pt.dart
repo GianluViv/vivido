@@ -878,7 +878,7 @@ class LanguagePt extends BaseLanguage {
   String get titleGridChild => "Exemplo de criança GridView \ n ↓ \ nchild 1 \ n ↓ \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// Download do arquivo de flutterviz- Arraste e solte uma ferramenta. Para mais detalhes, visite https://fluterviz.io/ñn\n";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Faça login para ficar conectado.";

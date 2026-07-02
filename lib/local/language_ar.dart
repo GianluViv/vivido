@@ -873,7 +873,7 @@ class LanguageAr extends BaseLanguage {
   String get titleGridChild => "gridview child example \ n ↓ \ nchild 1 \ n ↓ \ Nchild 2";
 
   @override
-  String get copyrightInformation => "///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/\n\n";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "تسجيل الدخول للبقاء على اتصال.";

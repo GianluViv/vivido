@@ -879,7 +879,7 @@ class LanguageFr extends BaseLanguage {
   String get titleGridChild => "GridView enfant exemple \ n \ nchild 1 \ n \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// Téléchargement de fichier à partir de Flutterviz- Faites glisser un outil. Pour plus de détails, visitez https://flutterviz.io/\n\n";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "Connectez-vous à rester connecté.";

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FlutterVizCreditCardView extends StatefulWidget {
+class CustomCreditCardView extends StatefulWidget {
   final bool? obscureCardNumber;
   final bool? obscureCVV;
   final bool? filled;
@@ -11,7 +11,7 @@ class FlutterVizCreditCardView extends StatefulWidget {
   final InputBorder? inputBorder;
   final TextStyle? textStyle;
 
-  FlutterVizCreditCardView({
+  CustomCreditCardView({
     this.obscureCardNumber,
     this.obscureCVV,
     this.filled,
@@ -24,10 +24,10 @@ class FlutterVizCreditCardView extends StatefulWidget {
   });
 
   @override
-  FlutterVizCreditCardViewState createState() => FlutterVizCreditCardViewState();
+  CustomCreditCardViewState createState() => CustomCreditCardViewState();
 }
 
-class FlutterVizCreditCardViewState extends State<FlutterVizCreditCardView> {
+class CustomCreditCardViewState extends State<CustomCreditCardView> {
   @override
   void initState() {
     super.initState();
@@ -70,7 +70,9 @@ class FlutterVizCreditCardViewState extends State<FlutterVizCreditCardView> {
           decoration: getInputDecoration('Card number'),
           obscureText: widget.obscureCardNumber ?? true,
         ),
-        SizedBox(height: widget.spacing ?? 16),
+        SizedBox(
+          height: widget.spacing ?? 16,
+        ),
         Row(
           children: [
             Expanded(
@@ -80,7 +82,9 @@ class FlutterVizCreditCardViewState extends State<FlutterVizCreditCardView> {
                 decoration: getInputDecoration('Exp. Date'),
               ),
             ),
-            SizedBox(width: 16),
+            SizedBox(
+              width: 16,
+            ),
             Expanded(
               child: TextField(
                 controller: TextEditingController(text: '123'),

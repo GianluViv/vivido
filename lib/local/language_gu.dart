@@ -874,7 +874,7 @@ class LanguageGu extends BaseLanguage {
   String get titleGridChild => "ગ્રીડવ્યુ બાળક ઉદાહરણ \ n ↓ \ nchild 1 \ n ↓ \ nchild 2";
 
   @override
-  String get copyrightInformation => "/// flutterviz માંથી ફાઇલ ડાઉનલોડ કરો- એક સાધનો ખેંચો અને છોડો. વધુ વિગતો માટે https://flutterviz.io/'sn\n ની મુલાકાત લો";
+  String get copyrightInformation => "";
 
   @override
   String get loginToStayConnected => "જોડાયેલા રહેવા માટે પ્રવેશ કરો.";

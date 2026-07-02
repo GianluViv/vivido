@@ -1,9 +1,9 @@
-import 'package:flutter_viz/externalClasses/flutterViz_drawerItem_model.dart';
+import 'package:flutter_viz/externalClasses/custom_drawer_item_model.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter/material.dart';
 
-class FlutterVizDrawer extends StatefulWidget {
-  static String tag = '/FlutterVizDrawer';
+class CustomDrawer extends StatefulWidget {
+  static String tag = '/CustomDrawer';
 
   final double? elevation;
   final ImageProvider? profileImage;
@@ -12,12 +12,12 @@ class FlutterVizDrawer extends StatefulWidget {
   final String? email;
   final TextStyle? nameStyle;
   final TextStyle? emailStyle;
-  final List<FlutterVizDrawerItemModel>? drawerItems;
+  final List<CustomDrawerItemModel>? drawerItems;
   final Color? iconColor;
   final double? iconSize;
   final TextStyle? labelStyle;
 
-  FlutterVizDrawer({
+  CustomDrawer({
     this.elevation,
     this.headerColor,
     this.profileImage,
@@ -32,10 +32,10 @@ class FlutterVizDrawer extends StatefulWidget {
   });
 
   @override
-  FlutterVizDrawerState createState() => FlutterVizDrawerState();
+  CustomDrawerState createState() => CustomDrawerState();
 }
 
-class FlutterVizDrawerState extends State<FlutterVizDrawer> {
+class CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     super.initState();

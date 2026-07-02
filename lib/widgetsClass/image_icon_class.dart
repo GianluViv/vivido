@@ -43,7 +43,7 @@ class ImageIconClass {
   int? flex;
 
   ImageIconClass({
-    this.imageType = ImageTypeNetwork,
+    this.imageType = ImageTypeAsset,
     this.path,
     this.color,
     this.size,
@@ -57,7 +57,7 @@ class ImageIconClass {
   });
 
   ImageIconClass.fromJson(Map<String, dynamic> json) {
-    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeNetwork;
+    imageType = json['imageType'] != null ? json['imageType'] : ImageTypeAsset;
     path = json['path'] != null ? json['path'] : (imageType == ImageTypeAsset ? DEFAULT_ASSET_IMAGE_ICON : DEFAULT_NETWORK_IMAGE_ICON);
     color = json['color'] != null ? fromJsonColor(json['color']) : DEFAULT_ICON_COLOR;
     size = json['size'] != null ? json['size'] : DEFAULT_ICON_SIZE;
