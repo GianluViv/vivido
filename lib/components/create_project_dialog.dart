@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_viz/local_storage/local_project_service.dart';
 import 'package:flutter_viz/main.dart';
 import 'package:flutter_viz/screen/dashboard_screen.dart';
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/utils/AppWidget.dart';
+import 'package:flutter_viz/widgetsProperty/comman_property_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -21,6 +25,25 @@ class CreateProjectDialogState extends State<CreateProjectDialog> {
 
   TextEditingController projectNameController = TextEditingController();
 
+  /// Default location proposed for the new project (`<user home>/FlutterViz`);
+  /// overridden by [selectedLocation] if the user browses to a different folder.
+  String defaultLocationPath = '';
+  Directory? selectedLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    locator<LocalProjectService>().defaultProjectsDirectory.then((dir) {
+      if (mounted) setState(() => defaultLocationPath = dir.path);
+    });
+  }
+
+  Future<void> pickLocation() async {
+    String? path = await FilePicker.platform.getDirectoryPath(dialogTitle: "Select Project Location");
+    if (path == null) return;
+    setState(() => selectedLocation = Directory(path));
+  }
+
   /// Creates a project folder on disk (project.json + media/ + export/), adds a
   /// default "Home Screen", and jumps straight into the editor.
   Future<void> createProject() async {
@@ -31,7 +54,7 @@ class CreateProjectDialogState extends State<CreateProjectDialog> {
 
     try {
       final service = locator<LocalProjectService>();
-      final project = await service.newProject(projectNameController.text.trim());
+      final project = await service.newProject(projectNameController.text.trim(), location: selectedLocation);
       await service.addScreen(project, name: "Home Screen");
       appStore.setLoading(false);
       appStore.loadProject(project);
@@ -85,6 +108,30 @@ class CreateProjectDialogState extends State<CreateProjectDialog> {
                   },
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z ]")),
+                  ],
+                ).paddingSymmetric(horizontal: 30),
+                16.height,
+                Text("Location", style: secondaryTextStyle()).paddingSymmetric(horizontal: 30),
+                8.height,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: COMMON_BORDER_COLOR, width: 1),
+                          borderRadius: BorderRadius.circular(COMMON_BUTTON_BORDER_RADIUS),
+                        ),
+                        child: Text(
+                          selectedLocation?.path ?? defaultLocationPath,
+                          style: primaryTextStyle(size: 13),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    8.width,
+                    dialogGrayBorderButton(text: "Browse", onTap: pickLocation, width: 90, height: 45),
                   ],
                 ).paddingSymmetric(horizontal: 30),
                 30.height,

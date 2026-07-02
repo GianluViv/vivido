@@ -65,8 +65,8 @@ class DashboardPreviewComponentState extends State<DashboardPreviewComponent> {
             ).visible(appStore.selectedWidgetList.isEmpty && appStore.appBarClass == null && appStore.drawerClass == null && appStore.bottomNavigationBarClass == null),
           );
         },
-        onAccept: (item) {
-          WidgetModel currentModel = getWidgets(item.widgetSubType);
+        onAcceptWithDetails: (details) {
+          WidgetModel currentModel = getWidgets(details.data.widgetSubType);
           blankScreenChildAccept(currentModel);
         },
       );
@@ -102,8 +102,8 @@ class DashboardPreviewComponentState extends State<DashboardPreviewComponent> {
                 },
               );
             },
-            onAccept: (item) {
-              scaffoldFirstWidgetAcceptChild(item, rootModelView);
+            onAcceptWithDetails: (details) {
+              scaffoldFirstWidgetAcceptChild(details.data, rootModelView);
             },
           );
         } else {
@@ -122,7 +122,8 @@ class DashboardPreviewComponentState extends State<DashboardPreviewComponent> {
                 ),
               );
             },
-            onAccept: (item) {
+            onAcceptWithDetails: (details) {
+              WidgetModel item = details.data;
               WidgetModel currentModel = getWidgets(item.widgetSubType);
               if (item.widgetType == WidgetTypeAppBarLayout || item.widgetType == WidgetTypeLeftDrawerLayout || item.widgetType == WidgetTypeBottomNavigationBarLayout) {
                 acceptScaffoldOtherPart(item);

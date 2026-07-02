@@ -852,8 +852,8 @@ Widget getDragTargetView(WidgetModel widgetModel) {
         },
       );
     },
-    onAccept: (item) {
-      layoutWidgetsOnAccept(item, widgetModel);
+    onAcceptWithDetails: (details) {
+      layoutWidgetsOnAccept(details.data, widgetModel);
     },
   );
 }
@@ -1392,6 +1392,7 @@ Widget subChildView(WidgetModel selectedWidgetModel) {
       singleChildScrollView = tempWidget;
     } else if (tempWidget is Expanded) {
       expanded = tempWidget;
+      columnView = null;
     } else if (tempWidget is GestureDetector) {
       gestureDetector = tempWidget;
     } else {
@@ -1462,6 +1463,7 @@ Widget subChildView(WidgetModel selectedWidgetModel) {
       singleChildScrollView = tempWidget;
     } else if (tempWidget is Expanded) {
       expanded = tempWidget;
+      rowView = null;
     } else if (tempWidget is GestureDetector) {
       gestureDetector = tempWidget;
     } else {
@@ -1504,6 +1506,8 @@ Widget subChildView(WidgetModel selectedWidgetModel) {
 
   if (align != null) {
     return align;
+  } else if (expanded != null) {
+    return expanded;
   } else if (gestureDetector != null) {
     return gestureDetector;
   } else if (padding != null) {

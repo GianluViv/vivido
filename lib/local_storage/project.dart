@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_viz/model/screen_list_response.dart';
+import 'package:path/path.dart' as p;
 
 /// Bumped whenever the on-disk `project.json` shape changes in a
 /// backwards-incompatible way. See docs/local-desktop-plan.md §2.1.
@@ -59,9 +60,9 @@ class Project {
         screens = screens ?? <ScreenListData>[],
         media = media ?? <ProjectMediaItem>[];
 
-  File get projectFile => File('${directory.path}/project.json');
-  Directory get mediaDirectory => Directory('${directory.path}/media');
-  Directory get exportDirectory => Directory('${directory.path}/export');
+  File get projectFile => File(p.join(directory.path, 'project.json'));
+  Directory get mediaDirectory => Directory(p.join(directory.path, 'media'));
+  Directory get exportDirectory => Directory(p.join(directory.path, 'export'));
 
   factory Project.fromJson(Map<String, dynamic> json, Directory directory) {
     return Project(

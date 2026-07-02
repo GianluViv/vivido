@@ -66,12 +66,17 @@ class _RightScreenComponentState extends State<RightScreenComponent> {
                           color: appStore.isDarkMode ? darkModeSecondaryBackgroundDark : centerBackgroundColor,
                         ),
                         child: DropdownButtonFormField<ScreenListData>(
+                          /// `initialValue` (unlike the deprecated `value`) only applies on the
+                          /// field's first build, so key on the screen id to force the
+                          /// FormField to re-init whenever selectedDropdownScreen changes
+                          /// programmatically (e.g. AppStore.removeScreen/setScreenDetails).
+                          key: ValueKey(appStore.selectedDropdownScreen?.id),
                           iconDisabledColor: btnBackgroundColor,
                           isDense: true,
                           isExpanded: true,
                           dropdownColor: appStore.isDarkMode ? darkModeSecondaryBackgroundDark : dropDownColor,
                           decoration: InputDecoration(focusedBorder: InputBorder.none, enabledBorder: InputBorder.none),
-                          value: appStore.selectedDropdownScreen,
+                          initialValue: appStore.selectedDropdownScreen,
                           items: appStore.screenList.map((ScreenListData screenData) {
                             return new DropdownMenuItem<ScreenListData>(
                               value: screenData,

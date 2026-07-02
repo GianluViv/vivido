@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_viz/components/add_page_dialog.dart';
 import 'package:flutter_viz/externalClasses/on_hover.dart';
+import 'package:flutter_viz/local_storage/local_project_service.dart';
 import 'package:flutter_viz/main.dart';
 import 'package:flutter_viz/model/download_model.dart';
 import 'package:flutter_viz/model/screen_list_response.dart';
@@ -24,8 +25,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nb_utils/nb_utils.dart';
-
-import '../model/models.dart';
 
 class HeaderComponent extends StatefulWidget {
   @override
@@ -109,6 +108,30 @@ class _HeaderComponentState extends State<HeaderComponent> {
     }
   }
 
+  /// Zips the whole project folder (project.json, media/, export/) into a
+  /// single `.fwz` file wherever the user picks — the local counterpart to
+  /// [downloadProjectLatest], which only zips the generated Dart source.
+  Future<void> exportProjectAsFwz() async {
+    final project = appStore.currentProject;
+    if (project == null) return;
+    try {
+      final savePath = await FilePicker.platform.saveFile(
+        dialogTitle: "Export Project",
+        fileName: "${getFileName(projectFileName: project.name)}.fwz",
+        type: FileType.custom,
+        allowedExtensions: ['fwz'],
+      );
+      if (savePath == null) return;
+
+      final outputPath = savePath.endsWith('.fwz') ? savePath : '$savePath.fwz';
+      await locator<LocalProjectService>().exportToFwz(project, File(outputPath));
+      getToast("Exported to $outputPath");
+    } catch (e) {
+      log("project .fwz export failed: $e");
+      getToast(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
@@ -166,36 +189,12 @@ class _HeaderComponentState extends State<HeaderComponent> {
                               );
                             }),
                             16.width,
-
-                            /// Uploading Functionality
                             OnHover(builder: (isHovered) {
-                              return Observer(
-                                builder: (_) => elevationButtonHighLightColor(
-                                  isHovered: isHovered,
-                                  child: highLightIcon(isHovered, icon: Icons.upload),
-                                  toolTipMessage: language!.uploadProjectFile,
-                                  onPressed: () async {
-                                    List<MediaRequestModel> imageUint8List = [];
-
-                                    final FilePickerResult? _filePicker = await FilePicker.platform.pickFiles(
-                                      allowedExtensions: ['dart'],
-                                      type: FileType.custom,
-                                    );
-
-                                    _filePicker!.files.forEach((element) async {
-                                      imageUint8List.add(MediaRequestModel(file: element.bytes, fileName: element.name));
-                                      String result = utf8.decode(element.bytes!);
-                                      toast(result);
-                                    });
-                                    appStore.setLoading(true);
-
-                                    Future.delayed(Duration(seconds: 5), () {
-                                      if (imageUint8List.isNotEmpty) {
-                                        toast("File is Uploaded");
-                                      }
-                                    });
-                                  },
-                                ),
+                              return elevationButtonHighLightColor(
+                                isHovered: isHovered,
+                                child: highLightIcon(isHovered, icon: Icons.archive_outlined),
+                                toolTipMessage: "Export Project as .fwz",
+                                onPressed: exportProjectAsFwz,
                               );
                             }),
                             16.width,
@@ -209,10 +208,8 @@ class _HeaderComponentState extends State<HeaderComponent> {
                         image: 'project_white.svg',
                         title: "My Projects",
                         onPressed: () {
-                          if (getStringAsync(USER_TYPE) == USER) {
-                            appStore.isProjectDownloading = false;
-                            WelcomeScreen().launch(getContext, isNewTask: true);
-                          }
+                          appStore.isProjectDownloading = false;
+                          WelcomeScreen().launch(getContext, isNewTask: true);
                         },
                       );
                     },

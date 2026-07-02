@@ -141,4 +141,24 @@ void main() {
     expect(reopened.media, hasLength(1));
     expect(reopened.media.first.path, 'media/logo.png');
   });
+
+  test('exportToFwz + importFwz: round-trip di project.json e media in un unico archivio', () async {
+    final project = await service.newProject('FwzTest');
+    await service.addScreen(project, name: 'Home', screenJsonData: '{"foo":"bar"}');
+    final sourceFile = File('${tempDir.path}/logo.png')..writeAsBytesSync([1, 2, 3, 4]);
+    await service.importMedia(project, sourceFile);
+
+    final archiveFile = File('${tempDir.path}/FwzTest.fwz');
+    await service.exportToFwz(project, archiveFile);
+    expect(archiveFile.existsSync(), isTrue);
+
+    final importDir = Directory('${tempDir.path}/imported')..createSync();
+    final imported = await service.importFwz(archiveFile, importDir);
+
+    expect(imported.name, 'FwzTest');
+    expect(imported.screens, hasLength(1));
+    expect(imported.screens.first.screenJsonData, '{"foo":"bar"}');
+    expect(imported.media, hasLength(1));
+    expect(File('${imported.directory.path}/${imported.media.first.path}').readAsBytesSync(), [1, 2, 3, 4]);
+  });
 }

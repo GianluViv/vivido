@@ -84,7 +84,7 @@ void handleKeyboardEvent(KeyEvent event, BuildContext context) async {
 
       /// Key => Arrow Up Or Arrow Left
       else if ((event.logicalKey == LogicalKeyboardKey.arrowUp || event.logicalKey == LogicalKeyboardKey.arrowLeft) &&
-          (appStore.previousKey != LogicalKeyboardKey.arrowUp || appStore.previousKey != LogicalKeyboardKey.arrowLeft)) {
+          (appStore.previousKey != LogicalKeyboardKey.arrowUp && appStore.previousKey != LogicalKeyboardKey.arrowLeft)) {
         appStore.previousKey = event.logicalKey;
         trackUserEvent("Keyboard(Up or Left) - Move Child");
         appStore.moveWidget(isMoveUpOperation: true);

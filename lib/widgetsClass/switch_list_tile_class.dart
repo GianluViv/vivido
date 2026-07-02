@@ -323,7 +323,7 @@ class SwitchListTileClass {
             side: BorderSide(color: borderColor ?? DEFAULT_CONTAINER_BORDER_COLOR, width: borderWidth ?? DEFAULT_BORDER_WIDTH), borderRadius: borderRadius ?? BorderRadius.circular(0.0)),
         onChanged: (value) {},
         tileColor: tileColor ?? DEFAULT_LIST_TILE_COLOR,
-        activeColor: activeColor ?? COMMON_BG_COLOR,
+        activeThumbColor: activeColor ?? COMMON_BG_COLOR,
         activeTrackColor: activeTrackColor ?? DEFAULT_ACTIVE_TRACK_COLOR,
         controlAffinity: listTileControlAffinity ?? ListTileControlAffinity.trailing,
         title: title != ""

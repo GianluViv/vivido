@@ -235,13 +235,15 @@ abstract class AppStoreBase with Store {
     projectName = data;
   }
 
-  /// Add to undo list
-  void addToChangeStack() async {
-    // printLogData("addToChangeStack call");
-    /* List<WidgetModel> change = <WidgetModel>[];
-    change = List.of(selectedWidgetList);*/
-    /*undoWidgetsList.add(selectedWidgetList);
-    redoWidgetList.clear();*/
+  /// Snapshots the current widget tree onto the undo stack and clears the
+  /// redo stack. Must be called *before* every tree-mutating action.
+  /// Snapshots are deep copies (via [createCopyOfWidgets]) so later in-place
+  /// mutations of the live tree don't corrupt history entries.
+  void addToChangeStack() {
+    if (selectedWidgetList.isNotEmpty) {
+      undoWidgetsList.add(selectedWidgetList.map((w) => createCopyOfWidgets(w)).toList());
+      redoWidgetList.clear();
+    }
   }
 
   bool canUndo() {
@@ -259,17 +261,16 @@ abstract class AppStoreBase with Store {
   }
 
   /// Perform Undo Operation
-  void undo() async {
+  void undo() {
     if (canUndo()) {
       printLogData("undo are perform");
 
-      List<WidgetModel> oldChange = <WidgetModel>[];
-      oldChange = List.of(selectedWidgetList);
-      redoWidgetList.insert(0, oldChange);
+      redoWidgetList.insert(0, selectedWidgetList.map((w) => createCopyOfWidgets(w)).toList());
 
       List<WidgetModel> change = undoWidgetsList.removeAt(undoWidgetsList.length - 1);
 
-      selectedWidgetList = change;
+      selectedWidgetList = ObservableList.of(change);
+      currentSelectedWidget = selectedWidgetList.isNotEmpty ? selectedWidgetList[0] : null;
       refreshMainViewData();
     } else {
       printLogData("undo are not perform");
@@ -277,16 +278,14 @@ abstract class AppStoreBase with Store {
   }
 
   /// Perform Redo Operation
-  void redo() async {
+  void redo() {
     if (canRedo()) {
-      List<WidgetModel> removeObject = [];
-      removeObject = redoWidgetList.removeAt(0);
-      if (undoWidgetsList.length > 0) {
-        undoWidgetsList.insert(undoWidgetsList.length, removeObject);
-      } else {
-        undoWidgetsList.insert(undoWidgetsList.length, []);
-      }
-      selectedWidgetList = removeObject;
+      undoWidgetsList.add(selectedWidgetList.map((w) => createCopyOfWidgets(w)).toList());
+
+      List<WidgetModel> change = redoWidgetList.removeAt(0);
+
+      selectedWidgetList = ObservableList.of(change);
+      currentSelectedWidget = selectedWidgetList.isNotEmpty ? selectedWidgetList[0] : null;
       refreshMainViewData();
     }
   }
@@ -884,8 +883,9 @@ abstract class AppStoreBase with Store {
             return (selectedWidgetList[0].subWidgetsList![index]!.widgetViewModel as RowClass?);
           else if (parentWidgetType == WidgetTypeList) return (selectedWidgetList[0].widgetViewModel as ListViewClass?);
         } else if (selectedWidgetList[0].subWidgetsList![index]!.widgetType != WidgetTypeNormal) {
-          if (getParentWidgetsClassChild(selectedWidgetList[0].subWidgetsList![index]!, widgetModel, parentWidgetType) != null) {
-            return getParentWidgetsClassChild(selectedWidgetList[0].subWidgetsList![index]!, widgetModel, parentWidgetType);
+          dynamic childResult = getParentWidgetsClassChild(selectedWidgetList[0].subWidgetsList![index]!, widgetModel, parentWidgetType);
+          if (childResult != null) {
+            return childResult;
           }
         }
       }
@@ -902,7 +902,10 @@ abstract class AppStoreBase with Store {
           return (childWidgetModel.subWidgetsList![index]!.widgetViewModel as RowClass?);
         else if (parentWidgetType == WidgetTypeList) return (childWidgetModel.widgetViewModel as ListViewClass?);
       } else if (childWidgetModel.subWidgetsList![index]!.widgetType != WidgetTypeNormal) {
-        return getParentWidgetsClassChild(childWidgetModel.subWidgetsList![index]!, widgetModel, parentWidgetType);
+        dynamic childResult = getParentWidgetsClassChild(childWidgetModel.subWidgetsList![index]!, widgetModel, parentWidgetType);
+        if (childResult != null) {
+          return childResult;
+        }
       }
     }
     return null;
@@ -1077,7 +1080,6 @@ abstract class AppStoreBase with Store {
 
   @action
   void removeScreen(int? id) {
-    screenList.remove(ScreenListData(id: id));
     for (int i = 0; i < screenList.length; i++) {
       if (screenList[i].id == id) {
         screenList.removeAt(i);

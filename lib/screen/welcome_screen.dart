@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_viz/components/create_project_dialog.dart';
 import 'package:flutter_viz/components/welcome_screen_component.dart';
@@ -56,6 +58,30 @@ class WelcomeScreenState extends State<WelcomeScreen> {
     }
   }
 
+  /// Extracts a `.fwz` archive (see [LocalProjectService.importFwz]) into
+  /// this machine's default projects folder and opens it.
+  Future<void> importProjectFromFwz() async {
+    final result = await FilePicker.platform.pickFiles(
+      dialogTitle: "Select .fwz Project File",
+      type: FileType.custom,
+      allowedExtensions: ['fwz'],
+    );
+    final path = result?.files.single.path;
+    if (path == null) return;
+    try {
+      appStore.setLoading(true);
+      final service = locator<LocalProjectService>();
+      final project = await service.importFwz(File(path), await service.defaultProjectsDirectory);
+      appStore.setLoading(false);
+      appStore.loadProject(project);
+      appStore.selectedMenu = WIDGETS_INDEX;
+      DashboardScreen().launch(context, isNewTask: true);
+    } catch (e) {
+      appStore.setLoading(false);
+      getToast(e.toString());
+    }
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -100,6 +126,13 @@ class WelcomeScreenState extends State<WelcomeScreen> {
                                 title: "Open Project",
                                 icon: Icons.folder_open,
                                 onPressed: openProjectFromFolder,
+                              ),
+                              16.width,
+                              elevationButtonWithIcon(
+                                toolTipMessage: "Import .fwz Project",
+                                title: "Import .fwz",
+                                icon: Icons.unarchive_outlined,
+                                onPressed: importProjectFromFwz,
                               ),
                               16.width,
                               elevationButtonWithIcon(

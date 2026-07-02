@@ -1159,7 +1159,7 @@ class ColorViewState extends State<ColorView> {
               4.width,
               Container(width: 1, height: 35, color: appStore.isDarkMode ? darkModeSecondaryBackgroundDark : COMMON_BORDER_COLOR),
               12.width,
-              Text((appStore.color!.opacity * 100).round().toString() + " %", style: primaryTextStyle(size: 14, color: appStore.isDarkMode ? Colors.white : DEFAULT_TEXT_COLOR)),
+              Text((appStore.color!.a * 100).round().toString() + " %", style: primaryTextStyle(size: 14, color: appStore.isDarkMode ? Colors.white : DEFAULT_TEXT_COLOR)),
             ],
           ),
         ),

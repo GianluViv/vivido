@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive.dart';
 import 'package:flutter_viz/local_storage/project.dart';
 import 'package:flutter_viz/model/screen_list_response.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 /// Lightweight entry in the "recent projects" index (`<AppData>/FlutterViz/recent.json`).
@@ -36,33 +38,44 @@ class RecentProjectEntry {
 class LocalProjectService {
   Directory? _appDataDirectoryOverride;
 
-  /// Root folder for all FlutterViz local data (`<AppData>/FlutterViz`).
+  /// Root folder for app-level data — the recent-projects index
+  /// (`<AppData>/FlutterViz`). Kept separate from [defaultProjectsDirectory]:
+  /// this is internal bookkeeping, not something the user browses to.
   Future<Directory> get appDataDirectory async {
     if (_appDataDirectoryOverride != null) return _appDataDirectoryOverride!;
     final supportDir = await getApplicationSupportDirectory();
-    return Directory('${supportDir.path}/FlutterViz');
+    return Directory(p.join(supportDir.path, 'FlutterViz'));
   }
 
-  /// Redirects [appDataDirectory] to a test-controlled folder instead of the
-  /// real OS app-data location (which needs platform channel mocking).
+  /// Redirects [appDataDirectory] and [defaultProjectsDirectory] to a
+  /// test-controlled folder instead of the real OS locations (which need
+  /// platform channel mocking).
   void setAppDataDirectoryForTesting(Directory directory) {
     _appDataDirectoryOverride = directory;
   }
 
+  Directory get _userHomeDirectory {
+    final home = Platform.isWindows ? Platform.environment['USERPROFILE'] : Platform.environment['HOME'];
+    return Directory(home ?? Directory.current.path);
+  }
+
+  /// Folder proposed when creating a new project — `<user home>/FlutterViz`,
+  /// so it's easy for the user to find rather than buried under AppData.
+  /// Always overridable per-project via [newProject]'s `location` parameter.
   Future<Directory> get defaultProjectsDirectory async {
-    final root = await appDataDirectory;
-    return Directory('${root.path}/projects');
+    if (_appDataDirectoryOverride != null) return Directory(p.join(_appDataDirectoryOverride!.path, 'projects'));
+    return Directory(p.join(_userHomeDirectory.path, 'FlutterViz'));
   }
 
   Future<File> _recentIndexFile() async {
     final root = await appDataDirectory;
-    return File('${root.path}/recent.json');
+    return File(p.join(root.path, 'recent.json'));
   }
 
   /// Creates `<location>/<name>/` with `project.json`, `media/` and `export/`.
   Future<Project> newProject(String name, {Directory? location}) async {
     final baseDir = location ?? await defaultProjectsDirectory;
-    final projectDir = Directory('${baseDir.path}/${_sanitizeFolderName(name)}');
+    final projectDir = Directory(p.join(baseDir.path, _sanitizeFolderName(name)));
     if (await projectDir.exists()) {
       throw StateError('Esiste già un progetto in ${projectDir.path}');
     }
@@ -72,7 +85,7 @@ class LocalProjectService {
   }
 
   Future<Project> openProject(Directory dir) async {
-    final file = File('${dir.path}/project.json');
+    final file = File(p.join(dir.path, 'project.json'));
     if (!await file.exists()) {
       throw StateError('Nessun project.json trovato in ${dir.path}');
     }
@@ -194,7 +207,7 @@ class LocalProjectService {
   Future<String> importMedia(Project project, File source) async {
     await project.mediaDirectory.create(recursive: true);
     final fileName = _uniqueFileName(project, source.uri.pathSegments.last);
-    final destination = File('${project.mediaDirectory.path}/$fileName');
+    final destination = File(p.join(project.mediaDirectory.path, fileName));
     await source.copy(destination.path);
     final relativePath = 'media/$fileName';
     project.media.add(ProjectMediaItem(name: fileName, path: relativePath));
@@ -204,7 +217,7 @@ class LocalProjectService {
 
   /// Removes a media file from `<project>/media/` and its `project.json` entry.
   Future<void> deleteMedia(Project project, String relativePath) async {
-    final file = File('${project.directory.path}/$relativePath');
+    final file = File(p.normalize(p.join(project.directory.path, relativePath)));
     if (await file.exists()) await file.delete();
     project.media.removeWhere((m) => m.path == relativePath);
     await saveProject(project);
@@ -226,5 +239,51 @@ class LocalProjectService {
 
   String _sanitizeFolderName(String name) {
     return name.trim().replaceAll(RegExp(r'[\\/:*?"<>|]'), '_');
+  }
+
+  // ---------------------------------------------------------------------
+  // .fwz archive — single-file export/import of a project folder, layered
+  // on top of the folder-based storage above.
+  // ---------------------------------------------------------------------
+
+  /// Zips [project]'s folder (project.json, media/, export/) into a single
+  /// `.fwz` file at [destination].
+  Future<void> exportToFwz(Project project, File destination) async {
+    final archive = Archive();
+    await for (final entity in project.directory.list(recursive: true)) {
+      if (entity is! File) continue;
+      final relativePath = p.relative(entity.path, from: project.directory.path);
+      final entryName = p.split(relativePath).join('/');
+      final bytes = await entity.readAsBytes();
+      archive.addFile(ArchiveFile(entryName, bytes.length, bytes));
+    }
+    final zipBytes = ZipEncoder().encode(archive);
+    await destination.parent.create(recursive: true);
+    await destination.writeAsBytes(zipBytes);
+  }
+
+  /// Extracts a `.fwz` archive into a new folder under [parentDir] (named
+  /// after the archive file, deduplicated if that name is already taken)
+  /// and opens the resulting project.
+  Future<Project> importFwz(File fwzFile, Directory parentDir) async {
+    final archive = ZipDecoder().decodeBytes(await fwzFile.readAsBytes());
+
+    final baseName = _sanitizeFolderName(p.basenameWithoutExtension(fwzFile.path));
+    var targetDir = Directory(p.join(parentDir.path, baseName));
+    var index = 1;
+    while (await targetDir.exists()) {
+      targetDir = Directory(p.join(parentDir.path, '$baseName ($index)'));
+      index++;
+    }
+    await targetDir.create(recursive: true);
+
+    for (final entry in archive.files) {
+      if (!entry.isFile) continue;
+      final outputFile = File(p.joinAll([targetDir.path, ...p.posix.split(entry.name)]));
+      await outputFile.parent.create(recursive: true);
+      await outputFile.writeAsBytes(entry.content as List<int>);
+    }
+
+    return openProject(targetDir);
   }
 }

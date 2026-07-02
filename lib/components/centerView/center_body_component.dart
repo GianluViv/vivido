@@ -107,8 +107,8 @@ class _CenterBodyComponentState extends State<CenterBodyComponent> with TickerPr
                                   child: DashboardPreviewComponent().cornerRadiusWithClipRRect(0),
                                 );
                               },
-                              onAccept: (item) {
-                                rootViewAcceptChild(item);
+                              onAcceptWithDetails: (details) {
+                                rootViewAcceptChild(details.data);
                               },
                             ),
                           ).cornerRadiusWithClipRRect(5),

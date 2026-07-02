@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_viz/local_storage/local_project_service.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_viz/utils/AppFunctions.dart';
 import 'package:flutter_viz/widgets/screen_json_parser_class.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
 
 import '../main.dart';
 import 'AppConstant.dart';
@@ -19,7 +21,7 @@ Future<void> allMediaListApi() async {
   if (project == null) return;
   appStore.mediaList.addAll(project.media.map((m) => MediaData(
         id: project.media.indexOf(m),
-        userAttachment: '${project.directory.path}/${m.path}',
+        userAttachment: p.normalize(p.join(project.directory.path, m.path)),
       )));
 }
 
@@ -47,26 +49,30 @@ Future<void> saveScreenApi() async {
   trackUserEvent(SAVE_SCREEN);
   if (appStore.currentProject == null) return;
   Map<String, dynamic> rootScreenDataJson = await widgetClassToJsonData();
-  screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) async {
-    String? screenImage;
-    if (rootScreenDataJson['widgetsData'].isNotEmpty ||
-        rootScreenDataJson['appBarData'].isNotEmpty ||
-        rootScreenDataJson['bottomBarNavigationData'].isNotEmpty ||
-        rootScreenDataJson['drawerData'].isNotEmpty) {
-      screenImage = base64.encode(capturedImage!);
-    }
-    String screenJsonData = json.encode(rootScreenDataJson);
+  String screenJsonData = json.encode(rootScreenDataJson);
 
-    await locator<LocalProjectService>().updateScreenData(
-      appStore.currentProject!,
-      appStore.selectedScreenId!,
-      screenJsonData: screenJsonData,
-      screenImage: screenImage,
-    );
-    appStore.updateScreenNewData(screenJsonData, appStore.selectedScreenId);
-    appStore.updateScreenImage(screenImage, appStore.selectedScreenId);
-    getToast(language!.save);
-  }).catchError((onError) {
-    print(onError);
-  });
+  bool hasContent = rootScreenDataJson['widgetsData'].isNotEmpty ||
+      rootScreenDataJson['appBarData'].isNotEmpty ||
+      rootScreenDataJson['bottomBarNavigationData'].isNotEmpty ||
+      rootScreenDataJson['drawerData'].isNotEmpty;
+
+  String? screenImage;
+  if (hasContent) {
+    try {
+      final capturedImage = await screenshotController.capture(delay: Duration(milliseconds: 10));
+      if (capturedImage != null) screenImage = base64.encode(capturedImage);
+    } catch (e) {
+      log("screen thumbnail capture failed: $e");
+    }
+  }
+
+  await locator<LocalProjectService>().updateScreenData(
+    appStore.currentProject!,
+    appStore.selectedScreenId!,
+    screenJsonData: screenJsonData,
+    screenImage: screenImage,
+  );
+  appStore.updateScreenNewData(screenJsonData, appStore.selectedScreenId);
+  if (screenImage != null) appStore.updateScreenImage(screenImage, appStore.selectedScreenId);
+  getToast(language!.save);
 }

@@ -375,14 +375,14 @@ class _ColorPickerLabelState extends State<ColorPickerLabel> {
         color.red.toRadixString(16).toUpperCase().padLeft(2, '0'),
         color.green.toRadixString(16).toUpperCase().padLeft(2, '0'),
         color.blue.toRadixString(16).toUpperCase().padLeft(2, '0'),
-        '${(color.opacity * 100).round()}%',
+        '${(color.a * 100).round()}%',
       ];
     } else if (colorModel == ColorModel.rgb) {
       return [
         color.red.toString(),
         color.green.toString(),
         color.blue.toString(),
-        '${(color.opacity * 100).round()}%',
+        '${(color.a * 100).round()}%',
       ];
     } else if (colorModel == ColorModel.hsv) {
       return [
@@ -551,7 +551,7 @@ class ColorPickerSlider extends StatelessWidget {
           thumbColor = hsvColor!.toColor().withValues(alpha: 1.0);
           break;
         case TrackType.alpha:
-          thumbOffset += (box.maxWidth - 30.0) * hsvColor!.toColor().opacity;
+          thumbOffset += (box.maxWidth - 30.0) * hsvColor!.toColor().a;
           thumbColor = Colors.black.withValues(alpha: hsvColor!.alpha);
           break;
       }

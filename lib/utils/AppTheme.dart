@@ -14,9 +14,9 @@ class AppTheme {
     cardColor: scaffoldSecondaryDark,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Colors.white),
     iconTheme: IconThemeData(color: Colors.black),
-    dialogBackgroundColor: colorPrimary,
     unselectedWidgetColor: Colors.black,
     dividerColor: Colors.white,
+    dialogTheme: DialogThemeData(backgroundColor: colorPrimary),
     pageTransitionsTheme: PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.android: ZoomPageTransitionsBuilder(),
@@ -33,9 +33,9 @@ class AppTheme {
     iconTheme: IconThemeData(color: Colors.white),
     cardColor: darkModeSecondaryBackgroundDark,
     fontFamily: font,
-    dialogBackgroundColor: darkModeSecondaryBackgroundDark,
     unselectedWidgetColor: Colors.grey,
     dividerColor: Colors.white,
+    dialogTheme: DialogThemeData(backgroundColor: darkModeSecondaryBackgroundDark),
   ).copyWith(
     pageTransitionsTheme: PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{

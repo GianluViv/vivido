@@ -121,7 +121,7 @@ class SwitchClass {
       child: Switch(
         value: value ?? true,
         onChanged: (value) {},
-        activeColor: activeColor ?? COMMON_BG_COLOR,
+        activeThumbColor: activeColor ?? COMMON_BG_COLOR,
         activeTrackColor: activeTrackColor ?? DEFAULT_ACTIVE_TRACK_COLOR,
         inactiveThumbColor: inactiveThumbColor ?? DEFAULT_INACTIVE_THUMB_COLOR,
         inactiveTrackColor: inactiveTrackColor ?? DEFAULT_INACTIVE_TRACK_COLOR,
