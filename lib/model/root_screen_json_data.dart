@@ -1,6 +1,7 @@
 import 'package:flutter_viz/utils/AppConstant.dart';
 import 'package:flutter_viz/widgetsClass/app_bar_class.dart';
 import 'package:flutter_viz/widgetsClass/bottom_navigation_bar_class.dart';
+import 'package:flutter_viz/widgetsClass/fab_class.dart';
 import 'package:flutter_viz/widgetsClass/left_drawer_class.dart';
 import 'package:flutter_viz/widgetsClass/root_view_class.dart';
 
@@ -12,8 +13,9 @@ class RootScreenJsonData {
   AppBarData? appBarData;
   BottomNavigationBarData? bottomNavigationBarData;
   LeftDrawerData? drawerData;
+  FabData? fabData;
 
-  RootScreenJsonData({this.widgetsData, this.scaffoldData, this.appBarData, this.bottomNavigationBarData, this.drawerData});
+  RootScreenJsonData({this.widgetsData, this.scaffoldData, this.appBarData, this.bottomNavigationBarData, this.drawerData, this.fabData});
 
   RootScreenJsonData.fromJson(Map<String, dynamic> json) {
     widgetsData = json[JSON_WIDGET_DATA] != null ? new ScreenJsonData.fromJson(json[JSON_WIDGET_DATA]) : null;
@@ -26,6 +28,9 @@ class RootScreenJsonData {
     }
     if (json[JSON_DRAWER_DATA] != null) {
       drawerData = new LeftDrawerData.fromJson(json[JSON_DRAWER_DATA]);
+    }
+    if (json[JSON_FAB_DATA] != null) {
+      fabData = new FabData.fromJson(json[JSON_FAB_DATA]);
     }
   }
 
@@ -45,6 +50,36 @@ class RootScreenJsonData {
     }
     if (this.drawerData != null) {
       data[JSON_DRAWER_DATA] = this.drawerData!.toJson();
+    }
+    if (this.fabData != null) {
+      data[JSON_FAB_DATA] = this.fabData!.toJson();
+    }
+    return data;
+  }
+}
+
+class FabData {
+  String? widgetId;
+  String? type;
+  String? subType;
+  FabClass? fab;
+
+  FabData({this.widgetId, this.type, this.subType, this.fab});
+
+  FabData.fromJson(Map<String, dynamic> json) {
+    widgetId = json[JSON_WIDGET_ID] != null ? json[JSON_WIDGET_ID] : "";
+    type = json[JSON_TYPE] ?? "";
+    subType = json[JSON_SUB_TYPE] ?? "";
+    fab = json[WidgetTypeFAB] != null ? new FabClass.fromJson(json[WidgetTypeFAB]) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data[JSON_WIDGET_ID] = this.widgetId;
+    data[JSON_TYPE] = this.type;
+    data[JSON_SUB_TYPE] = this.subType;
+    if (this.fab != null) {
+      data[WidgetTypeFAB] = this.fab!.toJson();
     }
     return data;
   }

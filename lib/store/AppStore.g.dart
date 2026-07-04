@@ -462,6 +462,22 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
+  late final _$fabClassAtom =
+      Atom(name: 'AppStoreBase.fabClass', context: context);
+
+  @override
+  WidgetModel? get fabClass {
+    _$fabClassAtom.reportRead();
+    return super.fabClass;
+  }
+
+  @override
+  set fabClass(WidgetModel? value) {
+    _$fabClassAtom.reportWrite(value, super.fabClass, () {
+      super.fabClass = value;
+    });
+  }
+
   late final _$rootViewAtom =
       Atom(name: 'AppStoreBase.rootView', context: context);
 
@@ -1144,6 +1160,17 @@ mixin _$AppStore on AppStoreBase, Store {
   }
 
   @override
+  void selectFab() {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.selectFab');
+    try {
+      return super.selectFab();
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void selectDrawer() {
     final _$actionInfo = _$AppStoreBaseActionController.startAction(
         name: 'AppStoreBase.selectDrawer');
@@ -1342,6 +1369,17 @@ mixin _$AppStore on AppStoreBase, Store {
   }
 
   @override
+  void addFab(WidgetModel fab) {
+    final _$actionInfo =
+        _$AppStoreBaseActionController.startAction(name: 'AppStoreBase.addFab');
+    try {
+      return super.addFab(fab);
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addAppBar(WidgetModel appBar) {
     final _$actionInfo = _$AppStoreBaseActionController.startAction(
         name: 'AppStoreBase.addAppBar');
@@ -1494,6 +1532,7 @@ selectedDropdownScreen: ${selectedDropdownScreen},
 drawerClass: ${drawerClass},
 appBarClass: ${appBarClass},
 bottomNavigationBarClass: ${bottomNavigationBarClass},
+fabClass: ${fabClass},
 rootView: ${rootView},
 parentWidgetsList: ${parentWidgetsList},
 selectedWidgetList: ${selectedWidgetList},

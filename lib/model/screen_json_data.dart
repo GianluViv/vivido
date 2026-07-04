@@ -6,6 +6,7 @@ import 'package:flutter_viz/widgetsClass/card_class.dart';
 import 'package:flutter_viz/widgetsClass/checkbox_class.dart';
 import 'package:flutter_viz/widgetsClass/checkbox_list_tile_class.dart';
 import 'package:flutter_viz/widgetsClass/chip_view_class.dart';
+import 'package:flutter_viz/widgetsClass/circular_progress_indicator_class.dart';
 import 'package:flutter_viz/widgetsClass/circle_image_class.dart';
 import 'package:flutter_viz/widgetsClass/clip_rrect_class.dart';
 import 'package:flutter_viz/widgetsClass/column_class.dart';
@@ -94,6 +95,7 @@ class ScreenJsonData {
   SwitchClass? switchClass;
   OTPTextFieldClass? otpTextFieldClass;
   LinearProgressIndicatorClass? linearProgressIndicatorClass;
+  CircularProgressIndicatorClass? circularProgressIndicatorClass;
 
   List<ScreenJsonData>? childData = [];
 
@@ -148,6 +150,7 @@ class ScreenJsonData {
     switchClass = json[WidgetTypeSwitch] != null ? new SwitchClass.fromJson(json[WidgetTypeSwitch]) : null;
     otpTextFieldClass = json[WidgetTypeOTPTextField] != null ? new OTPTextFieldClass.fromJson(json[WidgetTypeOTPTextField]) : null;
     linearProgressIndicatorClass = json[WidgetTypeLinearProgressIndicator] != null ? new LinearProgressIndicatorClass.fromJson(json[WidgetTypeLinearProgressIndicator]) : null;
+    circularProgressIndicatorClass = json[WidgetTypeCircularProgressIndicator] != null ? new CircularProgressIndicatorClass.fromJson(json[WidgetTypeCircularProgressIndicator]) : null;
 
     if (json[JSON_CHILD_DATA] != null) {
       json[JSON_CHILD_DATA].forEach((v) {
@@ -295,6 +298,9 @@ class ScreenJsonData {
     }
     if (this.linearProgressIndicatorClass != null) {
       data[WidgetTypeLinearProgressIndicator] = this.linearProgressIndicatorClass!.toJson();
+    }
+    if (this.circularProgressIndicatorClass != null) {
+      data[WidgetTypeCircularProgressIndicator] = this.circularProgressIndicatorClass!.toJson();
     }
 
     if (this.childData != null) {

@@ -7,13 +7,11 @@
 > forked from lives on the [`backend` branch](https://github.com/iqonic-design/flutter_viz/tree/backend)
 > of the upstream repository.
 
-**FlutterViz** is a visual UI builder built using Flutter. It allows developers to design stunning Flutter UIs with a drag-and-drop interface, export clean Dart code, and accelerate the development process.
+**FlutterViz** is a visual UI builder built using Flutter. It lets you design Flutter UIs with a
+drag-and-drop interface and export clean Dart code — running entirely as a **local desktop app**,
+with no login, backend or cloud.
 
 > 🚀 This open-source project aims to empower developers by providing a free and extensible visual Flutter UI builder.
-
-[![Watch on YouTube](https://img.shields.io/badge/Watch%20Demo-YouTube-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/watch?v=CgIGPKeWYB0)
-
-**🌐 Live Demo:** **[https://app.flutterviz.com/](https://app.flutterviz.com/)**
 
 ---
 
@@ -22,10 +20,33 @@
 - 🔧 **Drag-and-drop editor** to build Flutter UIs visually
 - 📦 50+ Built-in Flutter widgets
 - 🎨 Real-time property customization (padding, color, font, etc.)
-- 💾 Export clean, readable, and production-ready Dart code
-- 📱 Mobile-first layout builder
-- 💡 Light and fast, optimized for performance
-- 🌍 Cross-platform (Web, Desktop, and Mobile with Flutter)
+- 💾 Export clean, readable, and production-ready Dart code (zipped)
+- 🗂️ **Local, multi-page projects** saved as plain folders on disk — no login, no cloud
+- 📄 **Page template library** — 10 built-in starter pages (Login, Register, Welcome, Profile,
+  Settings, List, Detail, …), a theme/color picker to recolor them, and "save as template" for
+  your own reusable pages
+- 📦 **Single-file project export/import** via the `.fwz` format (share a whole project as one file)
+- 🤖 **AI-assisted editing** — an embedded terminal panel runs [Claude Code](https://claude.com/claude-code)
+  inside the project folder and can edit the current screen for you (see below)
+- 🖥️ **Desktop-first** (Linux/Windows); web remains a secondary target
+
+---
+
+## 🤖 AI-assisted editing ("IA" panel)
+
+The left-hand **IA** panel embeds a real terminal (via `xterm` + `flutter_pty`) that opens a shell
+in the current project's folder, so you can run [Claude Code](https://claude.com/claude-code) —
+or any CLI — without leaving the app. It also drives a file-based round-trip so the AI can edit the
+screen you're looking at:
+
+1. **Prepara** writes the current screen's widget tree to `<project>/ai/<screen>.json` (pretty-printed)
+   plus a `CLAUDE.md` describing the JSON format.
+2. You run `claude` in the embedded terminal and ask it to change that JSON file.
+3. **Ricarica** reads the file back, applies it to the live preview and persists it.
+
+Claude only ever edits the separate `ai/…json` file (never `project.json` directly), so the app's
+30-second autosave never clobbers the AI's work. Using this panel requires the `claude` CLI to be
+installed and available on your `PATH`.
 
 ---
 
@@ -36,8 +57,8 @@
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/iqonic-design/flutter_viz.git
-cd flutterviz
+git clone https://github.com/GianluViv/flutter_viz.git
+cd flutter_viz
 ```
 
 2. **Install dependencies**
@@ -66,11 +87,19 @@ for the exact format:
 <ProjectName>/
  ├─ project.json   # project metadata + all screens (widget-tree JSON)
  ├─ media/         # images imported into the project
- └─ export/        # (reserved for future local export output)
+ ├─ export/        # generated Dart source written by "Export Dart code"
+ └─ ai/            # per-screen JSON handed to the AI panel (created on demand)
 ```
 
 New projects are created under the OS-standard app-data directory by default (via
 `path_provider`), or in any folder you pick with "Open Project".
+
+### 📤 Exporting & sharing
+
+- **Export Dart code** — generates the Flutter source for every screen and lets you save it as a
+  `.zip` (via the `archive` package).
+- **Export Project as `.fwz`** — packs the whole project folder (screens + media) into a single
+  `.fwz` file you can share; import it back from the welcome screen with **Import `.fwz` Project**.
 
 ---
 
@@ -85,8 +114,8 @@ We welcome contributions from everyone! Whether you're fixing bugs, improving do
 2. **Clone your forked repository**:
 
     ```bash
-    git clone https://github.com/your-username/flutterviz.git
-    cd flutterviz
+    git clone https://github.com/your-username/flutter_viz.git
+    cd flutter_viz
     ```
 
 3. **Create a new branch** with a descriptive name:
@@ -114,7 +143,7 @@ We welcome contributions from everyone! Whether you're fixing bugs, improving do
 
 Found a bug? Have a feature request?
 
-1. Go to the [Issues](https://github.com/iqonic-design/flutter_viz/issues) tab.
+1. Go to the [Issues](https://github.com/GianluViv/flutter_viz/issues) tab.
 2. Click **New Issue**.
 3. Choose the relevant template (e.g., Bug Report, Feature Request).
 4. Fill in the details clearly and concisely.

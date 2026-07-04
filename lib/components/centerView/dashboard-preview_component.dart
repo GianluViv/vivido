@@ -9,6 +9,7 @@ import 'package:flutter_viz/widgets/widgets.dart';
 import 'package:flutter_viz/widgets/on_accept_widgets.dart';
 import 'package:flutter_viz/widgetsClass/app_bar_class.dart';
 import 'package:flutter_viz/widgetsClass/bottom_navigation_bar_class.dart';
+import 'package:flutter_viz/widgetsClass/fab_class.dart';
 import 'package:flutter_viz/widgetsClass/left_drawer_class.dart';
 import 'package:flutter_viz/widgetsClass/root_view_class.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class DashboardPreviewComponentState extends State<DashboardPreviewComponent> {
                   style: secondaryTextStyle(size: 10),
                 ),
               ],
-            ).visible(appStore.selectedWidgetList.isEmpty && appStore.appBarClass == null && appStore.drawerClass == null && appStore.bottomNavigationBarClass == null),
+            ).visible(appStore.selectedWidgetList.isEmpty && appStore.appBarClass == null && appStore.drawerClass == null && appStore.bottomNavigationBarClass == null && appStore.fabClass == null),
           );
         },
         onAcceptWithDetails: (details) {
@@ -178,6 +179,8 @@ class DashboardPreviewComponentState extends State<DashboardPreviewComponent> {
           appBar: (appStore.appBarClass != null) ? (appStore.appBarClass!.widgetViewModel as AppBarClass).getAppBarWidget() as PreferredSizeWidget? : null,
           bottomNavigationBar: (appStore.bottomNavigationBarClass != null) ? (appStore.bottomNavigationBarClass!.widgetViewModel as BottomNavigationBarClass).getBottomNavigationBarWidget() : null,
           drawer: (appStore.drawerClass != null) ? (appStore.drawerClass!.widgetViewModel as LeftDrawerClass).getLeftDrawerWidget() : null,
+          floatingActionButton: (appStore.fabClass != null) ? (appStore.fabClass!.widgetViewModel as FabClass).getFabWidget() : null,
+          floatingActionButtonLocation: (appStore.fabClass != null) ? (appStore.fabClass!.widgetViewModel as FabClass).getFabLocation() : null,
         ),
         onPointerDown: (event) {
           if (!widget.isViewKey) {

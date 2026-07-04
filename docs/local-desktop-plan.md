@@ -589,9 +589,9 @@ aggiungere. Ordinati per valore.
 
 | Priorità | Widget | Perché | Note |
 |:--------:|--------|--------|------|
-| 🔴 Alta | **CircularProgressIndicator** | Esiste solo il `LinearProgressIndicator`; manca la controparte più usata | Ricalca quasi 1:1 il lineare |
+| ✅ FATTO | ~~**CircularProgressIndicator**~~ | Implementato (04/07/2026) come pilota end-to-end | `circular_progress_indicator_class.dart` + `_property_view.dart`, usa `strokeWidth` invece di `height`; titolo hardcoded per evitare churn su 15 lingue; test in `test/template_test.dart` |
 | 🔴 Alta | **ExpansionTile** | Pattern comune (FAQ/impostazioni a fisarmonica); nessun equivalente | Container di children |
-| 🔴 Alta | **FloatingActionButton** | Elemento Material fondamentale; **la costante `WidgetTypeFAB` esiste già in `AppConstant.dart:105` ma è morta** (nessuna classe/property view) → aggancio da completare | Va collegato allo Scaffold (come app bar/drawer) |
+| ✅ FATTO | ~~**FloatingActionButton**~~ | Implementato (04/07/2026); riusata la costante `WidgetTypeFAB` che era morta | `fab_class.dart` + `_property_view.dart`, widget-foglia posizionabile (modellato su IconButton + `backgroundColor`/`elevation`); NON scaffold-slot (scelta di scope); titolo hardcoded; test in `test/template_test.dart` |
 | 🟠 Media | **Wrap** | C'è `ChipView` ma nessun contenitore che manda a capo tag/chip in flusso | Layout container |
 | 🟠 Media | **NavigationRail** | Il fork è ora **app desktop**: è *il* pattern di navigazione laterale desktop/tablet, più adatto del `BottomNavigationBar` | Rilevante per il target del fork |
 | 🟠 Media | **DataTable** | Densità dati tabellare, tipica di UI desktop | |

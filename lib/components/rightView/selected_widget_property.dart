@@ -25,6 +25,8 @@ import 'package:flutter_viz/widgetsProperty/image_icon_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/image_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/left_drawer_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/linear_progress_indicator_property_view.dart';
+import 'package:flutter_viz/widgetsProperty/circular_progress_indicator_property_view.dart';
+import 'package:flutter_viz/widgetsProperty/fab_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/list_tile_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/list_view_property_view.dart';
 import 'package:flutter_viz/widgetsProperty/lottie_animation_property_view.dart';
@@ -152,6 +154,10 @@ class _SelectedWidgetPropertyState extends State<SelectedWidgetProperty> {
       return OTPTextFieldPropertyView();
     else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeLinearProgressIndicator)
       return LinearProgressIndicatorPropertyView();
+    else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeCircularProgressIndicator)
+      return CircularProgressIndicatorPropertyView();
+    else if (appStore.currentSelectedWidget!.widgetSubType == WidgetTypeFAB)
+      return FabPropertyView();
     else
       return Container(
         child: Text(language!.defaultProperty),

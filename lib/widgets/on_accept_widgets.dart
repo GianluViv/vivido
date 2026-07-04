@@ -41,6 +41,15 @@ acceptScaffoldOtherPart(WidgetModel item) {
       appStore.addBottomNavigation(item);
     }
   }
+
+  /// floating action button
+  else if (item.widgetType == WidgetTypeFABLayout) {
+    if (appStore.fabClass != null) {
+      fabMessage();
+    } else {
+      appStore.addFab(item);
+    }
+  }
 }
 
 addChildWidgets(WidgetModel item, WidgetModel widgetModel) {
@@ -205,7 +214,7 @@ bool checkExpandedWidgetAccept(WidgetModel widgetModel, WidgetModel item) {
 /// Layout widgets on accept child data
 layoutWidgetsOnAccept(WidgetModel item, WidgetModel widgetModel) {
   WidgetModel currentModel = getWidgets(item.widgetSubType);
-  if (currentModel.widgetType == WidgetTypeAppBarLayout || currentModel.widgetType == WidgetTypeLeftDrawerLayout || currentModel.widgetType == WidgetTypeBottomNavigationBarLayout) {
+  if (currentModel.widgetType == WidgetTypeAppBarLayout || currentModel.widgetType == WidgetTypeLeftDrawerLayout || currentModel.widgetType == WidgetTypeBottomNavigationBarLayout || currentModel.widgetType == WidgetTypeFABLayout) {
     acceptScaffoldOtherPart(currentModel);
   } else {
     addChildWidgets(currentModel, widgetModel);
@@ -214,7 +223,7 @@ layoutWidgetsOnAccept(WidgetModel item, WidgetModel widgetModel) {
 
 /// Blank screen child accept dialog
 blankScreenChildAccept(WidgetModel currentModel) {
-  if (currentModel.widgetType == WidgetTypeAppBarLayout || currentModel.widgetType == WidgetTypeLeftDrawerLayout || currentModel.widgetType == WidgetTypeBottomNavigationBarLayout) {
+  if (currentModel.widgetType == WidgetTypeAppBarLayout || currentModel.widgetType == WidgetTypeLeftDrawerLayout || currentModel.widgetType == WidgetTypeBottomNavigationBarLayout || currentModel.widgetType == WidgetTypeFABLayout) {
     acceptScaffoldOtherPart(currentModel);
   } else {
     if (currentModel.widgetType == WidgetTypeNormal) {
@@ -272,7 +281,7 @@ blankScreenChildAccept(WidgetModel currentModel) {
 /// Accept child by scaffold view
 rootViewAcceptChild(WidgetModel childWidgets) {
   WidgetModel item = getWidgets(childWidgets.widgetSubType);
-  if (item.widgetType == WidgetTypeAppBarLayout || item.widgetType == WidgetTypeLeftDrawerLayout || item.widgetType == WidgetTypeBottomNavigationBarLayout) {
+  if (item.widgetType == WidgetTypeAppBarLayout || item.widgetType == WidgetTypeLeftDrawerLayout || item.widgetType == WidgetTypeBottomNavigationBarLayout || item.widgetType == WidgetTypeFABLayout) {
     acceptScaffoldOtherPart(item);
   } else {
     if (appStore.selectedWidgetList.length > 0) {
@@ -337,7 +346,7 @@ rootViewAcceptChild(WidgetModel childWidgets) {
 scaffoldFirstWidgetAcceptChild(WidgetModel childWidgets, WidgetModel rootModelView) {
   WidgetModel item = getWidgets(childWidgets.widgetSubType);
   WidgetModel currentModel = getWidgets(item.widgetSubType);
-  if (item.widgetType == WidgetTypeAppBarLayout || item.widgetType == WidgetTypeLeftDrawerLayout || item.widgetType == WidgetTypeBottomNavigationBarLayout) {
+  if (item.widgetType == WidgetTypeAppBarLayout || item.widgetType == WidgetTypeLeftDrawerLayout || item.widgetType == WidgetTypeBottomNavigationBarLayout || item.widgetType == WidgetTypeFABLayout) {
     acceptScaffoldOtherPart(item);
   } else {
     if (isSingleChildLayout(rootModelView)) {

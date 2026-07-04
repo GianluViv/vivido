@@ -29,6 +29,8 @@ import 'package:flutter_viz/widgetsClass/icon_button_class.dart';
 import 'package:flutter_viz/widgetsClass/image_icon_class.dart';
 import 'package:flutter_viz/widgetsClass/left_drawer_class.dart';
 import 'package:flutter_viz/widgetsClass/linear_progress_indicator_class.dart';
+import 'package:flutter_viz/widgetsClass/circular_progress_indicator_class.dart';
+import 'package:flutter_viz/widgetsClass/fab_class.dart';
 import 'package:flutter_viz/widgetsClass/list_tile_class.dart';
 import 'package:flutter_viz/widgetsClass/list_view_class.dart';
 import 'package:flutter_viz/widgetsClass/lottie_animation_class.dart';
@@ -225,6 +227,12 @@ List<WidgetModel> baseWidgetsList = [
 
   /// Linear Progress Indicator
   getWidgets(WidgetTypeLinearProgressIndicator),
+
+  /// Circular Progress Indicator
+  getWidgets(WidgetTypeCircularProgressIndicator),
+
+  /// Floating Action Button
+  getWidgets(WidgetTypeFAB),
 ];
 
 class LayoutExpanded {
@@ -714,6 +722,27 @@ getWidgets(String? subType) {
       widgetSubType: WidgetTypeLinearProgressIndicator,
       widgetViewModel: LinearProgressIndicatorClass(),
       widgetType: WidgetTypeNormal,
+    );
+  } else if (subType == WidgetTypeCircularProgressIndicator) {
+    /// Circular Progress Indicator
+    return WidgetModel(
+      id: getWidgetId(),
+      title: getWidgetTitle(WidgetTypeCircularProgressIndicator),
+      displayWidget: getDisplayWidget(getWidgetsIcon(WidgetTypeCircularProgressIndicator), getWidgetTitle(WidgetTypeCircularProgressIndicator)),
+      widgetSubType: WidgetTypeCircularProgressIndicator,
+      widgetViewModel: CircularProgressIndicatorClass(),
+      widgetType: WidgetTypeNormal,
+    );
+  } else if (subType == WidgetTypeFAB) {
+    /// Floating Action Button (scaffold slot)
+    return WidgetModel(
+      id: getWidgetId(),
+      title: getWidgetTitle(WidgetTypeFAB),
+      displayWidget: getDisplayWidget(getWidgetsIcon(WidgetTypeFAB), getWidgetTitle(WidgetTypeFAB)),
+      widgetSubType: WidgetTypeFAB,
+      widgetViewModel: FabClass(),
+      subWidgetsList: [],
+      widgetType: WidgetTypeFABLayout,
     );
   } else if (subType == WidgetTypeDummyAddWidget) {
     /// Wrap Dummy View
@@ -2036,6 +2065,24 @@ getWidgetsClassData(
     } else if (isPropertyJsonData) {
       return (widgetModel.widgetViewModel as LinearProgressIndicatorClass).toJson();
     }
+  } else if (widgetModel.widgetSubType == WidgetTypeCircularProgressIndicator) {
+    /// Circular Progress Indicator
+    if (isChildData) {
+      return (widgetModel.widgetViewModel as CircularProgressIndicatorClass).getCircularProgressIndicatorWidget(widgetModel);
+    } else if (isCodeAsString) {
+      return (widgetModel.widgetViewModel as CircularProgressIndicatorClass).getCodeAsString(widgetModel);
+    } else if (isPropertyJsonData) {
+      return (widgetModel.widgetViewModel as CircularProgressIndicatorClass).toJson();
+    }
+  } else if (widgetModel.widgetSubType == WidgetTypeFAB) {
+    /// Floating Action Button (scaffold slot)
+    if (isChildData) {
+      return (widgetModel.widgetViewModel as FabClass).getFabWidget();
+    } else if (isCodeAsString) {
+      return (widgetModel.widgetViewModel as FabClass).getCodeAsString();
+    } else if (isPropertyJsonData) {
+      return (widgetModel.widgetViewModel as FabClass).toJson();
+    }
   } else if (widgetModel.widgetSubType == WidgetTypeRootView) {
     /// Scaffold View
     if (isPropertyJsonData) {
@@ -2172,6 +2219,8 @@ getWidgetJsonData(ScreenJsonData childData) {
     return childData.otpTextFieldClass;
   } else if (childData.subType == WidgetTypeLinearProgressIndicator) {
     return childData.linearProgressIndicatorClass;
+  } else if (childData.subType == WidgetTypeCircularProgressIndicator) {
+    return childData.circularProgressIndicatorClass;
   } else {
     return null;
   }
@@ -2264,6 +2313,10 @@ String getWidgetTitle(String? subType) {
     return language!.titleOTPTextField;
   } else if (subType == WidgetTypeLinearProgressIndicator) {
     return language!.titleLinearProgressIndicator;
+  } else if (subType == WidgetTypeCircularProgressIndicator) {
+    return "Circular Progress Indicator";
+  } else if (subType == WidgetTypeFAB) {
+    return "Floating Action Button";
   }
   return "";
 }

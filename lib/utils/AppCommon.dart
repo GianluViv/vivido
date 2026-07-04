@@ -24,6 +24,10 @@ bottomNavigationBarMessage() {
   getToast(language!.alreadyHaveBottomNavigationBar);
 }
 
+fabMessage() {
+  getToast("This screen already has a Floating Action Button");
+}
+
 String? parseHtmlString(String? value) {
   return value;
 }
@@ -111,6 +115,10 @@ String getWidgetsIcon(String? widgetType) {
     return getPath("OTPTextfiled.svg");
   } else if (widgetType == WidgetTypeLinearProgressIndicator) {
     return getPath("linear_progress.svg");
+  } else if (widgetType == WidgetTypeCircularProgressIndicator) {
+    return getPath("linear_progress.svg");
+  } else if (widgetType == WidgetTypeFAB) {
+    return getPath("IconButton.svg");
   } else if (widgetType == WidgetTypeLeftDrawer) {
     return getPath("widgets.svg");
   } else if (widgetType == WidgetTypeConstrainedBox) {

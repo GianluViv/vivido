@@ -33,6 +33,8 @@ import 'package:flutter_viz/widgetsClass/icon_button_class.dart';
 import 'package:flutter_viz/widgetsClass/image_icon_class.dart';
 import 'package:flutter_viz/widgetsClass/left_drawer_class.dart';
 import 'package:flutter_viz/widgetsClass/linear_progress_indicator_class.dart';
+import 'package:flutter_viz/widgetsClass/circular_progress_indicator_class.dart';
+import 'package:flutter_viz/widgetsClass/fab_class.dart';
 import 'package:flutter_viz/widgetsClass/list_tile_class.dart';
 import 'package:flutter_viz/widgetsClass/list_view_class.dart';
 import 'package:flutter_viz/widgetsClass/lottie_animation_class.dart';
@@ -272,6 +274,12 @@ Future<List<String>> viewFinalSourceData(List<WidgetModel> selectedWidgetList, {
       finalData.add("bottomNavigationBar: ${(downloadModel.bottomNavigationBarClass!.widgetViewModel as BottomNavigationBarClass).getCodeAsString()},\n");
     }
 
+    /// FloatingActionButton source code
+    if (downloadModel.fabClass != null) {
+      finalData.add("floatingActionButton: ${(downloadModel.fabClass!.widgetViewModel as FabClass).getCodeAsString()},\n");
+      finalData.add("floatingActionButtonLocation: ${(downloadModel.fabClass!.widgetViewModel as FabClass).getLocationCodeString()},\n");
+    }
+
     /// Left Drawer source code
     if (downloadModel.drawerClass != null) {
       finalData.add("drawer: ${(downloadModel.drawerClass!.widgetViewModel as LeftDrawerClass).getCodeAsString()},\n");
@@ -290,6 +298,12 @@ Future<List<String>> viewFinalSourceData(List<WidgetModel> selectedWidgetList, {
     /// bottomNavigationBar source code
     if (appStore.bottomNavigationBarClass != null) {
       finalData.add("bottomNavigationBar: ${(appStore.bottomNavigationBarClass!.widgetViewModel as BottomNavigationBarClass).getCodeAsString()},\n");
+    }
+
+    /// FloatingActionButton source code
+    if (appStore.fabClass != null) {
+      finalData.add("floatingActionButton: ${(appStore.fabClass!.widgetViewModel as FabClass).getCodeAsString()},\n");
+      finalData.add("floatingActionButtonLocation: ${(appStore.fabClass!.widgetViewModel as FabClass).getLocationCodeString()},\n");
     }
 
     /// Left Drawer source code
@@ -536,6 +550,10 @@ getWidgetCasting(WidgetModel widgetModel) {
     return widgetModel.widgetViewModel as OTPTextFieldClass?;
   } else if (widgetModel.widgetSubType == WidgetTypeLinearProgressIndicator) {
     return widgetModel.widgetViewModel as LinearProgressIndicatorClass?;
+  } else if (widgetModel.widgetSubType == WidgetTypeCircularProgressIndicator) {
+    return widgetModel.widgetViewModel as CircularProgressIndicatorClass?;
+  } else if (widgetModel.widgetSubType == WidgetTypeFAB) {
+    return widgetModel.widgetViewModel as FabClass?;
   }
 }
 

@@ -5,6 +5,7 @@ class DownloadModel {
   WidgetModel? appBarClass;
   WidgetModel? rootView;
   WidgetModel? bottomNavigationBarClass;
+  WidgetModel? fabClass;
   WidgetModel? drawerClass;
   List<WidgetModel> selectedWidgetList = [];
 }

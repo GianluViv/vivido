@@ -151,6 +151,27 @@ applyScreenJsonToView(String? screenJsonData, {bool isForDownload = false}) asyn
       }
     }
 
+    /// Set Floating Action Button Json Data to Original FAB View
+    if (rootScreenJsonData.fabData != null && rootScreenJsonData.fabData!.widgetId!.isNotEmpty) {
+      WidgetModel fabData = WidgetModel(
+        id: rootScreenJsonData.fabData!.widgetId,
+        title: getWidgetTitle(rootScreenJsonData.fabData!.subType),
+        displayWidget: getDisplayWidget(getWidgetsIcon(rootScreenJsonData.fabData!.subType), getWidgetTitle(WidgetTypeRootView)),
+        widgetSubType: rootScreenJsonData.fabData!.subType,
+        widgetViewModel: rootScreenJsonData.fabData!.fab,
+        widgetType: rootScreenJsonData.fabData!.type,
+      );
+      if (isForDownload) {
+        downloadModel.fabClass = fabData;
+      } else {
+        appStore.fabClass = fabData;
+      }
+    } else {
+      if (!isForDownload) {
+        appStore.fabClass = null;
+      }
+    }
+
     /// Set Scaffold Json Data to Original Scaffold View
     if (rootScreenJsonData.scaffoldData != null && rootScreenJsonData.scaffoldData!.widgetId!.isNotEmpty) {
       WidgetModel scaffoldData = WidgetModel(
@@ -187,6 +208,7 @@ applyScreenJsonToView(String? screenJsonData, {bool isForDownload = false}) asyn
       appStore.setWidgetsList(widgetList);
       appStore.appBarClass = null;
       appStore.bottomNavigationBarClass = null;
+      appStore.fabClass = null;
       appStore.rootView = null;
       appStore.drawerClass = null;
       appStore.finishLoadingData();
@@ -303,6 +325,17 @@ Future<Map<String, dynamic>> widgetClassToJsonData() async {
     });
   }
 
+  /// Floating Action Button json data
+  Map<String, dynamic> fabJsonData = {};
+  if (appStore.fabClass != null) {
+    fabJsonData.addAll({
+      JSON_WIDGET_ID: appStore.fabClass!.id,
+      JSON_TYPE: appStore.fabClass!.widgetType,
+      JSON_SUB_TYPE: appStore.fabClass!.widgetSubType,
+      appStore.fabClass!.widgetSubType!: getWidgetsClassData(appStore.fabClass!, isPropertyJsonData: true),
+    });
+  }
+
   /// Scaffold json Data
   Map<String, dynamic> scaffoldJsonData = {};
   if (appStore.rootView != null) {
@@ -320,6 +353,7 @@ Future<Map<String, dynamic>> widgetClassToJsonData() async {
     JSON_APPBAR_DATA: appBarJsonData,
     JSON_BOTTOM_BAR_NAVIGATION_DATA: bottomNavigationJsonData,
     JSON_DRAWER_DATA: drawerJsonData,
+    JSON_FAB_DATA: fabJsonData,
   });
   return rootScreenDataJson;
 }

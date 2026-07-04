@@ -16,6 +16,7 @@ import 'package:flutter_viz/widgets/on_accept_widgets.dart';
 import 'package:flutter_viz/widgetsClass/app_bar_class.dart';
 import 'package:flutter_viz/widgetsClass/bottom_navigation_bar_class.dart';
 import 'package:flutter_viz/widgetsClass/column_class.dart';
+import 'package:flutter_viz/widgetsClass/fab_class.dart';
 import 'package:flutter_viz/widgetsClass/left_drawer_class.dart';
 import 'package:flutter_viz/widgetsClass/list_view_class.dart';
 import 'package:flutter_viz/widgetsClass/root_view_class.dart';
@@ -136,6 +137,10 @@ abstract class AppStoreBase with Store {
   /// Bottom Bar view
   @observable
   WidgetModel? bottomNavigationBarClass;
+
+  /// Floating Action Button (scaffold slot)
+  @observable
+  WidgetModel? fabClass;
 
   /// Root Scaffold View
   @observable
@@ -977,6 +982,12 @@ abstract class AppStoreBase with Store {
   }
 
   @action
+  void selectFab() {
+    currentSelectedWidget = null;
+    currentSelectedWidget = fabClass;
+  }
+
+  @action
   void selectDrawer() {
     currentSelectedWidget = null;
     currentSelectedWidget = drawerClass;
@@ -1144,6 +1155,13 @@ abstract class AppStoreBase with Store {
       return;
     }
 
+    /// Remove Floating Action Button
+    if (fabClass != null && fabClass!.id == currentSelectedWidget!.id) {
+      fabClass = null;
+      currentSelectedWidget = rootView;
+      return;
+    }
+
     /// Remove Drawer
     if (drawerClass != null && drawerClass!.id == currentSelectedWidget!.id) {
       drawerClass = null;
@@ -1215,6 +1233,12 @@ abstract class AppStoreBase with Store {
   }
 
   @action
+  void addFab(WidgetModel fab) {
+    fabClass = fab;
+    updateSelectedWidget(fab);
+  }
+
+  @action
   void addAppBar(WidgetModel appBar) {
     appBarClass = appBar;
     updateSelectedWidget(appBar);
@@ -1229,6 +1253,7 @@ abstract class AppStoreBase with Store {
     currentSelectedWidget = null;
     appBarClass = null;
     bottomNavigationBarClass = null;
+    fabClass = null;
     drawerClass = null;
     refreshMainViewData();
     addRootView();
@@ -1252,6 +1277,12 @@ abstract class AppStoreBase with Store {
     /// Bottom Navigation select from Nodes
     if (bottomNavigationBarClass?.id == selectedView.key) {
       selectBottomNavigation();
+      return;
+    }
+
+    /// Floating Action Button select from Nodes
+    if (fabClass?.id == selectedView.key) {
+      selectFab();
       return;
     }
 
@@ -1382,6 +1413,15 @@ abstract class AppStoreBase with Store {
       return;
     }
 
+    /// Floating Action Button class updates
+    if (modelData is FabClass) {
+      WidgetModel tempFabClass = fabClass!;
+      tempFabClass.widgetViewModel = modelData;
+      fabClass = null;
+      fabClass = tempFabClass;
+      return;
+    }
+
     /// Left Drawer class updates
     if (modelData is LeftDrawerClass) {
       WidgetModel tempDrawerClass = drawerClass!;
@@ -1435,6 +1475,7 @@ abstract class AppStoreBase with Store {
     rootView = null;
     appBarClass = null;
     bottomNavigationBarClass = null;
+    fabClass = null;
     drawerClass = null;
     isDarkModeOn = false;
     isPreviewCode = false;
